@@ -1,10 +1,10 @@
-import { AppBar, Box, Typography, Toolbar, Button, Tabs, Tab, styled } from '@mui/material';
-import HouseIcon from '@mui/icons-material/House';
-import { useSelector } from 'react-redux';
-import { type RootState } from '../app/store';
+import { AppBar, Box, Typography, Toolbar, Button, Tabs, Tab, styled } from '@mui/material'
+import HouseIcon from '@mui/icons-material/House'
+import { useSelector } from 'react-redux'
+import { type RootState } from '../app/store'
 
 export const Header = (): JSX.Element => {
-    const categories = useSelector((state: RootState) => state.category);
+    const categories = useSelector((state: RootState) => state.category)
 
     return <AppBar position='sticky'>
         <Toolbar>
@@ -21,5 +21,5 @@ export const Header = (): JSX.Element => {
                 <Button sx={{ color: '#fff' }}>Đăng ký</Button>
             </Box>
         </Toolbar >
-    </AppBar >;
-};
+    </AppBar >
+}

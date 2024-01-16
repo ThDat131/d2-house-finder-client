@@ -1,8 +1,8 @@
-import React from 'react';
-import { type SetStateAction, useState } from 'react';
-import ReactMapGL, { Marker } from '@goongmaps/goong-map-react';
-import { type ViewPort } from '../model/map';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import React from 'react'
+import { type SetStateAction, useState } from 'react'
+import ReactMapGL, { Marker } from '@goongmaps/goong-map-react'
+import { type ViewPort } from '../model/map'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
 
 interface GoongMapProps {
     data: ViewPort
@@ -12,11 +12,11 @@ interface GoongMapProps {
 }
 
 const GoongMap: React.FC<GoongMapProps> = ({ data, setData, markers, layer }) => {
-    const MapAPIKey = import.meta.env.VITE_GOONG_MAPTILES_KEY;
+    const MapAPIKey = import.meta.env.VITE_GOONG_MAPTILES_KEY
 
     return <ReactMapGL
         {...data}
-        onViewportChange={(nextViewport: ViewPort) => { setData(nextViewport); }}
+        onViewportChange={(nextViewport: ViewPort) => { setData(nextViewport) }}
         goongApiAccessToken={MapAPIKey}
     >
         {(markers !== undefined) && markers.length > 0
@@ -25,9 +25,9 @@ const GoongMap: React.FC<GoongMapProps> = ({ data, setData, markers, layer }) =>
                     <Marker key={index} latitude={marker.latitude} longitude={marker.longitude}>
                         <LocationOnIcon />
                     </Marker>
-                );
+                )
             })
             : ''}
-    </ReactMapGL>;
-};
-export default GoongMap;
+    </ReactMapGL>
+}
+export default GoongMap

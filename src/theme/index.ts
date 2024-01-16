@@ -20,6 +20,10 @@ const theme = responsiveFontSizes(
                 textTransform: 'none',
                 fontWeight: 'medium' as React.CSSProperties['fontWeight'],
             },
+            h3: {
+                fontSize: 30,
+                fontWeight: 600
+            },
             h4: {
                 fontSize: 20,
                 fontWeight: 600,

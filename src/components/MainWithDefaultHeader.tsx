@@ -1,9 +1,9 @@
-import React from 'react';
-import HeaderDefault from './HeaderDefault';
-import { Box } from '@mui/material';
+import React from 'react'
+import HeaderDefault from './HeaderDefault'
+import { Box } from '@mui/material'
 
 interface Props {
-    children: React.ReactNode;
+    children: React.ReactNode
 }
 const MainWithDefaultHeader: React.FC<Props> = ({ children }) => {
     return <>
@@ -11,6 +11,6 @@ const MainWithDefaultHeader: React.FC<Props> = ({ children }) => {
         <Box>
             {children}
         </Box>
-    </>;
-};
-export default MainWithDefaultHeader;
+    </>
+}
+export default MainWithDefaultHeader

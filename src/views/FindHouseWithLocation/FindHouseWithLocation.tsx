@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { type ViewPort } from '../../model/map';
-import { FlyToInterpolator } from '@goongmaps/goong-map-react';
-import GoongMap from '../../components/GoongMap';
-import { Box, Paper, TextField } from '@mui/material';
-import { Header } from '../../components/Header';
+import { useState } from 'react'
+import { type ViewPort } from '../../model/map'
+import { FlyToInterpolator } from '@goongmaps/goong-map-react'
+import GoongMap from '../../components/GoongMap'
+import { Box, Paper, TextField } from '@mui/material'
+import { Header } from '../../components/Header'
 
 const FindHouseWithLocation = () => {
     const [viewportData, setViewPortData] = useState<ViewPort>({
@@ -16,9 +16,8 @@ const FindHouseWithLocation = () => {
         minZoom: 11,
         transitionDuration: 1000,
         transitionInterpolator: new FlyToInterpolator(),
-    });
-    const [markers, setMarkers] = useState<any[]>();
-
+    })
+    const [markers, setMarkers] = useState<any[]>()
 
     return <>
         <Header />
@@ -32,7 +31,7 @@ const FindHouseWithLocation = () => {
             <GoongMap data={viewportData} setData={setViewPortData} layer={false} markers={markers} />;
 
         </Box>;
-    </>;
-};
+    </>
+}
 
-export default FindHouseWithLocation;
+export default FindHouseWithLocation

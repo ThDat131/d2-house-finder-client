@@ -19,6 +19,7 @@
     "@goongmaps/goong-map-react": "^1.1.2",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.16",
+    "@mui/x-data-grid": "^6.18.7",
     "@reduxjs/toolkit": "^1.8.1",
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",

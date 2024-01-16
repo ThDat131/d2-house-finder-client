@@ -1,39 +1,39 @@
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import TerrainIcon from '@mui/icons-material/Terrain';
-import SearchIcon from '@mui/icons-material/Search';
-import HomeWorkIcon from '@mui/icons-material/HomeWork';
-import ChooseCategoryModal from './Modal/ChooseCategoryModal';
-import { useState } from 'react';
-import ChooseProvinceModal from './Modal/ChooseProvinceModal';
-import ChoosePricemodal from './Modal/ChoosePriceModal';
-import ChooseAcreageModal from './Modal/ChooseAcreageModal';
-import { AppBar, Box, Typography, Toolbar, Button, Tabs, Tab, styled } from '@mui/material';
-import { Header } from './Header';
+import LocationOnIcon from '@mui/icons-material/LocationOn'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+import TerrainIcon from '@mui/icons-material/Terrain'
+import SearchIcon from '@mui/icons-material/Search'
+import HomeWorkIcon from '@mui/icons-material/HomeWork'
+import ChooseCategoryModal from './Modal/ChooseCategoryModal'
+import { useState } from 'react'
+import ChooseProvinceModal from './Modal/ChooseProvinceModal'
+import ChoosePricemodal from './Modal/ChoosePriceModal'
+import ChooseAcreageModal from './Modal/ChooseAcreageModal'
+import { AppBar, Box, Typography, Toolbar, Button, Tabs, Tab, styled } from '@mui/material'
+import { Header } from './Header'
 
 const HeaderDefault = () => {
-    const [categoryModal, setCategoryModal] = useState<boolean>(false);
-    const [provinceModal, setProvinceModal] = useState<boolean>(false);
-    const [priceModal, setPriceModal] = useState<boolean>(false);
-    const [acreageModal, setAcreageModal] = useState<boolean>(false);
+    const [categoryModal, setCategoryModal] = useState<boolean>(false)
+    const [provinceModal, setProvinceModal] = useState<boolean>(false)
+    const [priceModal, setPriceModal] = useState<boolean>(false)
+    const [acreageModal, setAcreageModal] = useState<boolean>(false)
     const buttonStyle = {
         minWidth: 200,
         paddingY: 1,
         paddingX: 3,
         color: '#777',
-    };
+    }
     const handleOpenChooseCategoryModal = () => {
-        setCategoryModal(true);
-    };
+        setCategoryModal(true)
+    }
     const handleOpenChooseProvinceModal = () => {
-        setProvinceModal(true);
-    };
+        setProvinceModal(true)
+    }
     const handleOpenChoosePriceModal = () => {
-        setPriceModal(true);
-    };
+        setPriceModal(true)
+    }
     const handleOpenChooseAcreageModal = () => {
-        setAcreageModal(true);
-    };
+        setAcreageModal(true)
+    }
     const StyledButton = styled(Button)(({ theme }) => ({
         backgroundColor: '#fff',
         textTransform: 'none',
@@ -41,7 +41,7 @@ const HeaderDefault = () => {
         '&:hover': {
             backgroundColor: '#fff'
         }
-    }));
+    }))
 
     return <>
         <Header></Header>
@@ -71,8 +71,7 @@ const HeaderDefault = () => {
         <ChooseProvinceModal open={provinceModal} setOpen={setProvinceModal} />
         <ChoosePricemodal open={priceModal} setOpen={setPriceModal} />
         <ChooseAcreageModal open={acreageModal} setOpen={setAcreageModal} />
-    </>;
+    </>
+}
 
-};
-
-export default HeaderDefault;
+export default HeaderDefault
