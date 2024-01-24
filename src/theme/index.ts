@@ -95,6 +95,13 @@ const theme = responsiveFontSizes(
                     root: {},
                 },
             },
+            MuiButton: {
+                styleOverrides: {
+                    root: {
+                        minWidth: '90px',
+                    }
+                }
+            }
         },
     }),
 )
