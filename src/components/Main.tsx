@@ -1,25 +1,25 @@
-import { useEffect } from 'react';
-import { useAppDispatch } from '../app/store';
-import { getCategories } from '../app/slice/category.slice';
-import { getAllProvinces } from '../app/slice/address.slice';
-import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material';
-import PostItem from './PostItem';
-import PriceFilter from './PriceFilter';
-import AcreageFilter from './AcreageFilter';
-import HeaderDefault from './HeaderDefault';
+import { useEffect } from 'react'
+import { useAppDispatch } from '../app/store'
+import { getCategories } from '../app/slice/category.slice'
+import { getAllProvinces } from '../app/slice/address.slice'
+import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
+import PostItem from './PostItem'
+import PriceFilter from './PriceFilter'
+import AcreageFilter from './AcreageFilter'
+import HeaderDefault from './HeaderDefault'
 
 export const Main = (): JSX.Element => {
-    const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
-        const promise = dispatch(getCategories());
-        const provincePromise = dispatch(getAllProvinces());
+        const promise = dispatch(getCategories())
+        const provincePromise = dispatch(getAllProvinces())
 
         return () => {
-            promise.abort();
-            provincePromise.abort();
-        };
-    }, [dispatch]);
+            promise.abort()
+            provincePromise.abort()
+        }
+    }, [dispatch])
 
     return <>
         <HeaderDefault />
@@ -50,7 +50,7 @@ export const Main = (): JSX.Element => {
             </Grid>
         </Container>
 
-    </>;
-};
+    </>
+}
 
-export default Main;
+export default Main

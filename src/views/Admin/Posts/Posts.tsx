@@ -1,5 +1,5 @@
 const Posts = () => {
-    return <h1>PosatPosatPosatPosatPosatPosatPosat</h1>;
-};
+    return <h1>PosatPosatPosatPosatPosatPosatPosat</h1>
+}
 
-export default Posts;
+export default Posts

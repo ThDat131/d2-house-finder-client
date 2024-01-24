@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material'
 
 const PostItem = () => {
     return <Grid container padding={2} sx={{ backgroundColor: '#fff9f3' }} borderRadius={2}>
@@ -28,8 +28,7 @@ const PostItem = () => {
                 <Button variant='contained'>Gọi 01234567899</Button>
             </Box>
         </Grid>
-    </Grid>;
+    </Grid>
+}
 
-};
-
-export default PostItem;
+export default PostItem

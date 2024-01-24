@@ -1,7 +1,7 @@
-import axios, { type AxiosInstance } from 'axios';
+import axios, { type AxiosInstance } from 'axios'
 
 export class HttpService {
-    public httpService: AxiosInstance;
+    public httpService: AxiosInstance
 
     constructor() {
         this.httpService = axios.create({
@@ -9,6 +9,6 @@ export class HttpService {
             headers: {
                 'Content-Type': 'application/json'
             }
-        });
+        })
     }
 }

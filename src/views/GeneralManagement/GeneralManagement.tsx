@@ -1,6 +1,6 @@
-import { Grid } from '@mui/material';
-import { Header } from '../../components/Header';
-import UserSideNavbar from '../../components/NavBar/UserSideNavbar';
+import { Grid } from '@mui/material'
+import { Header } from '../../components/Header'
+import UserSideNavbar from '../../components/NavBar/UserSideNavbar'
 
 const GeneralManagement = (): JSX.Element => {
     return <>
@@ -14,7 +14,7 @@ const GeneralManagement = (): JSX.Element => {
             </Grid>
         </Grid>
 
-    </>;
-};
+    </>
+}
 
-export default GeneralManagement;
+export default GeneralManagement

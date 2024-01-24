@@ -1,17 +1,16 @@
-import { Box, List, ListItem, Typography } from '@mui/material';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { styled } from '@mui/system';
+import { Box, List, ListItem, Typography } from '@mui/material'
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
+import { styled } from '@mui/system'
 
 const PriceFilter = () => {
-
     const ListItemStyle: React.CSSProperties = {
         width: '50%',
         whiteSpace: 'nowrap',
-    };
+    }
 
     const CustomListItem = styled(ListItem)({
         paddingLeft: 0,
-    });
+    })
 
     return <Box padding={2} sx={{ background: '#f0f0f0', borderRadius: '5px' }}>
         <Typography component={'h4'} fontSize={18} fontWeight={'bold'}>Xem theo giá</Typography>
@@ -49,7 +48,7 @@ const PriceFilter = () => {
                 <Typography>Trên 15 triệu</Typography>
             </CustomListItem>
         </List>
-    </Box>;
-};
+    </Box>
+}
 
-export default PriceFilter;
+export default PriceFilter

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   Avatar,
   Box,
@@ -11,8 +11,8 @@ import {
   Paper,
   TextField,
   Typography,
-} from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+} from '@mui/material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 
 const Signin = (): JSX.Element => {
   return (
@@ -102,7 +102,7 @@ const Signin = (): JSX.Element => {
         </Grid>
       </Grid>
     </>
-  );
-};
+  )
+}
 
-export default Signin;
+export default Signin
