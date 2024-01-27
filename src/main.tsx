@@ -1,17 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-import './index.css';
-import { createBrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom';
-import Signin from './views/Signin/Signin';
-import { Signup } from './views/Signup/Signup';
-import Main from './components/Main';
-import { Admin, FindHouseWithLocation, GeneralManagement } from './views/index.view';
-import { ThemeProvider } from '@emotion/react';
-import theme from './theme';
-import { AdminAnalyticsView, AdminApplicationView, AdminPostView, AdminUserView, AdmninCategoriesView } from './views/Admin';
-import { CssBaseline } from '@mui/material';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+import { store } from './app/store'
+import './index.css'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Signin from './views/Signin/Signin'
+import { Signup } from './views/Signup/Signup'
+import Main from './components/Main'
+import { Admin, FindHouseWithLocation, GeneralManagement } from './views/index.view'
+import { ThemeProvider } from '@emotion/react'
+import theme from './theme'
+import { AdminAnalyticsView, AdminApplicationView, AdminPostView, AdminUserView, AdmninCategoriesView } from './views/Admin'
+import { CssBaseline } from '@mui/material'
+import { I18nextProvider } from 'react-i18next'
+import i18n from './lang/i18n'
 
 const router = createBrowserRouter([
     {
@@ -60,19 +62,21 @@ const router = createBrowserRouter([
             },
         ]
     }
-]);
+])
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
-);
+)
 
 root.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <RouterProvider router={router} />
-            </ThemeProvider>
-        </Provider>
+        <I18nextProvider i18n={i18n}>
+            <Provider store={store}>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <RouterProvider router={router} />
+                </ThemeProvider>
+            </Provider>
+        </I18nextProvider>
     </React.StrictMode>,
-);
+)

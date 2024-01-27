@@ -1,7 +1,7 @@
 import React from 'react'
 import { type SetStateAction, useState } from 'react'
 import ReactMapGL, { Marker } from '@goongmaps/goong-map-react'
-import { type ViewPort } from '../model/map'
+import { type ViewPort } from '../model/utils/map'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 
 interface GoongMapProps {

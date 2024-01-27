@@ -1,7 +1,7 @@
-import { Box, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { type RootState } from '../../app/store';
-import React from 'react';
+import { Box, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import { useSelector } from 'react-redux'
+import { type RootState } from '../../app/store'
+import React from 'react'
 
 interface ChooseCategoryModalProps {
     open: boolean
@@ -9,11 +9,11 @@ interface ChooseCategoryModalProps {
 }
 
 const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({ open, setOpen }) => {
-    const categories = useSelector((state: RootState) => state.category);
+    const categories = useSelector((state: RootState) => state.category)
 
     return <Dialog
         PaperProps={{ sx: { minHeight: 400 } }}
-        fullWidth open={open} maxWidth={'md'} onClose={() => { setOpen(false); }}>
+        fullWidth open={open} maxWidth={'md'} onClose={() => { setOpen(false) }}>
         <DialogTitle textAlign={'center'} pb={2} borderBottom={1} borderColor={'grey.500'}>
             Chọn loại bất động sản
         </DialogTitle>
@@ -30,7 +30,7 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({ open, setOpen
                 </RadioGroup>
             </FormControl>
         </DialogContent>
-    </Dialog>;
-};
+    </Dialog>
+}
 
-export default ChooseCategoryModal;
+export default ChooseCategoryModal

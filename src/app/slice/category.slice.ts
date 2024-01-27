@@ -1,5 +1,5 @@
 import { type PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { type Category } from '../../model/category'
+import { type Category } from '../../model/category/category'
 import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 
