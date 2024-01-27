@@ -2,12 +2,14 @@ import { configureStore, type ThunkAction, type Action } from '@reduxjs/toolkit'
 import categoryReducer from './slice/category.slice'
 import { useDispatch } from 'react-redux'
 import provinceReducer from './slice/address.slice'
+import authReducer from './slice/auth.slice'
 
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
     province: provinceReducer,
-  },
+    auth: authReducer
+  }
 })
 
 export type AppDispatch = typeof store.dispatch

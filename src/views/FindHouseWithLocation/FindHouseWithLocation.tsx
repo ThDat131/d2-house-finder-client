@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { type ViewPort } from '../../model/map'
+import { type ViewPort } from '../../model/utils/map'
 import { FlyToInterpolator } from '@goongmaps/goong-map-react'
 import GoongMap from '../../components/GoongMap'
 import { Box, Paper, TextField } from '@mui/material'
