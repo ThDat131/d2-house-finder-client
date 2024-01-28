@@ -1,5 +1,14 @@
 {
   "signin": {
-    "error": "Sai email hoặc mật khẩu!"
+    "didntHaveAccountGetOne": "Chưa có tài khoản? Đăng ký ngay",
+    "email": "Email",
+    "emailIsRequired": "Email là bắt buộc",
+    "error": "Sai email hoặc mật khẩu!",
+    "forgotPassword": "Quên mật khẩu",
+    "password": "Mật khẩu",
+    "passwordIsRequired": "Mật khẩu là bắt buộc",
+    "passwordIsTooShort": "Mật khẩu quá ngắn",
+    "rememberAccount": "Ghi nhớ tài khoản",
+    "signin": "Đăng nhập"
   }
 }

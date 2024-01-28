@@ -21,6 +21,7 @@ import { type SigninModel } from '../../model/auth/signin-model'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
+import HouseImage from '../../assets/image/house-img.jpg'
 
 const Signin = (): JSX.Element => {
     const navigate = useNavigate()
@@ -35,18 +36,18 @@ const Signin = (): JSX.Element => {
     }, [])
 
     const initialValues: SigninModel = {
-        username: '',
+        email: '',
         password: ''
     }
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string()
-            .required('Email là bắt buộc')
-            .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Email không hợp lệ'),
+        email: Yup.string()
+            .required(t('signin.emailValidation'))
+            .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, t('signin.emailIsRequired')),
 
         password: Yup.string()
-            .required('Mật khẩu là bắt buộc')
-            .min(4, 'Mật khẩu quá ngắn'),
+            .required(t('signin.passwordIsRequired'))
+            .min(4, t('signin.passwordIsTooShort')),
     })
 
     const onSubmit = () => {
@@ -76,8 +77,7 @@ const Signin = (): JSX.Element => {
             sm={4}
             md={7}
             sx={{
-                backgroundImage:
-                    'url(https://source.unsplash.com/random?wallpapers)',
+                backgroundImage: `url(${HouseImage})`,
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
@@ -97,25 +97,25 @@ const Signin = (): JSX.Element => {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Đăng nhập
+                    {t('signin.signin')}
                 </Typography>
                 <form onSubmit={formik.handleSubmit}>
                     <TextField
                         fullWidth
-                        id="username"
-                        label="Email"
-                        name="username"
-                        value={formik.values.username}
+                        id="email"
+                        label={t('signin.email')}
+                        name="email"
+                        value={formik.values.email}
                         onChange={formik.handleChange}
                         onFocus={onFocus}
-                        error={formik.touched.username && Boolean(formik.errors.username)}
-                        helperText={formik.touched.username && formik.errors.username}
+                        error={formik.touched.email && Boolean(formik.errors.email)}
+                        helperText={formik.touched.email && formik.errors.email}
                         sx={{ marginBottom: 2 }}
                     />
                     <TextField
                         fullWidth
                         name="password"
-                        label="Mật khẩu"
+                        label={t('signin.password')}
                         type="password"
                         id="password"
                         value={formik.values.password}
@@ -126,7 +126,7 @@ const Signin = (): JSX.Element => {
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
-                        label="Ghi nhớ tài khoản"
+                        label={t('signin.rememberAccount')}
                     />
                     {
                         error ? <FormHelperText error> {t('signin.error')} </FormHelperText> : null
@@ -138,17 +138,17 @@ const Signin = (): JSX.Element => {
                         variant='contained'
                         sx={{ mt: 3, mb: 2 }}
                     >
-                        Đăng nhập
+                        {t('signin.signin')}
                     </LoadingButton>
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
-                                Quên mật khẩu
+                                {t('signin.forgotPassword')}
                             </Link>
                         </Grid>
                         <Grid item>
                             <Link href="#" variant="body2">
-                                {'Chưa có tài khoản? Đăng ký ngay'}
+                                {t('signin.didntHaveAccountGetOne')}
                             </Link>
                         </Grid>
                     </Grid>
