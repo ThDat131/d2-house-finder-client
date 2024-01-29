@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useAppDispatch } from '../app/store'
 import { getCategories } from '../app/slice/category.slice'
 import { getAllProvinces } from '../app/slice/address.slice'
 import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
@@ -7,6 +6,7 @@ import PostItem from './PostItem'
 import PriceFilter from './PriceFilter'
 import AcreageFilter from './AcreageFilter'
 import HeaderDefault from './HeaderDefault'
+import { useAppDispatch } from '../app/hooks'
 
 export const Main = (): JSX.Element => {
     const dispatch = useAppDispatch()
