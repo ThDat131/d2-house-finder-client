@@ -1,34 +1,47 @@
 import { type GridRenderCellParams, type GridColDef, type GridValueGetterParams } from '@mui/x-data-grid'
 import DataTable from '../../../components/DataTable'
 import { Box, Button, Checkbox, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { type User } from '../../../model/user/user'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import { getUsers } from './user.slice'
+import { type RootState } from '../../../app/store'
+import { useTranslation } from 'react-i18next'
 
 const Users = () => {
+    const dispatch = useAppDispatch()
+    const users = useAppSelector((state: RootState) => state.user)
     const [roleSelect, setRoleSelect] = useState(-1)
+    const { t } = useTranslation()
     const columns: GridColDef[] = [
         {
-            field: 'id',
-            headerName: 'ID',
+            field: '_id',
+            headerName: t('admin.user.id'),
             width: 70
         },
         {
             field: 'fullName',
-            headerName: 'Full name',
+            headerName: t('admin.user.fullName'),
             width: 130
         },
         {
             field: 'phone',
-            headerName: 'Phone',
+            headerName: t('admin.user.phone'),
             width: 130,
         },
         {
+            field: 'email',
+            headerName: t('admin.user.email'),
+            minWidth: 130,
+        },
+        {
             field: 'role',
-            headerName: 'Role',
+            headerName: t('admin.user.role'),
             width: 130
         },
         {
-            field: 'active',
-            headerName: 'Active',
+            field: 'isDeleted',
+            headerName: t('admin.user.isDeleted'),
             type: 'number',
             width: 90,
             renderCell: (params: GridRenderCellParams) => {
@@ -40,116 +53,24 @@ const Users = () => {
         }
     ]
 
-    const rows: User[] = [
-        {
-            id: '1',
-            email: 'user1@example.com',
-            avatar: 'avatar1.jpg',
-            role: 'user',
-            active: true,
-            fullName: 'John Doe',
-            phone: '123-456-7890'
-        },
-        {
-            id: '2',
-            email: 'user2@example.com',
-            avatar: 'avatar2.jpg',
-            role: 'admin',
-            active: true,
-            fullName: 'Jane Smith',
-            phone: '987-654-3210'
-        },
-        {
-            id: '3',
-            email: 'user3@example.com',
-            avatar: 'avatar3.jpg',
-            role: 'user',
-            active: true,
-            fullName: 'Bob Johnson',
-            phone: '555-123-4567'
-        },
-        {
-            id: '4',
-            email: 'user4@example.com',
-            avatar: 'avatar4.jpg',
-            role: 'user',
-            active: false,
-            fullName: 'Alice Brown',
-            phone: '222-333-4444'
-        },
-        {
-            id: '5',
-            email: 'user5@example.com',
-            avatar: 'avatar5.jpg',
-            role: 'admin',
-            active: true,
-            fullName: 'Eva White',
-            phone: '789-456-1230'
-        },
-        {
-            id: '6',
-            email: 'user6@example.com',
-            avatar: 'avatar6.jpg',
-            role: 'user',
-            active: true,
-            fullName: 'Michael Green',
-            phone: '111-222-3333'
-        },
-        {
-            id: '7',
-            email: 'user7@example.com',
-            avatar: 'avatar7.jpg',
-            role: 'user',
-            active: true,
-            fullName: 'Sara Black',
-            phone: '999-888-7777'
-        },
-        {
-            id: '8',
-            email: 'user8@example.com',
-            avatar: 'avatar8.jpg',
-            role: 'admin',
-            active: false,
-            fullName: 'David Taylor',
-            phone: '444-555-6666'
-        },
-        {
-            id: '9',
-            email: 'user9@example.com',
-            avatar: 'avatar9.jpg',
-            role: 'user',
-            active: true,
-            fullName: 'Olivia Davis',
-            phone: '666-777-8888'
-        },
-        {
-            id: '10',
-            email: 'user10@example.com',
-            avatar: 'avatar10.jpg',
-            role: 'user',
-            active: true,
-            fullName: 'Peter Wilson',
-            phone: '123-987-6543'
-        },
-        {
-            id: '11',
-            email: 'user10@example.com',
-            avatar: 'avatar10.jpg',
-            role: 'user',
-            active: true,
-            fullName: 'Peter Wilson',
-            phone: '123-987-6543'
+    useEffect(() => {
+        const usersPromise = dispatch(getUsers())
+
+        return () => {
+            usersPromise.abort()
         }
-    ]
+    }, [dispatch])
+
+    const rows: User[] = users
 
     return <Box width={'100%'}>
         <Box display={'flex'} justifyContent={'space-between'}>
-            <Typography variant={'h3'} mb={2}>Danh sách người dùng</Typography>
-            <Button variant='contained'>Tạo</Button>
+            <Typography variant={'h3'} mb={2}>{t('admin.user.listOfUser')}</Typography>
+            <Button variant='contained'>{t('admin.user.create')}</Button>
         </Box>
         <Box display={'flex'} gap={1} paddingY={1}>
             <FormControl>
-                <InputLabel id="user-role">Vai Trò</InputLabel>
+                <InputLabel id="user-role">{t('admin.user.role')}</InputLabel>
                 <Select
                     labelId="user-role"
                     id="demo-simple-select"
@@ -163,7 +84,7 @@ const Users = () => {
                     <MenuItem value={-1}>Tất cả</MenuItem>
                 </Select>
             </FormControl>
-            <TextField variant='outlined' label='Tìm kiếm' sx={{ flex: 1 }} />
+            <TextField variant='outlined' label={t('admin.user.search')} sx={{ flex: 1 }} />
         </Box>
         <DataTable columns={columns} data={rows} />
     </Box>

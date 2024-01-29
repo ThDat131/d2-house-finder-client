@@ -10,5 +10,18 @@
     "passwordIsTooShort": "Mật khẩu quá ngắn",
     "rememberAccount": "Ghi nhớ tài khoản",
     "signin": "Đăng nhập"
+  },
+  "admin": {
+    "user": {
+      "create": "Tạo",
+      "email": "Email",
+      "fullName": "Tên đầy đủ",
+      "id": "ID",
+      "isDeleted": "Đã xoá",
+      "listOfUser": "Danh sách người dùng",
+      "phone": "Số điện thoại",
+      "role": "Vai trò",
+      "search": "Tìm kiếm"
+    }
   }
 }

@@ -10,6 +10,7 @@ const DataTable: React.FC<DataTableProps> = ({ columns, data }) => {
     return <DataGrid
         rows={data}
         columns={columns}
+        getRowId={row => row._id}
         initialState={{
             pagination: {
                 paginationModel: { page: 0, pageSize: 5 },

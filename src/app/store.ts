@@ -1,14 +1,15 @@
 import { configureStore, type ThunkAction, type Action } from '@reduxjs/toolkit'
 import categoryReducer from './slice/category.slice'
-import { useDispatch } from 'react-redux'
 import provinceReducer from './slice/address.slice'
 import authReducer from './slice/auth.slice'
+import userReducer from '../views/Admin/Users/user.slice'
 
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
     province: provinceReducer,
-    auth: authReducer
+    auth: authReducer,
+    user: userReducer
   }
 })
 
@@ -20,5 +21,3 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >
-
-export const useAppDispatch = () => useDispatch<AppDispatch>()

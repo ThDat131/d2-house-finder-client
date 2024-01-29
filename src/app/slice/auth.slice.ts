@@ -3,6 +3,7 @@ import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { type SigninModel } from '../../model/auth/signin-model'
 import { type CredentialUser } from '../../model/auth/current-user'
+import { type CommonResponse } from '../../model/common/common-response'
 
 const initialState = {
     access_token: '',
@@ -20,7 +21,7 @@ const initialState = {
 const { httpService } = new HttpService()
 export const signinAPI = createAsyncThunk('user/signin', async (user: SigninModel, thunkAPI) => {
     try {
-        const resposne = await httpService.post<CommonResponse>(ApiPathEnum.Signin, user, {
+        const resposne = await httpService.post<CommonResponse<any>>(ApiPathEnum.Signin, user, {
             signal: thunkAPI.signal
         })
 
