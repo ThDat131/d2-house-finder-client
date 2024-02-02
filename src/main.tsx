@@ -10,7 +10,7 @@ import Main from './components/Main'
 import { Admin, FindHouseWithLocation, GeneralManagement } from './views/index.view'
 import { ThemeProvider } from '@emotion/react'
 import theme from './theme'
-import { AdminAnalyticsView, AdminApplicationView, AdminPostView, AdminUserView, AdmninCategoriesView } from './views/Admin'
+import { AdminAnalyticsView, AdminApplicationView, AdminPostView, AdminUserCreateView, AdminUserView, AdmninCategoriesView } from './views/Admin'
 import { CssBaseline } from '@mui/material'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './lang/i18n'
@@ -43,6 +43,10 @@ const router = createBrowserRouter([
             {
                 path: 'user',
                 element: <AdminUserView />
+            },
+            {
+                path: 'user/create',
+                element: <AdminUserCreateView />
             },
             {
                 path: 'category',

@@ -10,16 +10,28 @@ const initialState: User[] = []
 const { httpService } = new HttpService()
 
 export const getUsers = createAsyncThunk('user/getUsers', async (_, thunkAPI) => {
-    const credentialString = cookie.load('credential')
+    const accessToken = cookie.load('access_token')
+
     try {
         const response = await httpService.get<GetUsersResponse>(ApiPathEnum.GetAllUser, {
-            headers: { Authorization: `Bearer ${credentialString.access_token}` },
+            headers: { Authorization: `Bearer ${accessToken}` },
             signal: thunkAPI.signal
         })
 
         return response.data.data.results
     } catch (error) {
-        return thunkAPI.rejectWithValue(error)
+        if (error instanceof AxiosError) {
+            if (error.response?.request.status === 401) {
+                httpService.get(ApiPathEnum.GetUserByRefreshToken, { withCredentials: true }).then(res => {
+                    if (res.status === 200) {
+                        cookie.save('access_token', res.data.data.access_token, {})
+                        getUsers()
+                    }
+                })
+
+                return thunkAPI.rejectWithValue(error)
+            }
+        }
     }
 })
 

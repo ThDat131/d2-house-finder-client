@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { getCategories } from '../app/slice/category.slice'
 import { getAllProvinces } from '../app/slice/address.slice'
 import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
@@ -7,17 +7,23 @@ import PriceFilter from './PriceFilter'
 import AcreageFilter from './AcreageFilter'
 import HeaderDefault from './HeaderDefault'
 import { useAppDispatch } from '../app/hooks'
+import { getCurrentUserFromCookie } from '../app/slice/auth.slice'
 
 export const Main = (): JSX.Element => {
     const dispatch = useAppDispatch()
+    const currentUserRef = useRef(false)
 
     useEffect(() => {
         const promise = dispatch(getCategories())
         const provincePromise = dispatch(getAllProvinces())
+        if (!currentUserRef.current) {
+            dispatch(getCurrentUserFromCookie())
+        }
 
         return () => {
             promise.abort()
             provincePromise.abort()
+            currentUserRef.current = true
         }
     }, [dispatch])
 

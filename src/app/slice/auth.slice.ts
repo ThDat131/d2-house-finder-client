@@ -4,6 +4,7 @@ import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { type SigninModel } from '../../model/auth/signin-model'
 import { type CredentialUser } from '../../model/auth/current-user'
 import { type CommonResponse } from '../../model/common/common-response'
+import cookie from 'react-cookies'
 
 const initialState = {
     access_token: '',
@@ -39,8 +40,21 @@ const authSlice = createSlice({
         signin: (state, action: PayloadAction<CredentialUser>) => {
             return action.payload
         },
-        signout: (state) => {
+        signout: () => {
+            cookie.remove('credential')
+            cookie.remove('access_token')
+            cookie.remove('refresh_token')
+
             return initialState
+        },
+        getCurrentUserFromCookie: () => {
+            const credential = cookie.load('credential')
+
+            if (credential) {
+                return credential
+            }
+
+            return null
         }
     },
     extraReducers(builder) {
@@ -50,7 +64,7 @@ const authSlice = createSlice({
     }
 })
 
-export const { signin, signout } = authSlice.actions
+export const { signin, signout, getCurrentUserFromCookie } = authSlice.actions
 
 const authReducer = authSlice.reducer
 
