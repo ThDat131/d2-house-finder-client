@@ -1,4 +1,5 @@
 export { default as AdminUserView } from './Users/User'
+export { default as AdminUserCreateView } from './Users/components/CreateUser'
 export { default as AdminApplicationView } from './Application/Application'
 export { default as AdmninCategoriesView } from './Categories/Categories'
 export { default as AdminAnalyticsView } from './Analytics/Analytics'

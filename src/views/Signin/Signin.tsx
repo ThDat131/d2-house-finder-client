@@ -54,6 +54,8 @@ const Signin = (): JSX.Element => {
     const onSubmit = () => {
         dispatch(signinAPI(formik.values)).unwrap().then((res) => {
             cookie.save('credential', res, {})
+            cookie.save('access_token', res.access_token, {})
+            cookie.save('refresh_token', res.refresh_token, {})
             setLoading(false)
             navigate('/')
         }).catch(() => {

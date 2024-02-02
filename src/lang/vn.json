@@ -13,15 +13,19 @@
   },
   "admin": {
     "user": {
+      "active": "Kích hoạt",
+      "createAUser": "Tạo người dùng",
       "create": "Tạo",
       "email": "Email",
       "fullName": "Tên đầy đủ",
       "id": "ID",
       "isDeleted": "Đã xoá",
       "listOfUser": "Danh sách người dùng",
+      "password": "Mật khẩu",
       "phone": "Số điện thoại",
       "role": "Vai trò",
-      "search": "Tìm kiếm"
+      "search": "Tìm kiếm",
+      "uploadAvatar": "Tải ảnh đại diện"
     }
   }
 }
