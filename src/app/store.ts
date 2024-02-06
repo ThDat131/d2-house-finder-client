@@ -9,8 +9,8 @@ export const store = configureStore({
     category: categoryReducer,
     province: provinceReducer,
     auth: authReducer,
-    user: userReducer
-  }
+    user: userReducer,
+  },
 })
 
 export type AppDispatch = typeof store.dispatch

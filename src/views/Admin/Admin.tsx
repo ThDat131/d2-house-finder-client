@@ -6,25 +6,27 @@ import { useAppDispatch } from '../../app/hooks'
 import { getCurrentUserFromCookie } from '../../app/slice/auth.slice'
 
 const Admin = (): JSX.Element => {
-    const dispatch = useAppDispatch()
-    const currentUserRef = useRef(false)
+  const dispatch = useAppDispatch()
+  const currentUserRef = useRef(false)
 
-    useEffect(() => {
-        if (!currentUserRef.current) {
-            dispatch(getCurrentUserFromCookie())
-        }
+  useEffect(() => {
+    if (!currentUserRef.current) {
+      dispatch(getCurrentUserFromCookie())
+    }
 
-        return () => {
-            currentUserRef.current = true
-        }
-    }, [dispatch])
+    return () => {
+      currentUserRef.current = true
+    }
+  }, [dispatch])
 
-    return <Box display={'flex'}>
-        <AdminSideNavBar />
-        <Box padding={5} minHeight={'100vh'} flex={1} >
-            <Outlet />
-        </Box>
-    </Box >
+  return (
+    <Box display={'flex'}>
+      <AdminSideNavBar />
+      <Box padding={5} minHeight={'100vh'} flex={1}>
+        <Outlet />
+      </Box>
+    </Box>
+  )
 }
 
 export default Admin
