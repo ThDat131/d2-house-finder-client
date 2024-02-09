@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { getCategories } from '../app/slice/category.slice'
-import { getAllProvinces } from '../app/slice/address.slice'
 import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
 import PostItem from './PostItem'
 import PriceFilter from './PriceFilter'
@@ -15,14 +14,12 @@ export const Main = (): JSX.Element => {
 
   useEffect(() => {
     const promise = dispatch(getCategories())
-    const provincePromise = dispatch(getAllProvinces())
     if (!currentUserRef.current) {
       dispatch(getCurrentUserFromCookie())
     }
 
     return () => {
       promise.abort()
-      provincePromise.abort()
       currentUserRef.current = true
     }
   }, [dispatch])

@@ -5,22 +5,23 @@ import SearchIcon from '@mui/icons-material/Search'
 import HomeWorkIcon from '@mui/icons-material/HomeWork'
 import ChooseCategoryModal from './Modal/ChooseCategoryModal'
 import { useState } from 'react'
-import ChooseProvinceModal from './Modal/ChooseProvinceModal'
+import ChooseAddressModal from './Modal/ChooseAddressModal/ChooseAddressModal'
 import ChoosePricemodal from './Modal/ChoosePriceModal'
 import ChooseAcreageModal from './Modal/ChooseAcreageModal'
 import {
-  AppBar,
   Box,
   Typography,
-  Toolbar,
   Button,
-  Tabs,
-  Tab,
   styled,
 } from '@mui/material'
 import { Header } from './Header'
+import { useAppSelector } from '../app/hooks'
+import { type RootState } from '../app/store'
 
 const HeaderDefault = () => {
+  const provinceSelected = useAppSelector((root: RootState) => root.provinces.selected)
+  const districtSelected = useAppSelector((root: RootState) => root.districts.selected)
+  const wardSelected = useAppSelector((root: RootState) => root.wards.selected)
   const [categoryModal, setCategoryModal] = useState<boolean>(false)
   const [provinceModal, setProvinceModal] = useState<boolean>(false)
   const [priceModal, setPriceModal] = useState<boolean>(false)
@@ -52,6 +53,18 @@ const HeaderDefault = () => {
     },
   }))
 
+  const handleShowSelectedAddress = (): string => {
+    if (provinceSelected && districtSelected && wardSelected) {
+      return `${provinceSelected.province_name}, ${districtSelected.district_name}, ${wardSelected.ward_name}`
+    }
+    if (provinceSelected && districtSelected) {
+      return `${provinceSelected.province_name}, ${districtSelected.district_name}`
+    }
+    if (provinceSelected)
+      return `${provinceSelected.province_name}`
+    return 'Toàn quốc'
+  }
+
   return (
     <>
       <Header></Header>
@@ -77,7 +90,7 @@ const HeaderDefault = () => {
           onClick={handleOpenChooseProvinceModal}
         >
           <LocationOnIcon />
-          <Typography component={'p'}>Toàn quốc</Typography>
+          <Typography component={'p'}>{handleShowSelectedAddress()}</Typography>
         </StyledButton>
         <StyledButton
           sx={buttonStyle}
@@ -101,7 +114,7 @@ const HeaderDefault = () => {
         </Button>
       </Box>
       <ChooseCategoryModal open={categoryModal} setOpen={setCategoryModal} />
-      <ChooseProvinceModal open={provinceModal} setOpen={setProvinceModal} />
+      <ChooseAddressModal open={provinceModal} setOpen={setProvinceModal} />
       <ChoosePricemodal open={priceModal} setOpen={setPriceModal} />
       <ChooseAcreageModal open={acreageModal} setOpen={setAcreageModal} />
     </>
