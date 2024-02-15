@@ -17,6 +17,7 @@ import theme from './theme'
 import {
   AdminAnalyticsView,
   AdminApplicationView,
+  AdminCategoryCreateView,
   AdminPostView,
   AdminUserCreateView,
   AdminUserView,
@@ -25,6 +26,8 @@ import {
 import { CssBaseline } from '@mui/material'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './lang/i18n'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const router = createBrowserRouter([
   {
@@ -60,11 +63,15 @@ const router = createBrowserRouter([
         element: <AdminUserCreateView />,
       },
       {
+        path: 'category/create',
+        element: <AdminCategoryCreateView />,
+      },
+      {
         path: 'category',
         element: <AdmninCategoriesView />,
       },
       {
-        path: 'analytic',
+        path: 'statistic',
         element: <AdminAnalyticsView />,
       },
       {
@@ -88,6 +95,7 @@ root.render(
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <RouterProvider router={router} />
+          <ToastContainer />
         </ThemeProvider>
       </Provider>
     </I18nextProvider>

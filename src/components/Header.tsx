@@ -18,7 +18,9 @@ export const Header = (): JSX.Element => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(true)
-  const categories = useAppSelector((state: RootState) => state.category)
+  const categories = useAppSelector(
+    (state: RootState) => state.category?.category,
+  )
   const currentUser = useAppSelector((state: RootState) => state.auth?.user)
   useEffect(() => {
     setLoading(false)
@@ -37,9 +39,13 @@ export const Header = (): JSX.Element => {
         <Typography mr={2}>Nhà trọ D2</Typography>
         <Tabs value={'main'} textColor={'inherit'}>
           <Tab label="Trang chủ" value={'main'} />
-          {categories.map((c, index) => (
-            <Tab key={index} label={c.name} value={c.name} />
-          ))}
+          {Array.isArray(categories) ? (
+            categories.map(c => (
+              <Tab key={c._id} label={c.name} value={c.name} />
+            ))
+          ) : (
+            <></>
+          )}
         </Tabs>
         {currentUser?.id !== '' ? (
           <Box sx={{ marginLeft: 'auto' }}>

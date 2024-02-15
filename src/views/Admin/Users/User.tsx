@@ -1,14 +1,11 @@
-import {
-  type GridRenderCellParams,
-  type GridColDef,
-  type GridValueGetterParams,
-} from '@mui/x-data-grid'
+import { type GridRenderCellParams, type GridColDef } from '@mui/x-data-grid'
 import DataTable from '../../../components/DataTable'
 import {
   Box,
   Button,
   Checkbox,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -16,11 +13,11 @@ import {
   Typography,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { type User } from '../../../model/user/user'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { getUsers } from './user.slice'
 import { type RootState } from '../../../app/store'
 import { useTranslation } from 'react-i18next'
+import AddIcon from '@mui/icons-material/Add'
 
 const Users = () => {
   const dispatch = useAppDispatch()
@@ -72,16 +69,20 @@ const Users = () => {
     }
   }, [dispatch])
 
-  const rows: User[] = users
-
   return (
     <Box width={'100%'}>
-      <Box display={'flex'} justifyContent={'space-between'}>
-        <Typography variant={'h3'} mb={2}>
-          {t('admin.user.listOfUser')}
-        </Typography>
-        <Button variant="contained">{t('admin.user.create')}</Button>
-      </Box>
+      <Grid container spacing={2} justifyContent={'space-between'}>
+        <Grid item>
+          <Typography variant={'h3'} mb={2}>
+            {t('admin.user.listOfUser')}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button startIcon={<AddIcon />} variant="contained">
+            {t('admin.user.create')}
+          </Button>
+        </Grid>
+      </Grid>
       <Box display={'flex'} gap={1} paddingY={1}>
         <FormControl>
           <InputLabel id="user-role">{t('admin.user.role')}</InputLabel>
@@ -106,7 +107,7 @@ const Users = () => {
           sx={{ flex: 1 }}
         />
       </Box>
-      <DataTable columns={columns} data={rows} />
+      <DataTable columns={columns} data={users} />
     </Box>
   )
 }

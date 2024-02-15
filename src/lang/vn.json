@@ -15,7 +15,7 @@
     "user": {
       "active": "Kích hoạt",
       "createAUser": "Tạo người dùng",
-      "create": "Tạo",
+      "create": "Tạo mới",
       "email": "Email",
       "fullName": "Tên đầy đủ",
       "id": "ID",
@@ -26,6 +26,27 @@
       "role": "Vai trò",
       "search": "Tìm kiếm",
       "uploadAvatar": "Tải ảnh đại diện"
+    },
+    "category": {
+      "alreadyExists": "Danh mục đã tồn tại",
+      "createACategory": "Tạo danh mục",
+      "createSuccess": "Tạo danh mục thành công!",
+      "create": "Tạo",
+      "id": "ID",
+      "listOfCategory": "Danh sách danh mục",
+      "nameIsRequired": "Tên danh mục là bắt buộc",
+      "name": "Tên danh mục"
+    },
+    "sideNav": {
+      "application": "Ứng dụng",
+      "category": "Danh mục",
+      "create": "Tạo mới",
+      "list": "Danh sách",
+      "manage": "Quản lý",
+      "overview": "Tổng quan",
+      "post": "Bài đăng",
+      "user": "Người dùng",
+      "statistic": "Thống kê"
     }
   },
   "chooseAddressModal": {

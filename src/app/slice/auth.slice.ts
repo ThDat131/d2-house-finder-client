@@ -12,7 +12,6 @@ import cookie from 'react-cookies'
 
 const initialState = {
   access_token: '',
-  refresh_token: '',
   user: {
     id: '',
     email: '',
@@ -52,9 +51,8 @@ const authSlice = createSlice({
       return action.payload
     },
     signout: () => {
-      cookie.remove('credential')
-      cookie.remove('access_token')
-      cookie.remove('refresh_token')
+      localStorage.removeItem('user')
+      localStorage.removeItem('access_token')
 
       return initialState
     },
