@@ -1,5 +1,5 @@
 import { configureStore, type ThunkAction, type Action } from '@reduxjs/toolkit'
-import categoryReducer from './slice/category.slice'
+import categoryReducer from '../views/Admin/Categories/category.slice'
 import provinceReducer from '../components/Modal/ChooseAddressModal/province.slice'
 import authReducer from './slice/auth.slice'
 import userReducer from '../views/Admin/Users/user.slice'

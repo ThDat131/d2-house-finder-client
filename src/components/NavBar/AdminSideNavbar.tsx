@@ -2,7 +2,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   Drawer,
   List,
   ListItem,
@@ -20,35 +19,45 @@ import CategoryIcon from '@mui/icons-material/Category'
 import AddIcon from '@mui/icons-material/Add'
 import ListIcon from '@mui/icons-material/List'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const AdminSideNavBar = (): JSX.Element => {
+  const { t } = useTranslation()
+
   const [open, setOpen] = useState<boolean>(true)
+  const [expanded, setExpanded] = useState(-1)
+
   const navigate = useNavigate()
   const overviewData = [
     {
-      title: 'Ứng dụng',
+      id: 1,
+      title: t('admin.sideNav.application'),
       icon: <LegendToggleIcon />,
       url: '/admin',
     },
     {
-      title: 'Thống kê',
+      id: 2,
+      title: t('admin.sideNav.statistic'),
       icon: <InsightsIcon />,
-      url: '/admin/analytic',
+      url: '/admin/statistic',
     },
   ]
   const managementData = [
     {
-      title: 'Người dùng',
+      id: 3,
+      title: t('admin.sideNav.user'),
       icon: <ManageAccountsIcon />,
       url: '/admin/user',
     },
     {
-      title: 'Bài đăng',
+      id: 4,
+      title: t('admin.sideNav.post'),
       icon: <FeedIcon />,
       url: '/admin/post',
     },
     {
-      title: 'Danh mục',
+      id: 5,
+      title: t('admin.sideNav.category'),
       icon: <CategoryIcon />,
       url: '/admin/category',
     },
@@ -88,13 +97,13 @@ const AdminSideNavBar = (): JSX.Element => {
       >
         <AccordionSummary>
           <Typography style={headingStyle} variant={'h4'}>
-            Tổng quan
+            {t('admin.sideNav.overview')}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <List>
-            {overviewData.map((x, index) => (
-              <ListItem key={index} disablePadding>
+            {overviewData.map(x => (
+              <ListItem key={x.title} disablePadding>
                 <ListItemButton
                   onClick={() => {
                     navigate(x.url)
@@ -111,17 +120,22 @@ const AdminSideNavBar = (): JSX.Element => {
       <Accordion disableGutters defaultExpanded elevation={0}>
         <AccordionSummary>
           <Typography style={headingStyle} variant={'h4'}>
-            Quản lý
+            {t('admin.sideNav.manage')}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <List>
-            {managementData.map((x, index) => (
-              <ListItem key={index} disablePadding>
-                <Accordion disableGutters elevation={0}>
+            {managementData.map(x => (
+              <ListItem key={x.title} disablePadding>
+                <Accordion
+                  disableGutters
+                  elevation={0}
+                  expanded={x.id === expanded}
+                >
                   <AccordionSummary>
                     <ListItemButton
                       onClick={() => {
+                        setExpanded(x.id)
                         navigate(x.url)
                       }}
                     >
@@ -132,19 +146,27 @@ const AdminSideNavBar = (): JSX.Element => {
                   <AccordionDetails>
                     <List>
                       <ListItem>
-                        <ListItemButton>
+                        <ListItemButton
+                          onClick={() => {
+                            navigate(`${x.url}/create`)
+                          }}
+                        >
                           <ListItemIcon>
                             <AddIcon />
                           </ListItemIcon>
-                          <ListItemText primary="Tạo mới" />
+                          <ListItemText primary={t('admin.sideNav.create')} />
                         </ListItemButton>
                       </ListItem>
                       <ListItem>
-                        <ListItemButton>
+                        <ListItemButton
+                          onClick={() => {
+                            navigate(`${x.url}`)
+                          }}
+                        >
                           <ListItemIcon>
                             <ListIcon />
                           </ListItemIcon>
-                          <ListItemText primary="Danh sách" />
+                          <ListItemText primary={t('admin.sideNav.list')} />
                         </ListItemButton>
                       </ListItem>
                     </List>

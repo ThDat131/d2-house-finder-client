@@ -3,5 +3,8 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.fontSize": 14,
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
