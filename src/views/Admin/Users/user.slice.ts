@@ -17,7 +17,7 @@ export const getUsers = createAsyncThunk(
           signal: thunkAPI.signal,
         },
       )
-      console.log(response.data)
+
       return response.data.data.results
     } catch (error) {
       return thunkAPI.rejectWithValue(error)

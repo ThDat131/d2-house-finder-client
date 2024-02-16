@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 import { useEffect, useRef } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useAppDispatch } from '../../app/hooks'
-import { getCurrentUserFromCookie } from '../../app/slice/auth.slice'
+import { getCurrentUser } from '../../app/slice/auth.slice'
 
 const Admin = (): JSX.Element => {
   const dispatch = useAppDispatch()
@@ -11,7 +11,7 @@ const Admin = (): JSX.Element => {
 
   useEffect(() => {
     if (!currentUserRef.current) {
-      dispatch(getCurrentUserFromCookie())
+      dispatch(getCurrentUser())
     }
 
     return () => {

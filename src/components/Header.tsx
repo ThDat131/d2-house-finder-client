@@ -21,7 +21,8 @@ export const Header = (): JSX.Element => {
   const categories = useAppSelector(
     (state: RootState) => state.category?.category,
   )
-  const currentUser = useAppSelector((state: RootState) => state.auth?.user)
+  const currentUser = useAppSelector((state: RootState) => state.auth.user)
+
   useEffect(() => {
     setLoading(false)
   }, [])
@@ -47,7 +48,7 @@ export const Header = (): JSX.Element => {
             <></>
           )}
         </Tabs>
-        {currentUser?.id !== '' ? (
+        {currentUser?._id !== '' ? (
           <Box sx={{ marginLeft: 'auto' }}>
             <Box component={'img'} src={currentUser?.avatar} />
             <Button sx={{ color: '#fff' }} onClick={handleSignout}>

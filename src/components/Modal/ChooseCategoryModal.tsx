@@ -21,7 +21,7 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
   open,
   setOpen,
 }) => {
-  const categories = useSelector((state: RootState) => state.category)
+  const categories = useSelector((state: RootState) => state.category.category)
 
   return (
     <Dialog
