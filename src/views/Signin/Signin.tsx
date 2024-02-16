@@ -15,14 +15,13 @@ import {
 import { LoadingButton } from '@mui/lab'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useFormik } from 'formik'
-import { signinAPI } from '../../app/slice/auth.slice'
+import { getCurrentUser, signinAPI } from '../../app/slice/auth.slice'
 import { type SigninModel } from '../../model/auth/signin-model'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import HouseImage from '../../assets/image/house-img.jpg'
 import { type RootState } from '../../app/store'
-import cookie from 'react-cookies'
 
 const Signin = (): JSX.Element => {
   const navigate = useNavigate()
@@ -33,10 +32,12 @@ const Signin = (): JSX.Element => {
   const currentUser = useAppSelector((state: RootState) => state.auth.user)
 
   useEffect(() => {
-    if (currentUser.id !== '') {
+    if (currentUser._id !== '') {
       navigate('/')
+    } else {
+      dispatch(getCurrentUser())
     }
-  }, [])
+  }, [currentUser])
 
   const initialValues: SigninModel = {
     email: '',

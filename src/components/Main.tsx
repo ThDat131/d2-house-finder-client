@@ -6,7 +6,7 @@ import PriceFilter from './PriceFilter'
 import AcreageFilter from './AcreageFilter'
 import HeaderDefault from './HeaderDefault'
 import { useAppDispatch } from '../app/hooks'
-import { getCurrentUserFromCookie } from '../app/slice/auth.slice'
+import { getCurrentUser } from '../app/slice/auth.slice'
 
 export const Main = (): JSX.Element => {
   const dispatch = useAppDispatch()
@@ -15,7 +15,7 @@ export const Main = (): JSX.Element => {
   useEffect(() => {
     const promise = dispatch(getCategories())
     if (!currentUserRef.current) {
-      dispatch(getCurrentUserFromCookie())
+      dispatch(getCurrentUser())
     }
 
     return () => {

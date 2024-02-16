@@ -8,12 +8,12 @@ import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { type SigninModel } from '../../model/auth/signin-model'
 import { type CredentialUser } from '../../model/auth/current-user'
 import { type CommonResponse } from '../../model/common/common-response'
-import cookie from 'react-cookies'
+import { type User } from '../../model/user/user'
 
 const initialState = {
   access_token: '',
   user: {
-    id: '',
+    _id: '',
     email: '',
     avatar: '',
     role: '',
@@ -56,14 +56,13 @@ const authSlice = createSlice({
 
       return initialState
     },
-    getCurrentUserFromCookie: () => {
-      const credential = cookie.load('credential')
+    getCurrentUser: state => {
+      const userString = localStorage.getItem('user') ?? ''
 
-      if (credential) {
-        return credential
+      if (userString !== '') {
+        const user = JSON.parse(userString) as User
+        state.user = user
       }
-
-      return null
     },
   },
   extraReducers(builder) {
@@ -73,7 +72,7 @@ const authSlice = createSlice({
   },
 })
 
-export const { signin, signout, getCurrentUserFromCookie } = authSlice.actions
+export const { signin, signout, getCurrentUser } = authSlice.actions
 
 const authReducer = authSlice.reducer
 
