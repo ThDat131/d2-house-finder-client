@@ -15,12 +15,18 @@ import { useSelector } from 'react-redux'
 import { type RootState } from '../../../app/store'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { getAllProvinces, selectProvince } from './province.slice'
+import {
+  getAllProvinces,
+  selectProvince,
+} from '../../../app/slice/province.slice'
 import { type District } from '../../../model/address/district'
 import { type Ward } from '../../../model/address/ward'
 import { type Province } from '../../../model/address/province'
-import { getAllDistricts, selectDistrict } from './district.slice'
-import { getAllWards, selectWard } from './ward.slice'
+import {
+  getAllDistricts,
+  selectDistrict,
+} from '../../../app/slice/district.slice'
+import { getAllWards, selectWard } from '../../../app/slice/ward.slice'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Loading from '../../Loading'
 import { useTranslation } from 'react-i18next'
@@ -38,11 +44,19 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
   const { t } = useTranslation()
 
   const provinces = useAppSelector((state: RootState) => state.provinces.data)
-  const provinceLoading = useAppSelector((state: RootState) => state.provinces.loading)
-  const districtLoading = useAppSelector((state: RootState) => state.districts.loading)
+  const provinceLoading = useAppSelector(
+    (state: RootState) => state.provinces.loading,
+  )
+  const districtLoading = useAppSelector(
+    (state: RootState) => state.districts.loading,
+  )
   const wardLoading = useAppSelector((state: RootState) => state.wards.loading)
-  const provinceSelected = useAppSelector((root: RootState) => root.provinces.selected)
-  const districtSelected = useAppSelector((root: RootState) => root.districts.selected)
+  const provinceSelected = useAppSelector(
+    (root: RootState) => root.provinces.selected,
+  )
+  const districtSelected = useAppSelector(
+    (root: RootState) => root.districts.selected,
+  )
   const wardSelected = useAppSelector((root: RootState) => root.wards.selected)
 
   const [districts, setDistricts] = useState<District[]>([])
@@ -75,7 +89,6 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
     }
   }
   const handleChangeDistrict = (district: District) => {
-
     if (page === 1) {
       dispatch(selectDistrict(district))
 
@@ -88,8 +101,7 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
   }
 
   const handleGoBack = () => {
-    if (page > 0)
-      setPage(page - 1)
+    if (page > 0) setPage(page - 1)
   }
 
   const handleSubmit = () => {
@@ -116,7 +128,7 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
               onClick={handleSelectAll}
             />
           </Box>
-          {provinces.map((p) => (
+          {provinces.map(p => (
             <Box
               key={p.province_id}
               sx={{ borderBottom: 1, borderColor: 'grey.500', py: 1 }}
@@ -139,62 +151,63 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
   }
 
   const DistrictSection = () => {
-    return <FormControl fullWidth>
-      <RadioGroup>
-        {districts.map((d) => (
-          <Box
-            key={d.district_id}
-            sx={{ borderBottom: 1, borderColor: 'grey.500', py: 1 }}
-          >
-            <FormControlLabel
-              value={d.district_id}
-              control={<Radio />}
-              label={d.district_name}
-              sx={{ width: 1 }}
-              onClick={() => {
-                handleChangeDistrict(d)
-              }}
-              checked={districtSelected?.district_id === d.district_id}
-            />
-          </Box>
-        ))}
-      </RadioGroup>
-    </FormControl>
+    return (
+      <FormControl fullWidth>
+        <RadioGroup>
+          {districts.map(d => (
+            <Box
+              key={d.district_id}
+              sx={{ borderBottom: 1, borderColor: 'grey.500', py: 1 }}
+            >
+              <FormControlLabel
+                value={d.district_id}
+                control={<Radio />}
+                label={d.district_name}
+                sx={{ width: 1 }}
+                onClick={() => {
+                  handleChangeDistrict(d)
+                }}
+                checked={districtSelected?.district_id === d.district_id}
+              />
+            </Box>
+          ))}
+        </RadioGroup>
+      </FormControl>
+    )
   }
 
   const WardSection = () => {
-    return <FormControl fullWidth>
-      <RadioGroup>
-        {wards.map((w) => (
-          <Box
-            key={w.ward_id}
-            sx={{ borderBottom: 1, borderColor: 'grey.500', py: 1 }}
-          >
-            <FormControlLabel
-              value={w.ward_id}
-              control={<Radio />}
-              label={w.ward_name}
-              sx={{ width: 1 }}
-              onClick={() => {
-                handleChangeWard(w)
-              }}
-              checked={wardSelected?.ward_id === w.ward_id}
-            />
-          </Box>
-        ))}
-      </RadioGroup>
-    </FormControl>
+    return (
+      <FormControl fullWidth>
+        <RadioGroup>
+          {wards.map(w => (
+            <Box
+              key={w.ward_id}
+              sx={{ borderBottom: 1, borderColor: 'grey.500', py: 1 }}
+            >
+              <FormControlLabel
+                value={w.ward_id}
+                control={<Radio />}
+                label={w.ward_name}
+                sx={{ width: 1 }}
+                onClick={() => {
+                  handleChangeWard(w)
+                }}
+                checked={wardSelected?.ward_id === w.ward_id}
+              />
+            </Box>
+          ))}
+        </RadioGroup>
+      </FormControl>
+    )
   }
 
   const SelectionAddress = (): JSX.Element => {
-    if (page === 0)
-      return <ProvinceSection />
+    if (page === 0) return <ProvinceSection />
 
-    if (page === 1)
-      return <DistrictSection />
+    if (page === 1) return <DistrictSection />
 
-    if (page === 2)
-      return <WardSection />
+    if (page === 2) return <WardSection />
 
     return <></>
   }
@@ -228,13 +241,16 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
         <ArrowBackIcon />
       </IconButton>
       <DialogContent>
-        {
-          provinceLoading || districtLoading || wardLoading ? <Loading /> :
-            <SelectionAddress />
-        }
+        {provinceLoading || districtLoading || wardLoading ? (
+          <Loading />
+        ) : (
+          <SelectionAddress />
+        )}
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" onClick={handleSubmit}>{t('chooseAddressModal.submit')}</Button>
+        <Button variant="contained" onClick={handleSubmit}>
+          {t('chooseAddressModal.submit')}
+        </Button>
       </DialogActions>
     </Dialog>
   )

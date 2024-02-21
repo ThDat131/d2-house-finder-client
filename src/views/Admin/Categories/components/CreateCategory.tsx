@@ -9,7 +9,10 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
 import * as Yup from 'yup'
-import { clearError, createCategory } from '../category.slice'
+import {
+  clearError,
+  createCategory,
+} from '../../../../app/slice/category.slice'
 import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'

@@ -8,6 +8,7 @@ export class HttpService {
   public httpService: AxiosInstance
   public authHttpService: AxiosInstance
   public httpAddressService: AxiosInstance
+  public httpGoongService: AxiosInstance
 
   mutex = new Mutex()
   NO_RETRY_HEADER = 'x-no-retry'
@@ -31,6 +32,13 @@ export class HttpService {
     this.authHttpService = axios.create({
       baseURL: import.meta.env.VITE_API_URL,
       withCredentials: true,
+    })
+
+    this.httpGoongService = axios.create({
+      baseURL: import.meta.env.VITE_GOONG_API_ADDRESS,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
 
     this.authHttpService.interceptors.request.use(function (config) {

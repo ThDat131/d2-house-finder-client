@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { getCategories } from '../views/Admin/Categories/category.slice'
+import { getCategories } from '../app/slice/category.slice'
 import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
 import PostItem from './PostItem'
 import PriceFilter from './PriceFilter'
