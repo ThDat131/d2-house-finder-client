@@ -1,13 +1,15 @@
 import { configureStore, type ThunkAction, type Action } from '@reduxjs/toolkit'
-import categoryReducer from '../views/Admin/Categories/category.slice'
-import provinceReducer from '../components/Modal/ChooseAddressModal/province.slice'
+import categoryReducer from './slice/category.slice'
+import provinceReducer from './slice/province.slice'
 import authReducer from './slice/auth.slice'
 import userReducer from '../views/Admin/Users/user.slice'
-import districtReducer from '../components/Modal/ChooseAddressModal/district.slice'
-import wardReducer from '../components/Modal/ChooseAddressModal/ward.slice'
+import districtReducer from './slice/district.slice'
+import wardReducer from './slice/ward.slice'
+import articleReducer from './slice/article.slice.'
 
 export const store = configureStore({
   reducer: {
+    article: articleReducer,
     category: categoryReducer,
     provinces: provinceReducer,
     districts: districtReducer,

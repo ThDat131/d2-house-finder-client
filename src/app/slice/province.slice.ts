@@ -3,14 +3,14 @@ import {
   createAsyncThunk,
   createSlice,
 } from '@reduxjs/toolkit'
-import { HttpService } from '../../../api/HttpService'
-import { type Province } from '../../../model/address/province'
-import { ApiPathEnum } from '../../../api/ApiPathEnum'
+import { HttpService } from '../../api/HttpService'
+import { type Province } from '../../model/address/province'
+import { ApiPathEnum } from '../../api/ApiPathEnum'
 
 const { httpAddressService } = new HttpService()
 const initialState = {
   data: [] as Province[],
-  loading: false,
+  loading: true,
   error: '',
   selected: null as Province | null,
 }

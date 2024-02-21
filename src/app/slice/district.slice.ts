@@ -3,9 +3,9 @@ import {
   createAsyncThunk,
   createSlice,
 } from '@reduxjs/toolkit'
-import { HttpService } from '../../../api/HttpService'
-import { type District } from '../../../model/address/district'
-import { ApiPathEnum } from '../../../api/ApiPathEnum'
+import { HttpService } from '../../api/HttpService'
+import { type District } from '../../model/address/district'
+import { ApiPathEnum } from '../../api/ApiPathEnum'
 
 const { httpAddressService } = new HttpService()
 const initialState = {
@@ -17,7 +17,7 @@ const initialState = {
 
 export const getAllDistricts = createAsyncThunk(
   'address/getAllDistricts',
-  async (provinceId: number, thunkAPI) => {
+  async (provinceId: string, thunkAPI) => {
     const response = await httpAddressService.get(
       `${ApiPathEnum.GetAllDistricts}/${provinceId}`,
       {

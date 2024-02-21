@@ -3,13 +3,13 @@ import {
   createAsyncThunk,
   type PayloadAction,
 } from '@reduxjs/toolkit'
-import { HttpService } from '../../../api/HttpService'
-import { ApiPathEnum } from '../../../api/ApiPathEnum'
-import { type Category } from '../../../model/category/category'
-import { type GetCategoryResponse } from './model/GetCategoriesResponse'
-import { type CreateCategoryModel } from './model/create-category-model'
-import { type CommonResponse } from '../../../model/common/common-response'
-import { type ErrorResponse } from '../../../model/common/error-response'
+import { HttpService } from '../../api/HttpService'
+import { ApiPathEnum } from '../../api/ApiPathEnum'
+import { type Category } from '../../model/category/category'
+import { type GetCategoryResponse } from '../../views/Admin/Categories/model/GetCategoriesResponse'
+import { type CreateCategoryModel } from '../../views/Admin/Categories/model/create-category-model'
+import { type CommonResponse } from '../../model/common/common-response'
+import { type ErrorResponse } from '../../model/common/error-response'
 
 const initialState = {
   category: [] as Category[],

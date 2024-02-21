@@ -94,6 +94,20 @@ const theme = responsiveFontSizes(
           },
         },
       },
+      MuiMenu: {
+        styleOverrides: {
+          root: {
+            height: '500px',
+          },
+        },
+      },
+      MuiSelect: {
+        styleOverrides: {
+          root: {
+            minWidth: '135px',
+          },
+        },
+      },
     },
   }),
 )

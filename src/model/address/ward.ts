@@ -1,4 +1,4 @@
 export interface Ward {
-  ward_id: number
+  ward_id: string
   ward_name: string
 }

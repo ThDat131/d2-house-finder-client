@@ -53,5 +53,37 @@
     "chooseProvince": "Chọn tỉnh thành",
     "nationWide": "Toàn quốc",
     "submit": "Xác nhận"
+  },
+  "generalManagement": {
+    "createNewArticle": {
+      "acreage": "Diện tích",
+      "addPicture": "Thêm ảnh",
+      "addressForRent": "Địa chỉ cho thuê",
+      "address": "Địa chỉ chính xác",
+      "createSuccess": "Đăng tin thành công!",
+      "create": "Tạo mới",
+      "category": "Danh mục",
+      "content": "Nội dung mô tả",
+      "delete": "Xóa",
+      "description": "Thông tin mô tả",
+      "district": "Quận/Huyện",
+      "noCategorySelected": "Chưa chọn danh mục",
+      "noDistrictSelected": "Chưa chọn Quận/Huyện",
+      "noEnteredAcreage": "Chưa nhập diện tích",
+      "noEnteredDescription": "Chưa nhập thông tin mô tả",
+      "noEnteredStreetAndHouseNumber": "Chưa nhập đường và số nhà",
+      "noEnteredPrice": "Chưa nhập giá",
+      "noEnteredTitle": "Chưa nhập tiêu đề",
+      "noProvinceSelected": "Chưa chọn Tỉnh/TP",
+      "noWardSelected": "Chưa chọn Phường/Xã",
+      "picture": "Hình ảnh",
+      "postArticle": "Đăng tin mới",
+      "price": "Giá cho thuê",
+      "province": "Tỉnh/Thành phố ",
+      "streetAndHouseNumber": "Đường và số nhà",
+      "title": "Tiêu đề",
+      "vndPerMonth": "đồng/tháng",
+      "ward": "Phường/Xã"
+    }
   }
 }

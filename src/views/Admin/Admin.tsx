@@ -22,7 +22,7 @@ const Admin = (): JSX.Element => {
   return (
     <Box display={'flex'}>
       <AdminSideNavBar />
-      <Box padding={5} minHeight={'100vh'} flex={1}>
+      <Box padding={3} minHeight={'100vh'} flex={1}>
         <Outlet />
       </Box>
     </Box>

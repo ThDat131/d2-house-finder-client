@@ -9,6 +9,7 @@ import { Signup } from './views/Signup/Signup'
 import Main from './components/Main'
 import {
   Admin,
+  CreateArticle,
   FindHouseWithLocation,
   GeneralManagement,
 } from './views/index.view'
@@ -45,6 +46,12 @@ const router = createBrowserRouter([
   {
     path: '/quan-ly',
     element: <GeneralManagement />,
+    children: [
+      {
+        path: 'dang-tin-moi',
+        element: <CreateArticle />,
+      },
+    ],
   },
   {
     path: '/tim-tro-theo-vi-tri',
