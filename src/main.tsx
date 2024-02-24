@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { store } from './app/store'
 import './index.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import Signin from './views/Signin/Signin'
 import { Signup } from './views/Signup/Signup'
-import Main from './components/Main'
+import Home from './views/Home/Home'
 import {
   Admin,
   CreateArticle,
@@ -33,7 +33,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Main />,
+    element: <Home />,
   },
   {
     path: '/dang-ky',

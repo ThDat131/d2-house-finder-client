@@ -85,5 +85,13 @@
       "vndPerMonth": "đồng/tháng",
       "ward": "Phường/Xã"
     }
+  },
+  "home": {
+    "default": "Mặc định",
+    "newest": "Mới nhất",
+    "signin": "Đăng nhập",
+    "signout": "Đăng xuất",
+    "sort": "Sắp xếp",
+    "totalNumberOfPost": "Tổng quan {{number}} kết quả"
   }
 }

@@ -1,6 +1,31 @@
 import { Box, Button, Grid, Stack, Typography } from '@mui/material'
+import { VNDCurrencyFormat, decodeHtmlEntities } from '../utils/utils'
+import { type Article } from '../model/article/article'
 
-const PostItem = () => {
+interface PostItemProps {
+  data: Article
+}
+
+const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
+  const getExactAddress = (): string => {
+    if (
+      data.address.provinceName &&
+      data.address.districtName &&
+      data.address.wardName &&
+      data.address.streetAddress
+    )
+      return `${data.address.streetAddress}, ${data.address.wardName}, ${data.address.districtName}, ${data.address.provinceName}`
+    if (
+      data.address.provinceName &&
+      data.address.districtName &&
+      data.address.wardName
+    )
+      return `${data.address.streetAddress}, ${data.address.wardName}, ${data.address.districtName}`
+    if (data.address.provinceName && data.address.districtName)
+      return `${data.address.districtName}, ${data.address.provinceName}`
+    if (data.address.provinceName) return data.address.provinceName
+    return ''
+  }
   return (
     <Grid
       container
@@ -11,7 +36,7 @@ const PostItem = () => {
       <Grid item xs={4}>
         <Box
           component={'img'}
-          src="https://pt123.cdn.static123.com/images/thumbs/450x300/fit/2023/07/05/img-2737_1688550736.jpg"
+          src={data.images[0]}
           width={1}
           height={1}
           borderRadius={2}
@@ -20,23 +45,21 @@ const PostItem = () => {
       <Grid item xs={8} display={'flex'} flexWrap={'wrap'} pl={2} height={240}>
         <Stack maxHeight={60} overflow={'hidden'}>
           <Typography fontSize={20} textTransform={'uppercase'}>
-            Phong tro chung cu abc
+            {data.title}
           </Typography>
         </Stack>
         <Stack direction={'row'} spacing={2} alignItems={'center'} mb={1}>
-          <Typography fontSize={16} color={'green'}>
-            1.7 Trieu / thang
+          <Typography fontSize={16} color={'green'} flex={2}>
+            {VNDCurrencyFormat.format(data.price)}/thang
           </Typography>
-          <Typography>
-            10 m<sup>2</sup>
+          <Typography flex={1}>
+            {data.acreage} m<sup>2</sup>
           </Typography>
-          <Typography>Quan 7, Ho Chi Minh</Typography>
+          <Typography flex={4}>{getExactAddress()}</Typography>
         </Stack>
         <Stack overflow={'hidden'} mb={1} height={60}>
           <Typography fontSize={14}>
-            Cần cho thuê phòng riêng chung cư Long Sơn Building , Huỳnh Tấn Phát
-            ngay mặt tiền lớn thuận tiện đi lại , không ngập nước.- Phòng 10m2
-            có thông gió vách…
+            {decodeHtmlEntities(data.description)}
           </Typography>
         </Stack>
 
@@ -47,11 +70,11 @@ const PostItem = () => {
               component={'img'}
               width={35}
               height={35}
-              src="https://phongtro123.com/images/default-user.png"
+              src={data.createdBy.avatar}
             />
-            <Typography>Le Tu</Typography>
+            <Typography>{data.createdBy.fullName}</Typography>
           </Stack>
-          <Button variant="contained">Gọi 01234567899</Button>
+          <Button variant="contained">Gọi {data.createdBy.phone}</Button>
         </Box>
       </Grid>
     </Grid>

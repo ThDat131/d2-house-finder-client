@@ -1,9 +1,14 @@
 import { type CommonResponse } from '../common/common-response'
 import { type Article } from './article'
 
-interface Data {
-  meta: any
+interface ArticleResponse {
+  meta: {
+    current: number
+    pageSize: number
+    pages: number
+    total: number
+  }
   results: Article[]
 }
 
-export interface GetArticlesResponse extends CommonResponse<Data> {}
+export interface GetArticlesResponse extends CommonResponse<ArticleResponse> {}

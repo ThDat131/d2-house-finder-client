@@ -17,7 +17,7 @@ import draftToHtml from 'draftjs-to-html'
 import { Editor } from 'react-draft-wysiwyg'
 import { convertToRaw, EditorState } from 'draft-js'
 import { useTranslation } from 'react-i18next'
-import { type Article } from '../../../model/article/article'
+import { type ArticleCreatedModel } from '../../../model/article/article-create'
 import * as Yup from 'yup'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { useFormik } from 'formik'
@@ -219,7 +219,7 @@ const CreateArticle = () => {
     // formik.setFieldValue('images', [imagesUpload])
   }
 
-  const initialValues: Article = {
+  const initialValues: ArticleCreatedModel = {
     title: '',
     description: '',
     categoryId: '',
