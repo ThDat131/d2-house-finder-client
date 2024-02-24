@@ -8,11 +8,12 @@ import {
   Tab,
 } from '@mui/material'
 import HouseIcon from '@mui/icons-material/House'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { signout } from '../app/slice/auth.slice'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { type RootState } from '../app/store'
 import { useEffect, useState } from 'react'
+import Loading from './Loading'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
@@ -31,18 +32,35 @@ export const Header = (): JSX.Element => {
     dispatch(signout())
   }
 
+  const handleNavigate = (value: string) => {
+    navigate(value)
+  }
+
   return loading ? (
-    <div>Loading</div>
+    <Loading />
   ) : (
     <AppBar position="sticky">
       <Toolbar>
         <HouseIcon />
         <Typography mr={2}>Nhà trọ D2</Typography>
         <Tabs value={'main'} textColor={'inherit'}>
-          <Tab label="Trang chủ" value={'main'} />
+          <Tab
+            label="Trang chủ"
+            value={'main'}
+            onClick={() => {
+              navigate('/')
+            }}
+          />
           {Array.isArray(categories) ? (
             categories.map(c => (
-              <Tab key={c._id} label={c.name} value={c.name} />
+              <Tab
+                key={c._id}
+                label={c.name}
+                value={c.name}
+                onClick={() => {
+                  handleNavigate(c._id)
+                }}
+              />
             ))
           ) : (
             <></>

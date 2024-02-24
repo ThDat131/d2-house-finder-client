@@ -7,11 +7,27 @@ import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { type CommonResponse } from '../../model/common/common-response'
 import { type ErrorResponse } from '../../model/common/error-response'
-import { type Article } from '../../model/article/article'
+import { type ArticleCreatedModel } from '../../model/article/article-create'
 import { type GetArticlesResponse } from '../../model/article/article-response'
+import { type Article } from '../../model/article/article'
 
-const initialState = {
-  articles: [] as Article[],
+interface ArticleStateProps {
+  articles: Article[]
+  pageSize: number
+  pageCurrent: number
+  totalPage: number
+  totalPost: number
+  error: string
+  loading: boolean
+}
+
+const PAGE_SIZE = 2
+const initialState: ArticleStateProps = {
+  articles: [],
+  pageSize: PAGE_SIZE,
+  pageCurrent: 1,
+  totalPage: 0,
+  totalPost: 0,
   error: '',
   loading: false,
 }
@@ -19,20 +35,22 @@ const { authHttpService, httpService } = new HttpService()
 
 export const getArticles = createAsyncThunk(
   'article/getArticles',
-  async (_, thunkAPI) => {
+  async (current: number, thunkAPI) => {
     try {
       const response = await httpService.get<GetArticlesResponse>(
         ApiPathEnum.Article,
         {
           params: {
-            current: 1,
-            pageSize: 5,
+            current,
+            pageSize: PAGE_SIZE,
+            populate: 'createdBy',
+            fields:
+              'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone',
           },
           signal: thunkAPI.signal,
         },
       )
-
-      return response.data.data.results
+      return response.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
     }
@@ -41,7 +59,7 @@ export const getArticles = createAsyncThunk(
 
 export const createArticle = createAsyncThunk(
   'article/createArticle',
-  async (article: Article, thunkAPI) => {
+  async (article: ArticleCreatedModel, thunkAPI) => {
     try {
       const response = await authHttpService.post<
         CommonResponse<Article> | ErrorResponse
@@ -72,8 +90,12 @@ const articleSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(
       getArticles.fulfilled,
-      (state, action: PayloadAction<Article[]>) => {
-        state.articles = action.payload
+      (state, action: PayloadAction<GetArticlesResponse>) => {
+        state.articles = action.payload.data.results
+        state.pageCurrent = action.payload.data.meta.current
+        state.pageSize = action.payload.data.meta.pageSize
+        state.totalPage = action.payload.data.meta.pages
+        state.totalPost = action.payload.data.meta.total
       },
     )
     builder.addCase(
