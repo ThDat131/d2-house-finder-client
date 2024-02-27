@@ -6,19 +6,27 @@ import {
   Button,
   Tabs,
   Tab,
+  Stack,
+  Paper,
+  List,
+  ListItemButton,
 } from '@mui/material'
 import HouseIcon from '@mui/icons-material/House'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { signout } from '../app/slice/auth.slice'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { type RootState } from '../app/store'
 import { useEffect, useState } from 'react'
 import Loading from './Loading'
+import { useTranslation } from 'react-i18next'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const { t } = useTranslation()
+
   const [loading, setLoading] = useState<boolean>(true)
+  const [showUserOpts, setShowUserOpts] = useState<boolean>(false)
   const categories = useAppSelector(
     (state: RootState) => state.category?.category,
   )
@@ -68,10 +76,51 @@ export const Header = (): JSX.Element => {
         </Tabs>
         {currentUser?._id !== '' ? (
           <Box sx={{ marginLeft: 'auto' }}>
-            <Box component={'img'} src={currentUser?.avatar} />
-            <Button sx={{ color: '#fff' }} onClick={handleSignout}>
-              Đăng xuất
-            </Button>
+            <Stack
+              direction={'row'}
+              alignItems={'center'}
+              gap={1}
+              position={'relative'}
+              onClick={() => {
+                setShowUserOpts(prev => !prev)
+              }}
+              sx={{ cursor: 'pointer' }}
+            >
+              <Typography>
+                {t('header.hello', { name: currentUser.fullName })}
+              </Typography>
+              <Box
+                borderRadius={'50%'}
+                width={50}
+                height={50}
+                component={'img'}
+                src={currentUser?.avatar}
+              />
+              {showUserOpts && (
+                <Box position={'absolute'} top={60} right={0} bgcolor={'#fff'}>
+                  <Paper sx={{ height: 1 }}>
+                    <List>
+                      <ListItemButton
+                        onClick={() => {
+                          navigate('/quan-ly/dang-tin-moi')
+                        }}
+                      >
+                        {t('header.postAnArticle')}
+                      </ListItemButton>
+                      <ListItemButton>
+                        {t('header.manageArticles')}
+                      </ListItemButton>
+                      <ListItemButton>
+                        {t('header.personalInformation')}
+                      </ListItemButton>
+                      <ListItemButton onClick={handleSignout}>
+                        {t('header.signout')}
+                      </ListItemButton>
+                    </List>
+                  </Paper>
+                </Box>
+              )}
+            </Stack>
           </Box>
         ) : (
           <Box sx={{ marginLeft: 'auto' }}>
@@ -81,7 +130,7 @@ export const Header = (): JSX.Element => {
                 navigate('/dang-nhap')
               }}
             >
-              Đăng nhập
+              {t('header.signin')}
             </Button>
             <Button
               sx={{ color: '#fff' }}
@@ -89,7 +138,7 @@ export const Header = (): JSX.Element => {
                 navigate('dang-ky')
               }}
             >
-              Đăng ký
+              {t('header.signup')}
             </Button>
           </Box>
         )}

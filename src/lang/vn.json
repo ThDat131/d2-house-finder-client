@@ -86,6 +86,15 @@
       "ward": "Phường/Xã"
     }
   },
+  "header": {
+    "hello": "Xin chào, {{name}}!",
+    "manageArticles": "Quản lý tin đăng",
+    "personalInformation": "Thông tin cá nhân",
+    "postAnArticle": "Đăng tin cho thuê",
+    "signin": "Đăng nhập",
+    "signout": "Đăng xuất",
+    "signup": "Đăng ký"
+  },
   "home": {
     "default": "Mặc định",
     "newest": "Mới nhất",
