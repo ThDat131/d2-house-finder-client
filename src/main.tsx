@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { store } from './app/store'
 import './index.css'
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Signin from './views/Signin/Signin'
 import { Signup } from './views/Signup/Signup'
 import Home from './views/Home/Home'
 import {
   Admin,
+  ArticleDetails,
   CreateArticle,
   FindHouseWithLocation,
   GeneralManagement,
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
   {
     path: '/tim-tro-theo-vi-tri',
     element: <FindHouseWithLocation />,
+  },
+  {
+    path: '/bai-dang/:id',
+    element: <ArticleDetails />,
   },
   {
     path: '/admin',

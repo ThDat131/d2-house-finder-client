@@ -13,12 +13,13 @@ import {
 } from '@mui/material'
 import HouseIcon from '@mui/icons-material/House'
 import { useNavigate } from 'react-router-dom'
-import { signout } from '../app/slice/auth.slice'
+import { getCurrentUser, signout } from '../app/slice/auth.slice'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { type RootState } from '../app/store'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Loading from './Loading'
 import { useTranslation } from 'react-i18next'
+import { getCategories } from '../app/slice/category.slice'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
@@ -31,9 +32,32 @@ export const Header = (): JSX.Element => {
     (state: RootState) => state.category?.category,
   )
   const currentUser = useAppSelector((state: RootState) => state.auth.user)
+  const currentUserRef = useRef(false)
 
   useEffect(() => {
-    setLoading(false)
+    const fetchData = async () => {
+      let categoryPromise
+      let currentUserPromise
+
+      if (!categories || categories.length <= 0) {
+        categoryPromise = dispatch(getCategories())
+      }
+
+      if (!currentUserRef.current) {
+        currentUserPromise = dispatch(getCurrentUser())
+      }
+
+      await Promise.all([categoryPromise, currentUserPromise])
+
+      setLoading(false)
+    }
+
+    fetchData()
+
+    return () => {
+      dispatch(getCurrentUser())
+      currentUserRef.current = true
+    }
   }, [])
 
   const handleSignout = () => {

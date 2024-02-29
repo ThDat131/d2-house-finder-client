@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react'
-import { getCategories } from '../../app/slice/category.slice'
+import { useEffect } from 'react'
 import {
   Box,
   Button,
@@ -14,7 +13,6 @@ import PriceFilter from '../../components/PriceFilter'
 import AcreageFilter from '../../components/AcreageFilter'
 import HeaderDefault from '../../components/HeaderDefault'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { getCurrentUser } from '../../app/slice/auth.slice'
 import { getArticles } from '../../app/slice/article.slice.'
 import { type RootState } from '../../app/store'
 import { useTranslation } from 'react-i18next'
@@ -27,10 +25,6 @@ export const Home = (): JSX.Element => {
   const articlesLoading = useAppSelector(
     (state: RootState) => state.article.loading,
   )
-  const pageSize = useAppSelector((state: RootState) => state.article.pageSize)
-  const currentPage = useAppSelector(
-    (state: RootState) => state.article.pageCurrent,
-  )
   const totalPage = useAppSelector(
     (state: RootState) => state.article.totalPage,
   )
@@ -38,20 +32,11 @@ export const Home = (): JSX.Element => {
     (state: RootState) => state.article.totalPost,
   )
 
-  const currentUserRef = useRef(false)
-
   useEffect(() => {
-    const categoryPromise = dispatch(getCategories())
     const articlesPromise = dispatch(getArticles(1))
 
-    if (!currentUserRef.current) {
-      dispatch(getCurrentUser())
-    }
-
     return () => {
-      categoryPromise.abort()
       articlesPromise.abort()
-      currentUserRef.current = true
     }
   }, [])
 

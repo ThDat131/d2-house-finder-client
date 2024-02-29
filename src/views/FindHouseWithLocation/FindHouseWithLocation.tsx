@@ -6,7 +6,7 @@ import { Box, Paper, TextField } from '@mui/material'
 import { Header } from '../../components/Header'
 
 const FindHouseWithLocation = () => {
-  const [viewportData, setViewPortData] = useState<ViewPort>({
+  const [viewportData, setViewportData] = useState<ViewPort>({
     width: '100%',
     height: '100%',
     latitude: 10.8231,
@@ -41,13 +41,7 @@ const FindHouseWithLocation = () => {
             />
           </Paper>
         </Box>
-        <GoongMap
-          data={viewportData}
-          setData={setViewPortData}
-          layer={false}
-          markers={markers}
-        />
-        ;
+        <GoongMap data={viewportData} layer={false} markers={markers} />;
       </Box>
       ;
     </>
