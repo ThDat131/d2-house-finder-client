@@ -1,12 +1,15 @@
 import { Box, Button, Grid, Stack, Typography } from '@mui/material'
 import { VNDCurrencyFormat, decodeHtmlEntities } from '../utils/utils'
 import { type Article } from '../model/article/article'
+import { useNavigate } from 'react-router-dom'
 
 interface PostItemProps {
   data: Article
 }
 
 const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
+  const navigate = useNavigate()
+
   const getExactAddress = (): string => {
     if (
       data.address.provinceName &&
@@ -30,8 +33,11 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
     <Grid
       container
       padding={2}
-      sx={{ backgroundColor: '#fff9f3' }}
+      sx={{ backgroundColor: '#fff9f3', cursor: 'pointer' }}
       borderRadius={2}
+      onClick={() => {
+        navigate(`bai-dang/${data._id}`)
+      }}
     >
       <Grid item xs={4}>
         <Box

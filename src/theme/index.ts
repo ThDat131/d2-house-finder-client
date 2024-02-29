@@ -108,6 +108,13 @@ const theme = responsiveFontSizes(
           },
         },
       },
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            zIndex: 1050,
+          },
+        },
+      },
     },
   }),
 )

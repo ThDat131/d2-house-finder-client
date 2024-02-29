@@ -1,7 +1,7 @@
 import { type CommonResponse } from '../common/common-response'
 import { type Article } from './article'
 
-interface ArticleResponse {
+interface ArticlesResponse {
   meta: {
     current: number
     pageSize: number
@@ -11,4 +11,10 @@ interface ArticleResponse {
   results: Article[]
 }
 
-export interface GetArticlesResponse extends CommonResponse<ArticleResponse> {}
+interface ArticleResponse {
+  article: Article
+}
+
+export interface GetArticlesResponse extends CommonResponse<ArticlesResponse> {}
+
+export interface GetArticleResponse extends CommonResponse<ArticleResponse> {}

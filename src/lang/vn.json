@@ -49,6 +49,20 @@
       "statistic": "Thống kê"
     }
   },
+  "articleDetails": {
+    "address": "Địa chỉ",
+    "allImages": "Xem tất cả ảnh",
+    "acreage": "Diện tích",
+    "category": "Danh mục",
+    "description": "Thông tin mô tả",
+    "email": "Email",
+    "follow": "Theo dõi",
+    "map": "Bản đồ",
+    "owner": "Người đăng",
+    "phone": "Số điện thoại",
+    "price": "Giá",
+    "updatedAt": "Ngày cập nhật"
+  },
   "chooseAddressModal": {
     "chooseProvince": "Chọn tỉnh thành",
     "nationWide": "Toàn quốc",

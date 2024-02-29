@@ -38,7 +38,7 @@ const GoongMap: React.FC<GoongMapProps> = ({ data, markers, layer }) => {
                 latitude={marker.latitude}
                 longitude={marker.longitude}
               >
-                <LocationOnIcon />
+                <LocationOnIcon sx={{ color: '#ff0000', fontSize: 50 }} />
               </Marker>
             )
           })
