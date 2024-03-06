@@ -54,13 +54,18 @@
     "allImages": "Xem tất cả ảnh",
     "acreage": "Diện tích",
     "category": "Danh mục",
+    "comment": "Bình luận",
     "description": "Thông tin mô tả",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
     "email": "Email",
     "follow": "Theo dõi",
     "map": "Bản đồ",
     "owner": "Người đăng",
     "phone": "Số điện thoại",
     "price": "Giá",
+    "reply": "Phản hồi",
+    "submitYourComment": "Nhập bình luận...",
     "updatedAt": "Ngày cập nhật"
   },
   "chooseAddressModal": {

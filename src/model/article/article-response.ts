@@ -1,3 +1,4 @@
+import { Comment } from '../comment/comment'
 import { type CommonResponse } from '../common/common-response'
 import { type Article } from './article'
 
@@ -12,6 +13,7 @@ interface ArticlesResponse {
 }
 
 interface ArticleResponse {
+  comments: Comment[]
   article: Article
 }
 

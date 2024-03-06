@@ -15,8 +15,6 @@ import DOMPurify from 'dompurify'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { HttpService } from '../../api/HttpService'
-import { type GetArticleResponse } from '../../model/article/article-response'
-import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { type Article } from '../../model/article/article'
 import Loading from '../../components/Loading'
 import { Header } from '../../components/Header'
@@ -31,19 +29,23 @@ import { type ViewPort } from '../../model/utils/map'
 import { FlyToInterpolator } from '@goongmaps/goong-map-react'
 import Fancybox from '../../components/FancyBox'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import CommentInput from './components/CommentInput'
+import Comment from './components/Comment'
+import { RootState } from '../../app/store'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { getArticle } from '../../app/slice/article.slice.'
 
 const ArticleDetails = (): JSX.Element => {
   const { id } = useParams()
-  const { httpService } = new HttpService()
+  const { httpService, authHttpService } = new HttpService()
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
 
-  const [article, setArticle] = useState<Article>()
-  const [loading, setLoading] = useState<boolean>(true)
   const [viewportData, setViewportData] = useState<ViewPort>({
     width: '100%',
     height: '100%',
-    latitude: 10,
-    longitude: 106,
+    latitude: 0,
+    longitude: 0,
     zoom: 15,
     maxZoom: 16,
     minZoom: 6,
@@ -51,42 +53,36 @@ const ArticleDetails = (): JSX.Element => {
     transitionInterpolator: new FlyToInterpolator(),
   })
   const [marker, setMarker] = useState({
-    longitude: 100,
-    latitude: 10,
+    longitude: 0,
+    latitude: 0,
   })
+  const [article, setArticle] = useState<Article>()
+  const [loadingPage, setLoadingPage] = useState<boolean>(true)
+  const currentUser = useAppSelector((state: RootState) => state.auth.user)
+  const loading = useAppSelector((state: RootState) => state.article.loading)
+  const comments = useAppSelector((state: RootState) => state.article.comments)
 
   useEffect(() => {
-    moment.locale('vi')
-  }, [])
+    const promise = dispatch(getArticle(id as string))
 
-  useEffect(() => {
-    getArticleDetails()
-  }, [])
+    promise.then(res => {
+      if (res.payload) {
+        const result = res.payload as any
+        const articleFromResult = result.data.article as Article
+        const longitude = articleFromResult.address.longitude
+        const latitude = articleFromResult.address.latitude
 
-  const getArticleDetails = async () => {
-    const response = await httpService.get<GetArticleResponse>(
-      `${ApiPathEnum.Article}/${id}`,
-    )
+        setArticle(articleFromResult)
+        setViewportData(prev => ({ ...prev, latitude, longitude }))
+        setMarker({ latitude, longitude })
+        setLoadingPage(false)
+      }
+    })
 
-    if (response.status === 200) {
-      const result = response.data.data.article
-
-      setArticle(result)
-
-      setViewportData(prev => ({
-        ...prev,
-        longitude: result.address.longitude,
-        latitude: result.address.latitude,
-      }))
-
-      setMarker({
-        longitude: result.address.longitude,
-        latitude: result.address.latitude,
-      })
+    return () => {
+      promise.abort()
     }
-
-    setLoading(false)
-  }
+  }, [])
 
   const getExactAddress = (data: Article): string => {
     if (
@@ -108,7 +104,7 @@ const ArticleDetails = (): JSX.Element => {
     return ''
   }
 
-  return loading ? (
+  return loading || loadingPage ? (
     <Loading />
   ) : (
     <>
@@ -164,7 +160,7 @@ const ArticleDetails = (): JSX.Element => {
                     {t('articleDetails.address')}
                   </TableCell>
                   <TableCell colSpan={3}>
-                    {getExactAddress(article as Article)}
+                    {article ? getExactAddress(article) : null}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -225,7 +221,7 @@ const ArticleDetails = (): JSX.Element => {
                 ></Box>
               </Box>
             </Paper>
-            <Paper elevation={5}>
+            <Paper elevation={5} sx={{ mb: 2 }}>
               <Grid container p={2}>
                 <Typography variant="h4" mb={1}>
                   {t('articleDetails.map')}
@@ -239,6 +235,26 @@ const ArticleDetails = (): JSX.Element => {
                 </Grid>
               </Grid>
             </Paper>
+            <Grid container>
+              <Grid item xs={12}>
+                <Typography variant="h4" mb={1}>
+                  {t('articleDetails.comment')}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <CommentInput type={0} />
+              </Grid>
+              <Grid item container xs={12}>
+                {comments.map(x => (
+                  <Grid item xs={12} key={x._id}>
+                    <Comment
+                      comment={x}
+                      showAction={currentUser._id === x.createdBy._id}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={3}>
             <Paper elevation={5}>
@@ -246,6 +262,7 @@ const ArticleDetails = (): JSX.Element => {
                 <Box width={100} height={100}>
                   <Box
                     component={'img'}
+                    boxShadow={2}
                     width={1}
                     height={1}
                     src={article?.createdBy.avatar}
