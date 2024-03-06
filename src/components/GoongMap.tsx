@@ -13,8 +13,8 @@ interface GoongMapProps {
 const GoongMap: React.FC<GoongMapProps> = ({ data, markers, layer }) => {
   const MapAPIKey = import.meta.env.VITE_GOONG_MAPTILES_KEY
   const [viewPort, setViewPort] = useState({
-    latitude: 10,
-    longitude: 106,
+    latitude: 0,
+    longitude: 0,
     zoom: 0,
   })
 

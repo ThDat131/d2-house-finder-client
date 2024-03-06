@@ -3,6 +3,7 @@ const prefix = '/api'
 export const ApiPathEnum = {
   Article: `${prefix}/v1/articles`,
   Categories: `${prefix}/v1/categories`,
+  Comments: `${prefix}/v1/comments`,
   GetAllUser: `${prefix}/v1/users`,
   Signin: `${prefix}/v1/auth/login`,
   Geocode: 'geocode',
