@@ -18,6 +18,7 @@ export interface Article {
   createdAt: Date
   updatedAt: Date
   createdBy: {
+    _id: string
     fullName: string
     email: string
     avatar: string

@@ -13,8 +13,7 @@ import {
 } from '@mui/material'
 import DOMPurify from 'dompurify'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { HttpService } from '../../api/HttpService'
+import { useNavigate, useParams } from 'react-router-dom'
 import { type Article } from '../../model/article/article'
 import Loading from '../../components/Loading'
 import { Header } from '../../components/Header'
@@ -37,7 +36,7 @@ import { getArticle } from '../../app/slice/article.slice.'
 
 const ArticleDetails = (): JSX.Element => {
   const { id } = useParams()
-  const { httpService, authHttpService } = new HttpService()
+  const navigate = useNavigate()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 
@@ -259,17 +258,24 @@ const ArticleDetails = (): JSX.Element => {
           <Grid item xs={3}>
             <Paper elevation={5}>
               <Stack p={2} spacing={2} alignItems={'center'}>
-                <Box width={100} height={100}>
-                  <Box
-                    component={'img'}
-                    boxShadow={2}
-                    width={1}
-                    height={1}
-                    src={article?.createdBy.avatar}
-                    borderRadius={'50%'}
-                  ></Box>
+                <Box
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    navigate(`/trang-ca-nhan/${article?.createdBy._id}`)
+                  }}
+                >
+                  <Box width={100} height={100}>
+                    <Box
+                      component={'img'}
+                      boxShadow={2}
+                      width={1}
+                      height={1}
+                      src={article?.createdBy.avatar}
+                      borderRadius={'50%'}
+                    ></Box>
+                  </Box>
+                  <Typography>{article?.createdBy.fullName}</Typography>
                 </Box>
-                <Typography>{article?.createdBy.fullName}</Typography>
                 <Button
                   variant="contained"
                   size="large"
