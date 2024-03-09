@@ -33,11 +33,8 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
     <Grid
       container
       padding={2}
-      sx={{ backgroundColor: '#fff9f3', cursor: 'pointer' }}
+      sx={{ backgroundColor: '#fff9f3' }}
       borderRadius={2}
-      onClick={() => {
-        navigate(`bai-dang/${data._id}`)
-      }}
     >
       <Grid item xs={4}>
         <Box
@@ -46,10 +43,21 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
           width={1}
           height={1}
           borderRadius={2}
-        ></Box>
+          sx={{ cursor: 'pointer' }}
+          onClick={() => {
+            navigate(`bai-dang/${data._id}`)
+          }}
+        />
       </Grid>
       <Grid item xs={8} display={'flex'} flexWrap={'wrap'} pl={2} height={240}>
-        <Stack maxHeight={60} overflow={'hidden'}>
+        <Stack
+          maxHeight={60}
+          overflow={'hidden'}
+          sx={{ cursor: 'pointer' }}
+          onClick={() => {
+            navigate(`bai-dang/${data._id}`)
+          }}
+        >
           <Typography fontSize={20} textTransform={'uppercase'}>
             {data.title}
           </Typography>
@@ -70,7 +78,15 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
         </Stack>
 
         <Box display={'flex'} justifyContent={'space-between'} width={1}>
-          <Stack direction={'row'} spacing={1} alignItems={'center'}>
+          <Stack
+            direction={'row'}
+            spacing={1}
+            alignItems={'center'}
+            sx={{ cursor: 'pointer' }}
+            onClick={() => {
+              navigate(`/trang-ca-nhan/${data?.createdBy._id}`)
+            }}
+          >
             <Box
               borderRadius={'50%'}
               component={'img'}

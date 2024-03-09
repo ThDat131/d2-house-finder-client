@@ -1,3 +1,5 @@
+import { FollowEntity } from '../follow/follow-entity'
+
 export interface User {
   _id: string
   email: string
@@ -7,4 +9,6 @@ export interface User {
   active: boolean
   fullName: string
   phone: string
+  followers: FollowEntity[]
+  followings: FollowEntity[]
 }

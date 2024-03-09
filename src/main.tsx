@@ -13,6 +13,7 @@ import {
   CreateArticle,
   FindHouseWithLocation,
   GeneralManagement,
+  Profile,
 } from './views/index.view'
 import { ThemeProvider } from '@emotion/react'
 import theme from './theme'
@@ -95,6 +96,10 @@ const router = createBrowserRouter([
         element: <AdminPostView />,
       },
     ],
+  },
+  {
+    path: '/trang-ca-nhan/:id',
+    element: <Profile />,
   },
 ])
 

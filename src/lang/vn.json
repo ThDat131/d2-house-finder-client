@@ -27,6 +27,7 @@
       "search": "Tìm kiếm",
       "uploadAvatar": "Tải ảnh đại diện"
     },
+
     "category": {
       "alreadyExists": "Danh mục đã tồn tại",
       "createACategory": "Tạo danh mục",
@@ -48,6 +49,9 @@
       "user": "Người dùng",
       "statistic": "Thống kê"
     }
+  },
+  "articleBox": {
+    "vndPerMonth": "{{price}}/tháng"
   },
   "articleDetails": {
     "address": "Địa chỉ",
@@ -121,5 +125,13 @@
     "signout": "Đăng xuất",
     "sort": "Sắp xếp",
     "totalNumberOfPost": "Tổng quan {{number}} kết quả"
+  },
+  "profile": {
+    "article": "Bài đăng",
+    "canNotFollowYourSelf": "Không thể theo dõi chính bạn",
+    "followers": "Người theo dõi",
+    "followings": "Đang theo dõi",
+    "follow": "Theo dõi",
+    "userArticles": "Các bài đăng"
   }
 }
