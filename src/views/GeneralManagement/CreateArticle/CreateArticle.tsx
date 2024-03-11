@@ -93,6 +93,7 @@ const CreateArticle = () => {
   })
 
   useEffect(() => {
+    if (provinces?.length > 0 && categories?.length > 0) return
     const provincePromise = dispatch(getAllProvinces())
     const categoryPromise = dispatch(getCategories())
     return () => {

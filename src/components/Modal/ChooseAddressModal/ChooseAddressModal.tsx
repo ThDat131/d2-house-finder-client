@@ -64,6 +64,8 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
   const [page, setPage] = useState<number>(0)
 
   useEffect(() => {
+    if (provinces?.length > 0) return
+
     const provincePromise = dispatch(getAllProvinces())
 
     return () => {

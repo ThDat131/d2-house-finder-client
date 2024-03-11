@@ -9,6 +9,7 @@ import { Signup } from './views/Signup/Signup'
 import Home from './views/Home/Home'
 import {
   Admin,
+  ArticleCategory,
   ArticleDetails,
   CreateArticle,
   FindHouseWithLocation,
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
   {
     path: '/trang-ca-nhan/:id',
     element: <Profile />,
+  },
+  {
+    path: '/danh-muc/:name',
+    element: <ArticleCategory />,
   },
 ])
 

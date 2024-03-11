@@ -55,6 +55,11 @@ interface EditCommentProps {
   }
 }
 
+interface meta {
+  current: number
+  categoryId?: string
+}
+
 const PAGE_SIZE = 2
 const initialState: ArticleStateProps = {
   articles: [],
@@ -71,17 +76,18 @@ const { authHttpService, httpService } = new HttpService()
 
 export const getArticles = createAsyncThunk(
   'article/getArticles',
-  async (current: number, thunkAPI) => {
+  async (data: meta, thunkAPI) => {
     try {
       const response = await httpService.get<GetArticlesResponse>(
         ApiPathEnum.Article,
         {
           params: {
-            current,
+            current: data.current,
             pageSize: PAGE_SIZE,
             populate: 'createdBy',
             fields:
               'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone',
+            categoryId: data.categoryId,
           },
           signal: thunkAPI.signal,
         },

@@ -63,7 +63,7 @@ export const Profile = () => {
   return loading ? (
     <Loading />
   ) : (
-    <UserLayout>
+    <UserLayout haveSearch={false}>
       <Grid container justifyContent={'center'}>
         <Grid item xs={12}>
           <Paper>

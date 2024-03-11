@@ -45,7 +45,7 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
           borderRadius={2}
           sx={{ cursor: 'pointer' }}
           onClick={() => {
-            navigate(`bai-dang/${data._id}`)
+            navigate(`/bai-dang/${data._id}`)
           }}
         />
       </Grid>
@@ -55,7 +55,7 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
           overflow={'hidden'}
           sx={{ cursor: 'pointer' }}
           onClick={() => {
-            navigate(`bai-dang/${data._id}`)
+            navigate(`/bai-dang/${data._id}`)
           }}
         >
           <Typography fontSize={20} textTransform={'uppercase'}>

@@ -8,19 +8,17 @@ import { useState } from 'react'
 import ChooseAddressModal from './Modal/ChooseAddressModal/ChooseAddressModal'
 import ChoosePricemodal from './Modal/ChoosePriceModal'
 import ChooseAcreageModal from './Modal/ChooseAcreageModal'
-import {
-  Box,
-  Typography,
-  Button,
-  styled,
-} from '@mui/material'
-import { Header } from './Header'
+import { Box, Typography, Button, styled } from '@mui/material'
 import { useAppSelector } from '../app/hooks'
 import { type RootState } from '../app/store'
 
-const HeaderDefault = () => {
-  const provinceSelected = useAppSelector((root: RootState) => root.provinces.selected)
-  const districtSelected = useAppSelector((root: RootState) => root.districts.selected)
+const HeaderSearch = () => {
+  const provinceSelected = useAppSelector(
+    (root: RootState) => root.provinces.selected,
+  )
+  const districtSelected = useAppSelector(
+    (root: RootState) => root.districts.selected,
+  )
   const wardSelected = useAppSelector((root: RootState) => root.wards.selected)
   const [categoryModal, setCategoryModal] = useState<boolean>(false)
   const [provinceModal, setProvinceModal] = useState<boolean>(false)
@@ -60,14 +58,12 @@ const HeaderDefault = () => {
     if (provinceSelected && districtSelected) {
       return `${provinceSelected.province_name}, ${districtSelected.district_name}`
     }
-    if (provinceSelected)
-      return `${provinceSelected.province_name}`
+    if (provinceSelected) return `${provinceSelected.province_name}`
     return 'Toàn quốc'
   }
 
   return (
     <>
-      <Header></Header>
       <Box
         display={'flex'}
         alignItems={'center'}
@@ -121,4 +117,4 @@ const HeaderDefault = () => {
   )
 }
 
-export default HeaderDefault
+export default HeaderSearch
