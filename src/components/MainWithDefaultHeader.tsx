@@ -1,5 +1,5 @@
 import React from 'react'
-import HeaderDefault from './HeaderDefault'
+import HeaderDefault from './HeaderSearch'
 import { Box } from '@mui/material'
 
 interface Props {

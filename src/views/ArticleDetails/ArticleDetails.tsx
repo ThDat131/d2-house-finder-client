@@ -68,8 +68,8 @@ const ArticleDetails = (): JSX.Element => {
       if (res.payload) {
         const result = res.payload as any
         const articleFromResult = result.data.article as Article
-        const longitude = articleFromResult.address.longitude
-        const latitude = articleFromResult.address.latitude
+        const longitude = articleFromResult.location.coordinates[0]
+        const latitude = articleFromResult.location.coordinates[1]
 
         setArticle(articleFromResult)
         setViewportData(prev => ({ ...prev, latitude, longitude }))

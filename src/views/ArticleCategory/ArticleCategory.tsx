@@ -1,23 +1,17 @@
+import { Box, Button, Grid, Pagination, Stack, Typography } from '@mui/material'
+import UserLayout from '../../components/Layout/UserLayout'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { useTranslation } from 'react-i18next'
+import { RootState } from '../../app/store'
 import { useEffect } from 'react'
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Pagination,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { getArticles } from '../../app/slice/article.slice.'
 import PostItem from '../../components/PostItem'
 import PriceFilter from '../../components/PriceFilter'
 import AcreageFilter from '../../components/AcreageFilter'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { getArticles } from '../../app/slice/article.slice.'
-import { type RootState } from '../../app/store'
-import { useTranslation } from 'react-i18next'
-import UserLayout from '../../components/Layout/UserLayout'
+import { useParams } from 'react-router-dom'
 
-export const Home = (): JSX.Element => {
+const ArticleCategory = (): JSX.Element => {
+  const { name } = useParams()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
 
@@ -33,20 +27,21 @@ export const Home = (): JSX.Element => {
   )
 
   useEffect(() => {
-    const articlesPromise = dispatch(getArticles(1))
+    const articlesPromise = dispatch(
+      getArticles({ current: 1, categoryId: `/${name}/i` }),
+    )
 
     return () => {
       articlesPromise.abort()
     }
-  }, [])
+  }, [name])
 
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     value: number,
   ) => {
-    dispatch(getArticles({ current: value }))
+    dispatch(getArticles({ current: value, categoryId: `/${name}/i` }))
   }
-
   return (
     <UserLayout haveSearch={true}>
       <Grid
@@ -92,4 +87,4 @@ export const Home = (): JSX.Element => {
   )
 }
 
-export default Home
+export default ArticleCategory

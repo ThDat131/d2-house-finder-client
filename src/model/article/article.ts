@@ -1,5 +1,6 @@
 import { type Address } from '../address/address'
 import { Comment } from '../comment/comment'
+import { Location } from '../location/location'
 
 export interface Article {
   _id: string
@@ -25,4 +26,5 @@ export interface Article {
     phone: string
   }
   comments: Comment[]
+  location: Location
 }
