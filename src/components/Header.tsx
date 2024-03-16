@@ -63,16 +63,10 @@ export const Header = (): JSX.Element => {
 
   const handleSignout = () => {
     dispatch(signout())
+    navigate('/dang-nhap')
   }
 
   const handlChangeCategory = (evt: React.SyntheticEvent, value: string) => {
-    if (value === 'main') {
-      setSelectedCategory('main')
-      navigate('/')
-
-      return
-    }
-
     setSelectedCategory(value)
     navigate(`/danh-muc/${value}`)
   }
@@ -82,14 +76,24 @@ export const Header = (): JSX.Element => {
   ) : (
     <AppBar position="sticky">
       <Toolbar>
-        <HouseIcon />
-        <Typography mr={2}>Nhà trọ D2</Typography>
+        <Stack
+          spacing={1}
+          direction={'row'}
+          px={2}
+          sx={{ cursor: 'pointer' }}
+          onClick={() => {
+            navigate('/')
+          }}
+        >
+          <HouseIcon />
+          <Typography mr={2}>Nhà trọ D2</Typography>
+        </Stack>
         <Tabs
           value={selectedCategory}
           textColor={'inherit'}
           onChange={handlChangeCategory}
         >
-          <Tab label="Trang chủ" value={'main'} />
+          {/* <Tab key={'main'} label="Trang chủ" value={'main'} /> */}
           {Array.isArray(categories) &&
             categories.map(c => (
               <Tab key={c._id} label={c.name} value={c.name} />

@@ -1,16 +1,4 @@
 {
-  "signin": {
-    "didntHaveAccountGetOne": "Chưa có tài khoản? Đăng ký ngay",
-    "email": "Email",
-    "emailIsRequired": "Email là bắt buộc",
-    "error": "Sai email hoặc mật khẩu!",
-    "forgotPassword": "Quên mật khẩu",
-    "password": "Mật khẩu",
-    "passwordIsRequired": "Mật khẩu là bắt buộc",
-    "passwordIsTooShort": "Mật khẩu quá ngắn",
-    "rememberAccount": "Ghi nhớ tài khoản",
-    "signin": "Đăng nhập"
-  },
   "admin": {
     "user": {
       "active": "Kích hoạt",
@@ -133,5 +121,43 @@
     "followings": "Đang theo dõi",
     "follow": "Theo dõi",
     "userArticles": "Các bài đăng"
+  },
+  "signin": {
+    "didntHaveAccountGetOne": "Chưa có tài khoản? Đăng ký ngay",
+    "email": "Email",
+    "emailIsRequired": "Email là bắt buộc",
+    "error": "Sai email hoặc mật khẩu!",
+    "forgotPassword": "Quên mật khẩu",
+    "password": "Mật khẩu",
+    "passwordIsRequired": "Mật khẩu là bắt buộc",
+    "passwordIsTooShort": "Mật khẩu quá ngắn",
+    "rememberAccount": "Ghi nhớ tài khoản",
+    "signin": "Đăng nhập"
+  },
+  "signup": {
+    "alreadyHaveAccountSignin": "Đã có tài khoản? Đăng nhập",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "emailAlreadyExist": "Emai đã tồn tại. Vui lòng đăng nhập",
+    "emailIsRequired": "Email là bắt buộc",
+    "email": "Email",
+    "fullNameIsRequired": "Họ tên là bắt buộc",
+    "fullName": "Họ tên",
+    "confirmPasswordIsRequired": "Xác nhận lại mật khẩu là bắt buộc",
+    "passwordIsRequired": "Mật khẩu là bắt buộc",
+    "passwordIsTooShort": "Mật khẩu quá ngắn",
+    "passwordMustMatch": "Mật khẩu phải trùng khớp",
+    "password": "Mật khẩu",
+    "signup": "Đăng ký"
+  },
+  "verify": {
+    "code": "Mã xác nhận",
+    "pleaseInputCode": "Vui lòng nhập mã xác nhận",
+    "pleaseVerify": "Đã gửi mã xác nhận, vui lòng kiểm tra email",
+    "pleaseWaitSecond": "Vui lòng đợi {{time}} giây",
+    "sendNewCode": "Gửi mã xác nhận",
+    "submit": "Xác nhận",
+    "verifyAccount": "Xác thực tài khoản",
+    "verifyFailed": "Vui lòng kiểm tra lại mã xác nhận",
+    "verifySuccessfully": "Xác thực thành công. Hãy tiếp tục đăng nhập"
   }
 }

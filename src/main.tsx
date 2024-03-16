@@ -15,6 +15,7 @@ import {
   FindHouseWithLocation,
   GeneralManagement,
   Profile,
+  Verify,
 } from './views/index.view'
 import { ThemeProvider } from '@emotion/react'
 import theme from './theme'
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
   {
     path: '/danh-muc/:name',
     element: <ArticleCategory />,
+  },
+  {
+    path: 'xac-nhan',
+    element: <Verify />,
   },
 ])
 

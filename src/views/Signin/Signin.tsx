@@ -7,7 +7,6 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
-  Link,
   Paper,
   TextField,
   Typography,
@@ -18,7 +17,7 @@ import { useFormik } from 'formik'
 import { getCurrentUser, signinAPI } from '../../app/slice/auth.slice'
 import { type SigninModel } from '../../model/auth/signin-model'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import HouseImage from '../../assets/image/house-img.jpg'
 import { type RootState } from '../../app/store'
@@ -46,7 +45,7 @@ const Signin = (): JSX.Element => {
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
-      .required(t('signin.emailValidation'))
+      .required(t('signin.emailIsRequired'))
       .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, t('signin.emailIsRequired')),
 
     password: Yup.string()
@@ -63,7 +62,11 @@ const Signin = (): JSX.Element => {
         setLoading(false)
         navigate('/')
       })
-      .catch(() => {
+      .catch(res => {
+        if (res.response.status === 403) {
+          localStorage.setItem('verify', res.config.data)
+          navigate('/xac-nhan')
+        }
         setError(true)
         setLoading(false)
       })
@@ -152,14 +155,16 @@ const Signin = (): JSX.Element => {
             </LoadingButton>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  {t('signin.forgotPassword')}
-                </Link>
+                <Typography>
+                  <Link to={'/'}>{t('signin.forgotPassword')}</Link>
+                </Typography>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {t('signin.didntHaveAccountGetOne')}
-                </Link>
+                <Typography>
+                  <Link to={'/dang-ky'}>
+                    {t('signin.didntHaveAccountGetOne')}
+                  </Link>
+                </Typography>
               </Grid>
             </Grid>
           </form>

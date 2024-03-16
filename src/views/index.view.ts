@@ -6,3 +6,4 @@ export { default as CreateArticle } from './GeneralManagement/CreateArticle/Crea
 export { default as Home } from './Home/Home'
 export { default as Profile } from './Profile/Profile'
 export { default as ArticleCategory } from './ArticleCategory/ArticleCategory'
+export { default as Verify } from './Verify/Verify'
