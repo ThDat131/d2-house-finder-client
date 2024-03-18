@@ -1,44 +1,33 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  FormHelperText,
-  Grid,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, FormHelperText, Grid, Paper, Typography } from '@mui/material'
 import HouseImage from '../../assets/image/house-img.jpg'
 import { LoadingButton } from '@mui/lab'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import BlackLogo from '../../assets/image/logo/BlackLogo.png'
+import VerificationCodeInput from '../../components/VerificationCodeInput'
 
 const Verify = (): JSX.Element => {
   const { httpService } = new HttpService()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [code, setCode] = useState<string>('')
+  const [codes, setCodes] = useState<string[]>(new Array(6).fill(''))
   const [loading, setLoading] = useState<boolean>(false)
   const [disabled, setDisabled] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const defaultTime = import.meta.env.VITE_PENDING_TIME / 1000
   const [timer, setTimer] = useState<number>(defaultTime)
+  const email = JSON.parse(localStorage.getItem('verify') ?? '').email ?? ''
 
   const handleSendMailVerify = () => {
-    const dataString = localStorage.getItem('verify')
-    if (dataString === null) return
-    const data = JSON.parse(dataString)
     setDisabled(true)
 
     httpService
       .post(ApiPathEnum.SendCode, {
-        email: data.email,
+        email,
       })
       .then(() => {
         toast.success(t('verify.pleaseVerify'))
@@ -71,21 +60,20 @@ const Verify = (): JSX.Element => {
   }, [disabled])
 
   const handleSubmitCode = () => {
-    if (!code) {
+    const check = codes.every(x => x !== '')
+    console.log(check)
+
+    if (!check) {
       setError(true)
       return
     }
-
-    const dataString = localStorage.getItem('verify')
-    if (dataString === null) return
-    const data = JSON.parse(dataString)
 
     setLoading(true)
 
     httpService
       .post(ApiPathEnum.Verify, {
-        email: data.email,
-        passcode: code,
+        email,
+        passcode: codes.join(''),
       })
       .then(res => {
         if (res.status === 201) {
@@ -104,9 +92,6 @@ const Verify = (): JSX.Element => {
       })
   }
 
-  const handleFocus = () => {
-    setError(false)
-  }
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <Grid
@@ -131,24 +116,21 @@ const Verify = (): JSX.Element => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Box width={200} height={200}>
+            <Box component={'img'} src={BlackLogo} width={1} height={1} />
+          </Box>
           <Typography component="h1" variant="h5" mb={2}>
             {t('verify.verifyAccount')}
           </Typography>
-          <Stack direction={'row'} spacing={1} width={1}>
-            <TextField
-              label={t('verify.code')}
-              sx={{ marginBottom: 2, flex: 1 }}
-              value={code}
-              onChange={evt => {
-                setCode(evt.target.value)
-              }}
-              onFocus={() => {
-                handleFocus()
-              }}
-            />
+          <Typography color={'#808080'} mb={2}>
+            {t('verify.weHaveSentEmail', { email })}
+          </Typography>
+          <VerificationCodeInput
+            setCodes={setCodes}
+            codes={codes}
+            setError={setError}
+          />
+          {/* <Stack direction={'row'} spacing={1} width={1}>
             <Button
               onClick={() => {
                 handleSendMailVerify()
@@ -161,7 +143,7 @@ const Verify = (): JSX.Element => {
                 : t('verify.sendNewCode')}
               {}
             </Button>
-          </Stack>
+          </Stack> */}
           <LoadingButton
             type="submit"
             fullWidth
@@ -177,6 +159,25 @@ const Verify = (): JSX.Element => {
           {error && (
             <FormHelperText error>{t('verify.pleaseInputCode')}</FormHelperText>
           )}
+          <Typography component={'span'} mt={1}>
+            <Typography component={'span'} color={'#808080'} mb={2}>
+              {t('verify.didNotSeeEmail')}
+            </Typography>
+            &nbsp;
+            <Typography
+              component={'span'}
+              sx={{
+                fontWeight: 700,
+                cursor: 'pointer',
+                textDecoration: 'underline',
+              }}
+              onClick={() => {
+                handleSendMailVerify()
+              }}
+            >
+              {t('verify.sendNewCode')}
+            </Typography>
+          </Typography>
         </Box>
       </Grid>
     </Grid>

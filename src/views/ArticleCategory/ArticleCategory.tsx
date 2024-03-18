@@ -28,7 +28,7 @@ const ArticleCategory = (): JSX.Element => {
 
   useEffect(() => {
     const articlesPromise = dispatch(
-      getArticles({ current: 1, categoryId: `/${name}/i` }),
+      getArticles({ current: 1, categoryId: `${name}` }),
     )
 
     return () => {
@@ -40,7 +40,7 @@ const ArticleCategory = (): JSX.Element => {
     event: React.ChangeEvent<unknown>,
     value: number,
   ) => {
-    dispatch(getArticles({ current: value, categoryId: `/${name}/i` }))
+    dispatch(getArticles({ current: value, categoryId: `${name}` }))
   }
   return (
     <UserLayout haveSearch={true}>

@@ -14,4 +14,5 @@ export interface ArticleCreatedModel {
   districtName: string
   wardName: string
   images: string[]
+  quantity: number
 }

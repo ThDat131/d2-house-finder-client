@@ -6,7 +6,10 @@ export interface Article {
   _id: string
   title: string
   description: string
-  categoryId: string
+  categoryId: {
+    categoryId: string
+    name: string
+  }
   price: number
   acreage: number
   status: string

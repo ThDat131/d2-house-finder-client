@@ -156,53 +156,94 @@ const ArticleDetails = (): JSX.Element => {
               <Table sx={{ minWidth: 700 }} aria-label="spanning table">
                 <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.address')}
+                    <Typography fontWeight={500}>
+                      {t('articleDetails.address')}
+                    </Typography>
                   </TableCell>
                   <TableCell colSpan={3}>
-                    {article ? getExactAddress(article) : null}
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article ? getExactAddress(article) : null}
+                    </Typography>
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.price')}
+                    <Typography fontWeight={500}>
+                      {t('articleDetails.price')}
+                    </Typography>
                   </TableCell>
                   <TableCell colSpan={3}>
-                    {VNDCurrencyFormat.format(article?.price as number)}
+                    <Typography color={'primary'} fontWeight={500}>
+                      {VNDCurrencyFormat.format(article?.price as number)}
+                    </Typography>
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.category')}
+                    <Typography fontWeight={500}>
+                      {t('articleDetails.category')}
+                    </Typography>
                   </TableCell>
-                  <TableCell>{article?.categoryId}</TableCell>
-                  <TableCell variant="head">
-                    {t('articleDetails.owner')}
+
+                  <TableCell>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.categoryId.name}
+                    </Typography>
                   </TableCell>
-                  <TableCell>{article?.createdBy.fullName}</TableCell>
-                </TableRow>
-                <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.acreage')}
+                    <Typography fontWeight={500}>
+                      {t('articleDetails.owner')}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    {article?.acreage}m<sup>2</sup>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.createdBy.fullName}
+                    </Typography>
                   </TableCell>
-                  <TableCell variant="head">
-                    {t('articleDetails.phone')}
-                  </TableCell>
-                  <TableCell>{article?.createdBy.phone ?? 0}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.updatedAt')}
+                    <Typography fontWeight={500}>
+                      {t('articleDetails.acreage')}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    {moment().locale('vi').startOf('day').fromNow()}
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.acreage}m<sup>2</sup>
+                    </Typography>
                   </TableCell>
                   <TableCell variant="head">
-                    {t('articleDetails.email')}
+                    <Typography fontWeight={500}>
+                      {t('articleDetails.phone')}
+                    </Typography>
                   </TableCell>
-                  <TableCell>{article?.createdBy.email}</TableCell>
+                  <TableCell>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.createdBy.phone ?? 0}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">
+                    <Typography fontWeight={500}>
+                      {t('articleDetails.updatedAt')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {moment().locale('vi').startOf('day').fromNow()}
+                    </Typography>
+                  </TableCell>
+                  <TableCell variant="head">
+                    <Typography fontWeight={500}>
+                      {t('articleDetails.email')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.createdBy.email}
+                    </Typography>
+                  </TableCell>
                 </TableRow>
               </Table>
             </TableContainer>
