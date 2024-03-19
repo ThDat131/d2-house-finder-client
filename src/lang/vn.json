@@ -44,6 +44,7 @@
   "articleDetails": {
     "address": "Địa chỉ",
     "allImages": "Xem tất cả ảnh",
+    "articleInWard": "Tin trọ cùng phường",
     "acreage": "Diện tích",
     "category": "Danh mục",
     "comment": "Bình luận",
@@ -101,10 +102,15 @@
     }
   },
   "header": {
+    "all": "Toàn quốc",
+    "category": "Danh mục",
+    "chooseAcreage": "Chọn diện tích",
+    "choosePrice": "Chọn giá",
     "hello": "Xin chào, {{name}}!",
     "manageArticles": "Quản lý tin đăng",
     "personalInformation": "Thông tin cá nhân",
     "postAnArticle": "Đăng tin cho thuê",
+    "search": "Tìm kiếm",
     "signin": "Đăng nhập",
     "signout": "Đăng xuất",
     "signup": "Đăng ký"

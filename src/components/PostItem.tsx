@@ -1,5 +1,5 @@
-import { Box, Button, Grid, Stack, Typography } from '@mui/material'
-import { VNDCurrencyFormat, decodeHtmlEntities } from '../utils/utils'
+import { Box, Grid, Stack, Typography } from '@mui/material'
+import { VNDCurrencyFormat } from '../utils/utils'
 import { type Article } from '../model/article/article'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
@@ -22,8 +22,9 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
     <Grid
       container
       padding={2}
-      sx={{ backgroundColor: '#fff9f3' }}
+      sx={{ backgroundColor: '#fff' }}
       borderRadius={2}
+      boxShadow={3}
     >
       <Grid item xs={4}>
         <Box height={240}>
@@ -58,8 +59,14 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
             {data.title}
           </Typography>
         </Stack>
-        <Stack direction={'row'} spacing={2} alignItems={'center'} mb={1}>
-          <Typography fontSize={18} color={'green'} flex={2}>
+        <Stack
+          direction={'row'}
+          spacing={2}
+          alignItems={'center'}
+          mb={1}
+          width={1}
+        >
+          <Typography fontSize={18} color={'green'}>
             {t('articleBox.vndPerMonth', {
               price: VNDCurrencyFormat.format(data.price),
             })}

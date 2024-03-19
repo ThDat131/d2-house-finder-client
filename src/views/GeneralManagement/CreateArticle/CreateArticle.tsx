@@ -230,9 +230,9 @@ const CreateArticle = () => {
     streetAddress: '',
     latitude: 0,
     longitude: 0,
-    provinceCode: '',
-    districtCode: '',
-    wardCode: '',
+    provinceCode: 0,
+    districtCode: 0,
+    wardCode: 0,
     provinceName: '',
     districtName: '',
     wardName: '',
@@ -280,11 +280,6 @@ const CreateArticle = () => {
         toast.success(t('generalManagement.createNewArticle.createSuccess'))
         navigate('/')
       })
-    setLoading(true)
-
-    console.log(formik.values)
-
-    setLoading(false)
   }
 
   const formik = useFormik({
@@ -521,6 +516,7 @@ const CreateArticle = () => {
                         value={formik.values.categoryId}
                         onChange={formik.handleChange}
                         size="small"
+                        sx={{ minWidth: 200 }}
                       >
                         {categories.length > 0 &&
                           categories.map(c => (

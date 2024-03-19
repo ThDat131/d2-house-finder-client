@@ -7,9 +7,9 @@ export interface ArticleCreatedModel {
   streetAddress: string
   latitude: number
   longitude: number
-  provinceCode: string
-  districtCode: string
-  wardCode: string
+  provinceCode: number
+  districtCode: number
+  wardCode: number
   provinceName: string
   districtName: string
   wardName: string
