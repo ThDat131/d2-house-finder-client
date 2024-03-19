@@ -48,6 +48,7 @@ import GoongMap from '../../../components/GoongMap'
 import { FlyToInterpolator } from '@goongmaps/goong-map-react'
 import { createArticle } from '../../../app/slice/article.slice.'
 import { toast } from 'react-toastify'
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined'
 import { useNavigate } from 'react-router-dom'
 
 interface ImageType {
@@ -229,13 +230,14 @@ const CreateArticle = () => {
     streetAddress: '',
     latitude: 0,
     longitude: 0,
-    provinceCode: '',
-    districtCode: '',
-    wardCode: '',
+    provinceCode: 0,
+    districtCode: 0,
+    wardCode: 0,
     provinceName: '',
     districtName: '',
     wardName: '',
     images: [],
+    quantity: 0,
   }
 
   const validationSchema = Yup.object().shape({
@@ -266,6 +268,9 @@ const CreateArticle = () => {
     wardCode: Yup.string().required(
       t('generalManagement.createNewArticle.noWardSelected'),
     ),
+    quantity: Yup.string().required(
+      t('generalManagement.createNewArticle.noEnteredQuantity'),
+    ),
   })
 
   const onSubmit = () => {
@@ -275,11 +280,6 @@ const CreateArticle = () => {
         toast.success(t('generalManagement.createNewArticle.createSuccess'))
         navigate('/')
       })
-    setLoading(true)
-
-    console.log(formik.values)
-
-    setLoading(false)
   }
 
   const formik = useFormik({
@@ -354,6 +354,7 @@ const CreateArticle = () => {
                         name="provinceCode"
                         value={formik.values.provinceCode}
                         onChange={formik.handleChange}
+                        size="small"
                       >
                         {provinces.length > 0 &&
                           provinces.map(p => (
@@ -395,6 +396,7 @@ const CreateArticle = () => {
                         name="districtCode"
                         value={formik.values.districtCode}
                         onChange={formik.handleChange}
+                        size="small"
                       >
                         {districts.length > 0 &&
                           districts.map(d => (
@@ -429,6 +431,7 @@ const CreateArticle = () => {
                       name="wardCode"
                       value={formik.values.wardCode}
                       onChange={formik.handleChange}
+                      size="small"
                     >
                       {wards.length > 0 &&
                         wards.map(w => (
@@ -471,6 +474,7 @@ const CreateArticle = () => {
                         formik.touched.streetAddress &&
                         formik.errors.streetAddress
                       }
+                      size="small"
                     />
                   </Stack>
                 </Grid>
@@ -484,6 +488,7 @@ const CreateArticle = () => {
                         readOnly: true,
                       }}
                       value={exactAddress}
+                      size="small"
                     />
                   </Stack>
                 </Grid>
@@ -510,10 +515,12 @@ const CreateArticle = () => {
                         name="categoryId"
                         value={formik.values.categoryId}
                         onChange={formik.handleChange}
+                        size="small"
+                        sx={{ minWidth: 200 }}
                       >
                         {categories.length > 0 &&
                           categories.map(c => (
-                            <MenuItem key={c.name} value={c.name}>
+                            <MenuItem key={c.name} value={c._id}>
                               {c.name}
                             </MenuItem>
                           ))}
@@ -539,6 +546,7 @@ const CreateArticle = () => {
                         (formik.touched.title && Boolean(formik.errors.title))
                       }
                       helperText={formik.touched.title && formik.errors.title}
+                      size="small"
                     />
                   </Stack>
                 </Grid>
@@ -591,6 +599,7 @@ const CreateArticle = () => {
                           </InputAdornment>
                         }
                         type="number"
+                        size="small"
                       />
                       <FormHelperText>
                         {formik.touched.price && formik.errors.price}
@@ -619,9 +628,40 @@ const CreateArticle = () => {
                           </InputAdornment>
                         }
                         type="number"
+                        size="small"
                       />
                       <FormHelperText>
                         {formik.touched.acreage && formik.errors.acreage}
+                      </FormHelperText>
+                    </FormControl>
+                  </Stack>
+                </Grid>
+                <Grid item xs={12} mb={2}>
+                  <Stack>
+                    <Typography>
+                      {t('generalManagement.createNewArticle.quantity')}
+                    </Typography>
+                    <FormControl
+                      error={
+                        formik.touched.quantity &&
+                        Boolean(formik.errors.quantity)
+                      }
+                    >
+                      <OutlinedInput
+                        id="quantity"
+                        name="quantity"
+                        value={formik.values.quantity}
+                        onChange={formik.handleChange}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            {t('generalManagement.createNewArticle.person')}
+                          </InputAdornment>
+                        }
+                        type="number"
+                        size="small"
+                      />
+                      <FormHelperText>
+                        {formik.touched.quantity && formik.errors.quantity}
                       </FormHelperText>
                     </FormControl>
                   </Stack>
@@ -634,7 +674,7 @@ const CreateArticle = () => {
               </Typography>
               <Box
                 sx={{
-                  backgroundColor: '#f5f5f5',
+                  backgroundColor: 'secondary',
                   border: '1px dashed #000',
                   height: '150px',
                 }}
@@ -667,8 +707,12 @@ const CreateArticle = () => {
                   htmlFor="post-images"
                   className="form-label"
                 >
-                  <CameraAltIcon />{' '}
-                  {t('generalManagement.createNewArticle.addPicture')}
+                  <Stack spacing={2} alignItems={'center'}>
+                    <CloudUploadOutlinedIcon fontSize="large" color="primary" />
+                    <Typography color="primary">
+                      {t('generalManagement.createNewArticle.addPicture')}
+                    </Typography>
+                  </Stack>
                 </label>
               </Box>
               <Grid container spacing={4} mb={2}>

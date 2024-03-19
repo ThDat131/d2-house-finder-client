@@ -4,14 +4,20 @@ import { red } from '@mui/material/colors'
 const theme = responsiveFontSizes(
   createTheme({
     palette: {
+      primary: {
+        main: '#00ABE4',
+        contrastText: '#fff',
+      },
       secondary: {
-        main: '#19857b',
+        main: '#E9F1FA',
+        contrastText: '#fff',
       },
       error: {
         main: red.A400,
       },
     },
     typography: {
+      fontFamily: 'Roboto',
       h3: {
         fontSize: 30,
         fontWeight: 600,
@@ -25,14 +31,14 @@ const theme = responsiveFontSizes(
       MuiCssBaseline: {
         styleOverrides: {
           body: {
-            scrollbarColor: '#6b6b6b #2b2b2b',
+            scrollbarColor: '#6b6b6b',
             '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
               backgroundColor: '#ffffff',
               width: '7px',
             },
             '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
               borderRadius: 8,
-              backgroundColor: '#6b6b6b',
+              backgroundColor: '#00ABE4',
               minHeight: 24,
               border: '1px solid #2b2b2b',
             },

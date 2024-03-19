@@ -1,7 +1,9 @@
-import { Box, Button, Grid, Stack, Typography } from '@mui/material'
-import { VNDCurrencyFormat, decodeHtmlEntities } from '../utils/utils'
+import { Box, Grid, Stack, Typography } from '@mui/material'
+import { VNDCurrencyFormat } from '../utils/utils'
 import { type Article } from '../model/article/article'
 import { useNavigate } from 'react-router-dom'
+import moment from 'moment'
+import { useTranslation } from 'react-i18next'
 
 interface PostItemProps {
   data: Article
@@ -9,21 +11,8 @@ interface PostItemProps {
 
 const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
   const navigate = useNavigate()
-
+  const { t } = useTranslation()
   const getExactAddress = (): string => {
-    if (
-      data.address.provinceName &&
-      data.address.districtName &&
-      data.address.wardName &&
-      data.address.streetAddress
-    )
-      return `${data.address.streetAddress}, ${data.address.wardName}, ${data.address.districtName}, ${data.address.provinceName}`
-    if (
-      data.address.provinceName &&
-      data.address.districtName &&
-      data.address.wardName
-    )
-      return `${data.address.streetAddress}, ${data.address.wardName}, ${data.address.districtName}`
     if (data.address.provinceName && data.address.districtName)
       return `${data.address.districtName}, ${data.address.provinceName}`
     if (data.address.provinceName) return data.address.provinceName
@@ -33,55 +22,73 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
     <Grid
       container
       padding={2}
-      sx={{ backgroundColor: '#fff9f3' }}
+      sx={{ backgroundColor: '#fff' }}
       borderRadius={2}
+      boxShadow={3}
     >
       <Grid item xs={4}>
-        <Box
-          component={'img'}
-          src={data.images[0]}
-          width={1}
-          height={1}
-          borderRadius={2}
-          sx={{ cursor: 'pointer' }}
-          onClick={() => {
-            navigate(`/bai-dang/${data._id}`)
-          }}
-        />
+        <Box height={240}>
+          <Box
+            component={'img'}
+            src={data.images[0]}
+            width={1}
+            height={1}
+            borderRadius={2}
+            sx={{ cursor: 'pointer' }}
+            onClick={() => {
+              navigate(`/bai-dang/${data._id}`)
+            }}
+          />
+        </Box>
       </Grid>
       <Grid item xs={8} display={'flex'} flexWrap={'wrap'} pl={2} height={240}>
         <Stack
-          maxHeight={60}
+          maxHeight={50}
           overflow={'hidden'}
-          sx={{ cursor: 'pointer' }}
           onClick={() => {
             navigate(`/bai-dang/${data._id}`)
           }}
         >
-          <Typography fontSize={20} textTransform={'uppercase'}>
+          <Typography
+            fontSize={16}
+            textTransform={'uppercase'}
+            fontWeight={600}
+            color={'primary'}
+            sx={{ cursor: 'pointer' }}
+          >
             {data.title}
           </Typography>
         </Stack>
-        <Stack direction={'row'} spacing={2} alignItems={'center'} mb={1}>
-          <Typography fontSize={16} color={'green'} flex={2}>
-            {VNDCurrencyFormat.format(data.price)}/thang
+        <Stack
+          direction={'row'}
+          spacing={2}
+          alignItems={'center'}
+          mb={1}
+          width={1}
+        >
+          <Typography fontSize={18} color={'green'}>
+            {t('articleBox.vndPerMonth', {
+              price: VNDCurrencyFormat.format(data.price),
+            })}
           </Typography>
-          <Typography flex={1}>
+          <Typography>
             {data.acreage} m<sup>2</sup>
           </Typography>
-          <Typography flex={4}>{getExactAddress()}</Typography>
         </Stack>
-        <Stack overflow={'hidden'} mb={1} height={60}>
-          <Typography fontSize={14}>
-            {decodeHtmlEntities(data.description)}
-          </Typography>
+        <Stack overflow={'hidden'} mb={1} width={1}>
+          <Typography>{getExactAddress()}</Typography>
         </Stack>
-
-        <Box display={'flex'} justifyContent={'space-between'} width={1}>
+        <Stack
+          direction={'row'}
+          justifyContent={'space-between'}
+          width={1}
+          mb={1}
+        >
           <Stack
             direction={'row'}
             spacing={1}
             alignItems={'center'}
+            justifyContent={'center'}
             sx={{ cursor: 'pointer' }}
             onClick={() => {
               navigate(`/trang-ca-nhan/${data?.createdBy._id}`)
@@ -96,8 +103,12 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
             />
             <Typography>{data.createdBy.fullName}</Typography>
           </Stack>
-          <Button variant="contained">Gọi {data.createdBy.phone}</Button>
-        </Box>
+          <Box display={'flex'} alignItems={'center'}>
+            <Typography marginLeft={'auto'} color={'#808080'}>
+              {moment(data.createdAt).locale('vi').startOf('hour').fromNow()}
+            </Typography>
+          </Box>
+        </Stack>
       </Grid>
     </Grid>
   )

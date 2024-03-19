@@ -44,6 +44,7 @@
   "articleDetails": {
     "address": "Địa chỉ",
     "allImages": "Xem tất cả ảnh",
+    "articleInWard": "Tin trọ cùng phường",
     "acreage": "Diện tích",
     "category": "Danh mục",
     "comment": "Bình luận",
@@ -68,7 +69,7 @@
   "generalManagement": {
     "createNewArticle": {
       "acreage": "Diện tích",
-      "addPicture": "Thêm ảnh",
+      "addPicture": "Thêm ảnh tại đây",
       "addressForRent": "Địa chỉ cho thuê",
       "address": "Địa chỉ chính xác",
       "createSuccess": "Đăng tin thành công!",
@@ -82,15 +83,18 @@
       "noDistrictSelected": "Chưa chọn Quận/Huyện",
       "noEnteredAcreage": "Chưa nhập diện tích",
       "noEnteredDescription": "Chưa nhập thông tin mô tả",
+      "noEnteredQuantity": "Chưa nhập số lượngn gười ở",
       "noEnteredStreetAndHouseNumber": "Chưa nhập đường và số nhà",
       "noEnteredPrice": "Chưa nhập giá",
       "noEnteredTitle": "Chưa nhập tiêu đề",
       "noProvinceSelected": "Chưa chọn Tỉnh/TP",
       "noWardSelected": "Chưa chọn Phường/Xã",
+      "person": "người",
       "picture": "Hình ảnh",
       "postArticle": "Đăng tin mới",
       "price": "Giá cho thuê",
       "province": "Tỉnh/Thành phố ",
+      "quantity": "Số người ở",
       "streetAndHouseNumber": "Đường và số nhà",
       "title": "Tiêu đề",
       "vndPerMonth": "đồng/tháng",
@@ -98,10 +102,15 @@
     }
   },
   "header": {
+    "all": "Toàn quốc",
+    "category": "Danh mục",
+    "chooseAcreage": "Chọn diện tích",
+    "choosePrice": "Chọn giá",
     "hello": "Xin chào, {{name}}!",
     "manageArticles": "Quản lý tin đăng",
     "personalInformation": "Thông tin cá nhân",
     "postAnArticle": "Đăng tin cho thuê",
+    "search": "Tìm kiếm",
     "signin": "Đăng nhập",
     "signout": "Đăng xuất",
     "signup": "Đăng ký"
@@ -123,16 +132,19 @@
     "userArticles": "Các bài đăng"
   },
   "signin": {
+    "accountInactive": "Tài khoản chưa được kích hoạt, vui lòng kích hoạt",
     "didntHaveAccountGetOne": "Chưa có tài khoản? Đăng ký ngay",
     "email": "Email",
     "emailIsRequired": "Email là bắt buộc",
     "error": "Sai email hoặc mật khẩu!",
     "forgotPassword": "Quên mật khẩu",
+    "or": "Hoặc",
     "password": "Mật khẩu",
     "passwordIsRequired": "Mật khẩu là bắt buộc",
     "passwordIsTooShort": "Mật khẩu quá ngắn",
     "rememberAccount": "Ghi nhớ tài khoản",
-    "signin": "Đăng nhập"
+    "signin": "Đăng nhập",
+    "welcome": "Chào mừng bạn đến với D2 - nền tảng thuê nhà trọ đáng tin cậy và tiện lợi."
   },
   "signup": {
     "alreadyHaveAccountSignin": "Đã có tài khoản? Đăng nhập",
@@ -151,6 +163,7 @@
   },
   "verify": {
     "code": "Mã xác nhận",
+    "didNotSeeEmail": "Không tìm thấy email?",
     "pleaseInputCode": "Vui lòng nhập mã xác nhận",
     "pleaseVerify": "Đã gửi mã xác nhận, vui lòng kiểm tra email",
     "pleaseWaitSecond": "Vui lòng đợi {{time}} giây",
@@ -158,6 +171,7 @@
     "submit": "Xác nhận",
     "verifyAccount": "Xác thực tài khoản",
     "verifyFailed": "Vui lòng kiểm tra lại mã xác nhận",
-    "verifySuccessfully": "Xác thực thành công. Hãy tiếp tục đăng nhập"
+    "verifySuccessfully": "Xác thực thành công. Hãy tiếp tục đăng nhập",
+    "weHaveSentEmail": "Chúng tôi đã gửi mã xác nhận đến {{email}}"
   }
 }

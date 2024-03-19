@@ -33,7 +33,7 @@ export const Home = (): JSX.Element => {
   )
 
   useEffect(() => {
-    const articlesPromise = dispatch(getArticles(1))
+    const articlesPromise = dispatch(getArticles({ current: 1 }))
 
     return () => {
       articlesPromise.abort()
@@ -49,12 +49,7 @@ export const Home = (): JSX.Element => {
 
   return (
     <UserLayout haveSearch={true}>
-      <Grid
-        container
-        spacing={2}
-        maxWidth={'100vw'}
-        justifyContent={'space-between'}
-      >
+      <Grid container spacing={2} justifyContent={'space-between'}>
         <Grid item xs={8}>
           <Box padding={2} sx={{ background: '#f0f0f0', borderRadius: '5px' }}>
             <Typography>

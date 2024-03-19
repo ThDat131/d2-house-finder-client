@@ -60,7 +60,7 @@ interface meta {
   categoryId?: string
 }
 
-const PAGE_SIZE = 2
+const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
 const initialState: ArticleStateProps = {
   articles: [],
   currentArticle: null,

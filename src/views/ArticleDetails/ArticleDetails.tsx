@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import DOMPurify from 'dompurify'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type Article } from '../../model/article/article'
 import Loading from '../../components/Loading'
@@ -33,12 +33,18 @@ import Comment from './components/Comment'
 import { RootState } from '../../app/store'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { getArticle } from '../../app/slice/article.slice.'
+import { HttpService } from '../../api/HttpService'
+import { GetArticlesResponse } from '../../model/article/article-response'
+import { ApiPathEnum } from '../../api/ApiPathEnum'
+import PostItem from '../../components/PostItem'
+import UserLayout from '../../components/Layout/UserLayout'
 
 const ArticleDetails = (): JSX.Element => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const { httpService } = new HttpService()
 
   const [viewportData, setViewportData] = useState<ViewPort>({
     width: '100%',
@@ -56,10 +62,43 @@ const ArticleDetails = (): JSX.Element => {
     latitude: 0,
   })
   const [article, setArticle] = useState<Article>()
+  const [articleList, setArticleList] = useState<Article[]>([])
   const [loadingPage, setLoadingPage] = useState<boolean>(true)
   const currentUser = useAppSelector((state: RootState) => state.auth.user)
   const loading = useAppSelector((state: RootState) => state.article.loading)
   const comments = useAppSelector((state: RootState) => state.article.comments)
+  const ref = useRef(false)
+
+  const getNearestArticle = (
+    currentId: string,
+    code: number,
+    category: string,
+  ) => {
+    if (!ref.current) {
+      httpService
+        .get<GetArticlesResponse>(ApiPathEnum.Article, {
+          params: {
+            current: 1,
+            pageSize: 5,
+            populate: 'createdBy,address',
+            fields:
+              'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone',
+            'address.wardCode': code,
+            categoryId: category,
+            '_id!': currentId,
+          },
+        })
+        .then(res => {
+          if (res.data) {
+            setArticleList(res.data.data.results)
+          }
+        })
+    }
+
+    return () => {
+      ref.current = true
+    }
+  }
 
   useEffect(() => {
     const promise = dispatch(getArticle(id as string))
@@ -74,6 +113,12 @@ const ArticleDetails = (): JSX.Element => {
         setArticle(articleFromResult)
         setViewportData(prev => ({ ...prev, latitude, longitude }))
         setMarker({ latitude, longitude })
+        getNearestArticle(
+          articleFromResult._id,
+          articleFromResult.address.wardCode,
+          articleFromResult.categoryId.categoryId,
+        )
+
         setLoadingPage(false)
       }
     })
@@ -106,8 +151,7 @@ const ArticleDetails = (): JSX.Element => {
   return loading || loadingPage ? (
     <Loading />
   ) : (
-    <>
-      <Header />
+    <UserLayout haveSearch={false}>
       <Container sx={{ mt: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -156,53 +200,94 @@ const ArticleDetails = (): JSX.Element => {
               <Table sx={{ minWidth: 700 }} aria-label="spanning table">
                 <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.address')}
+                    <Typography fontWeight={700}>
+                      {t('articleDetails.address')}
+                    </Typography>
                   </TableCell>
                   <TableCell colSpan={3}>
-                    {article ? getExactAddress(article) : null}
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article ? getExactAddress(article) : null}
+                    </Typography>
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.price')}
+                    <Typography fontWeight={700}>
+                      {t('articleDetails.price')}
+                    </Typography>
                   </TableCell>
                   <TableCell colSpan={3}>
-                    {VNDCurrencyFormat.format(article?.price as number)}
+                    <Typography color={'primary'} fontWeight={500}>
+                      {VNDCurrencyFormat.format(article?.price as number)}
+                    </Typography>
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.category')}
+                    <Typography fontWeight={700}>
+                      {t('articleDetails.category')}
+                    </Typography>
                   </TableCell>
-                  <TableCell>{article?.categoryId}</TableCell>
-                  <TableCell variant="head">
-                    {t('articleDetails.owner')}
+
+                  <TableCell>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.categoryId.name}
+                    </Typography>
                   </TableCell>
-                  <TableCell>{article?.createdBy.fullName}</TableCell>
-                </TableRow>
-                <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.acreage')}
+                    <Typography fontWeight={700}>
+                      {t('articleDetails.owner')}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    {article?.acreage}m<sup>2</sup>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.createdBy.fullName}
+                    </Typography>
                   </TableCell>
-                  <TableCell variant="head">
-                    {t('articleDetails.phone')}
-                  </TableCell>
-                  <TableCell>{article?.createdBy.phone ?? 0}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell variant="head">
-                    {t('articleDetails.updatedAt')}
+                    <Typography fontWeight={700}>
+                      {t('articleDetails.acreage')}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    {moment().locale('vi').startOf('day').fromNow()}
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.acreage}m<sup>2</sup>
+                    </Typography>
                   </TableCell>
                   <TableCell variant="head">
-                    {t('articleDetails.email')}
+                    <Typography fontWeight={700}>
+                      {t('articleDetails.phone')}
+                    </Typography>
                   </TableCell>
-                  <TableCell>{article?.createdBy.email}</TableCell>
+                  <TableCell>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.createdBy.phone ?? 0}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">
+                    <Typography fontWeight={700}>
+                      {t('articleDetails.updatedAt')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {moment().locale('vi').startOf('day').fromNow()}
+                    </Typography>
+                  </TableCell>
+                  <TableCell variant="head">
+                    <Typography fontWeight={700}>
+                      {t('articleDetails.email')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography color={'primary'} fontWeight={500}>
+                      {article?.createdBy.email}
+                    </Typography>
+                  </TableCell>
                 </TableRow>
               </Table>
             </TableContainer>
@@ -234,7 +319,7 @@ const ArticleDetails = (): JSX.Element => {
                 </Grid>
               </Grid>
             </Paper>
-            <Grid container>
+            <Grid container mb={2}>
               <Grid item xs={12}>
                 <Typography variant="h4" mb={1}>
                   {t('articleDetails.comment')}
@@ -251,6 +336,18 @@ const ArticleDetails = (): JSX.Element => {
                       showAction={currentUser._id === x.createdBy._id}
                     />
                   </Grid>
+                ))}
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={12}>
+                <Typography variant="h4" mb={1}>
+                  {t('articleDetails.articleInWard')}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                {articleList.map(x => (
+                  <PostItem key={x._id} data={x} />
                 ))}
               </Grid>
             </Grid>
@@ -297,7 +394,7 @@ const ArticleDetails = (): JSX.Element => {
           </Grid>
         </Grid>
       </Container>
-    </>
+    </UserLayout>
   )
 }
 
