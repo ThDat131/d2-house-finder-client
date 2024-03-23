@@ -16,7 +16,7 @@ export const UserLayout: React.FC<Props> = ({
     <>
       <Header />
       {haveSearch && <HeaderSearch />}
-      <Container sx={{ mt: 2 }}>{children}</Container>
+      <Container sx={{ mt: 2, minHeight: '50vw' }}>{children}</Container>
       <Footer />
     </>
   )

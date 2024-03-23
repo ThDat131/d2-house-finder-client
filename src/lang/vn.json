@@ -99,6 +99,42 @@
       "title": "Tiêu đề",
       "vndPerMonth": "đồng/tháng",
       "ward": "Phường/Xã"
+    },
+    "manageArticles": {
+      "manageArticles": "Quản lý tin đăng",
+      "articleId": "Mã tin",
+      "articleImage": "Ảnh tin",
+      "articlePrice": "Giá",
+      "articleStatus": "Trạng thái",
+      "articleTitle": "Tiêu đề",
+      "articleUpdatedAt": "Ngày cập nhật",
+      "verify": "Xác thực",
+      "unverify": "Chưa xác thực"
+    },
+    "updateInformation": {
+      "avatar": "Ảnh đại diện",
+      "choosePicture": "Chọn ảnh",
+      "email": "Email",
+      "fullName": "Họ tên",
+      "password": "Mật khẩu",
+      "phone": "Số điện thoại",
+      "saveUpdate": "Lưu & Cập nhật",
+      "updatePassword": "Cập nhật mật khẩu",
+      "updatePersonalInformation": "Cập nhật thông tin cá nhân"
+    },
+    "updatePassword": {
+      "updatePassword": "Cập nhật mật khẩu",
+      "newPassword": "Mật khẩu mới",
+      "oldPassword": "Mật khẩu cũ",
+      "update": "Cập nhật"
+    },
+    "verifyArticle": {
+      "contract": "Giấy tờ nhà",
+      "latedImage": "Ảnh nhà trọ hiện tại",
+      "personalIdImage": "Ảnh Căn cước công dân",
+      "requestVerify": "Yêu cầu xác thực",
+      "upload": "Tải lên",
+      "video": "Video"
     }
   },
   "header": {
@@ -130,6 +166,13 @@
     "followings": "Đang theo dõi",
     "follow": "Theo dõi",
     "userArticles": "Các bài đăng"
+  },
+  "userSideNav": {
+    "newArticle": "Đăng tin mới",
+    "manageArticles": "Quản lý tin đăng",
+    "updatePersonalInformation": "Cập nhật thông tin cá nhân",
+    "requestVerify": "Yêu cầu xác thực",
+    "returnToHome": "Trở về trang chủ"
   },
   "signin": {
     "accountInactive": "Tài khoản chưa được kích hoạt, vui lòng kích hoạt",
