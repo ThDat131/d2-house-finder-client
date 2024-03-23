@@ -27,7 +27,7 @@ export const signinAPI = createAsyncThunk(
   'user/signin',
   async (user: SigninModel, thunkAPI) => {
     try {
-      const resposne = await httpService.post<CommonResponse<any>>(
+      const response = await httpService.post<CommonResponse<any>>(
         ApiPathEnum.Signin,
         user,
         {
@@ -35,7 +35,7 @@ export const signinAPI = createAsyncThunk(
         },
       )
 
-      return resposne.data.data as CredentialUser
+      return response.data.data as CredentialUser
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
     }

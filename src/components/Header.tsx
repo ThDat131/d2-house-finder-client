@@ -144,10 +144,18 @@ export const Header = (): JSX.Element => {
                         >
                           {t('header.postAnArticle')}
                         </ListItemButton>
-                        <ListItemButton>
+                        <ListItemButton
+                          onClick={() => {
+                            navigate('/quan-ly/tin-dang')
+                          }}
+                        >
                           {t('header.manageArticles')}
                         </ListItemButton>
-                        <ListItemButton>
+                        <ListItemButton
+                          onClick={() => {
+                            navigate('/quan-ly/cap-nhat-thong-tin-ca-nhan')
+                          }}
+                        >
                           {t('header.personalInformation')}
                         </ListItemButton>
                         <ListItemButton onClick={handleSignout}>

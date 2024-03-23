@@ -12,7 +12,7 @@ export const getUsers = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await authHttpService.get<GetUsersResponse>(
-        ApiPathEnum.GetAllUser,
+        ApiPathEnum.Users,
         {
           signal: thunkAPI.signal,
         },

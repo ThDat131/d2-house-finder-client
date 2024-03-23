@@ -14,8 +14,12 @@ import {
   CreateArticle,
   FindHouseWithLocation,
   GeneralManagement,
+  ManageArticles,
   Profile,
+  UpdateInformation,
+  UpdatePassword,
   Verify,
+  VerifyArticle,
 } from './views/index.view'
 import { ThemeProvider } from '@emotion/react'
 import theme from './theme'
@@ -54,6 +58,22 @@ const router = createBrowserRouter([
       {
         path: 'dang-tin-moi',
         element: <CreateArticle />,
+      },
+      {
+        path: 'cap-nhat-thong-tin-ca-nhan',
+        element: <UpdateInformation />,
+      },
+      {
+        path: 'cap-nhat-mat-khau',
+        element: <UpdatePassword />,
+      },
+      {
+        path: 'tin-dang',
+        element: <ManageArticles />,
+      },
+      {
+        path: 'yeu-cau-xac-thuc',
+        element: <VerifyArticle />,
       },
     ],
   },

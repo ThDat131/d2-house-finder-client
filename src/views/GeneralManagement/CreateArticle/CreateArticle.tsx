@@ -38,7 +38,6 @@ import {
 } from '../../../app/slice/district.slice'
 import Loading from '../../../components/Loading'
 import { getCategories } from '../../../app/slice/category.slice'
-import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { HttpService } from '../../../api/HttpService'
 import { ApiPathEnum } from '../../../api/ApiPathEnum'
@@ -313,7 +312,7 @@ const CreateArticle = () => {
   }
 
   return (
-    <Box p={4} width={1}>
+    <>
       <Box borderBottom={1} mb={4}>
         <Typography variant={'h3'} mb={2}>
           {t('generalManagement.createNewArticle.postArticle')}
@@ -719,7 +718,8 @@ const CreateArticle = () => {
                 {imageUrls.map((item, index) => (
                   <Grid item xs={3} key={item} flexDirection={'column'}>
                     <Box height={'100px'} overflow={'hidden'} boxShadow={5}>
-                      <img
+                      <Box
+                        component={'img'}
                         srcSet={item}
                         src={item}
                         width={'100%'}
@@ -761,7 +761,7 @@ const CreateArticle = () => {
           </Grid>
         </Grid>
       </form>
-    </Box>
+    </>
   )
 }
 

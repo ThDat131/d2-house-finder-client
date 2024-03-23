@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material'
+import { Box } from '@mui/material'
 import { Header } from '../../components/Header'
 import UserSideNavbar from '../../components/NavBar/UserSideNavbar'
 import { Outlet } from 'react-router-dom'
@@ -11,11 +11,18 @@ const GeneralManagement = (): JSX.Element => {
         display={'flex'}
         alignItems={'stretch'}
         flexDirection={'row'}
-        minHeight={'100%'}
-        height={'100%'}
+        minHeight={1}
       >
         <UserSideNavbar />
-        <Outlet />
+        <Box
+          p={4}
+          width={1}
+          height={1}
+          display={'flex'}
+          flexDirection={'column'}
+        >
+          <Outlet />
+        </Box>
       </Box>
     </>
   )
