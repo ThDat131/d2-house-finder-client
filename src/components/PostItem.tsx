@@ -26,9 +26,10 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
       borderRadius={2}
       boxShadow={3}
     >
-      <Grid item xs={4}>
+      <Grid item xs={5}>
         <Box height={240}>
           <Box
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
             component={'img'}
             src={data.images[0]}
             width={1}
@@ -41,7 +42,7 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
           />
         </Box>
       </Grid>
-      <Grid item xs={8} display={'flex'} flexWrap={'wrap'} pl={2} height={240}>
+      <Grid item xs={7} display={'flex'} flexWrap={'wrap'} pl={2} height={240}>
         <Stack
           maxHeight={50}
           overflow={'hidden'}

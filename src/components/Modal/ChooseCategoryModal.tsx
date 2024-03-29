@@ -11,6 +11,9 @@ import {
 import { useSelector } from 'react-redux'
 import { type RootState } from '../../app/store'
 import React from 'react'
+import { useAppDispatch } from '../../app/hooks'
+import { selectCategory } from '../../app/slice/category.slice'
+import { useTranslation } from 'react-i18next'
 
 interface ChooseCategoryModalProps {
   open: boolean
@@ -21,6 +24,8 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
   open,
   setOpen,
 }) => {
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const categories = useSelector((state: RootState) => state.category.category)
 
   return (
@@ -39,7 +44,7 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
         borderBottom={1}
         borderColor={'grey.500'}
       >
-        Chọn loại bất động sản
+        {t('chooseCategoryModal.chooseCategory')}
       </DialogTitle>
       <DialogContent>
         <FormControl fullWidth>
@@ -48,12 +53,16 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
               categories?.[0] !== undefined ? categories[0].name : ''
             }
           >
-            {categories.map((c, index) => (
+            {categories.map(c => (
               <Box
-                key={index}
+                key={c._id}
                 sx={{ borderBottom: 1, borderColor: 'grey.500', py: 1 }}
               >
                 <FormControlLabel
+                  onClick={() => {
+                    setOpen(false)
+                    dispatch(selectCategory(c))
+                  }}
                   value={c.name}
                   control={<Radio />}
                   label={c.name}

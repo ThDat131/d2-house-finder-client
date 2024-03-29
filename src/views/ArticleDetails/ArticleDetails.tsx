@@ -157,10 +157,11 @@ const ArticleDetails = (): JSX.Element => {
           <Grid item xs={12}>
             <Paper elevation={4}>
               <Box
-                height={300}
+                height={400}
                 sx={{
                   backgroundImage: `url(${article?.images[0]})`,
                   backgroundSize: 'cover',
+                  backgroundPosition: 'center',
                 }}
                 position={'relative'}
               >
@@ -276,16 +277,6 @@ const ArticleDetails = (): JSX.Element => {
                   <TableCell>
                     <Typography color={'primary'} fontWeight={500}>
                       {moment().locale('vi').startOf('day').fromNow()}
-                    </Typography>
-                  </TableCell>
-                  <TableCell variant="head">
-                    <Typography fontWeight={700}>
-                      {t('articleDetails.email')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography color={'primary'} fontWeight={500}>
-                      {article?.createdBy.email}
                     </Typography>
                   </TableCell>
                 </TableRow>

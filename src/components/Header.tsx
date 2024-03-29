@@ -12,15 +12,24 @@ import {
   ListItemButton,
   Container,
 } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { getCurrentUser, signout } from '../app/slice/auth.slice'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { type RootState } from '../app/store'
 import { useEffect, useRef, useState } from 'react'
 import Loading from './Loading'
 import { useTranslation } from 'react-i18next'
-import { getCategories } from '../app/slice/category.slice'
+import { getCategories, selectCategory } from '../app/slice/category.slice'
 import Logo from '../assets/image/logo/D2-logos_white.png'
+import {
+  setAcreageFilter,
+  setFilterQuery,
+  setPriceFilter,
+} from '../app/slice/filter.slice'
+import { Category } from '../model/category/category'
+import { selectProvince } from '../app/slice/province.slice'
+import { selectDistrict } from '../app/slice/district.slice'
+import { selectWard } from '../app/slice/ward.slice'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
@@ -32,9 +41,10 @@ export const Header = (): JSX.Element => {
   const categories = useAppSelector(
     (state: RootState) => state.category?.category,
   )
+  const filter = useAppSelector((state: RootState) => state.filter)
   const currentUser = useAppSelector((state: RootState) => state.auth.user)
   const currentUserRef = useRef(false)
-  const [selectedCategory, setSelectedCategory] = useState('main')
+  const [selectedCategory, setSelectedCategory] = useState('')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,8 +78,21 @@ export const Header = (): JSX.Element => {
   }
 
   const handleChangeCategory = (evt: React.SyntheticEvent, value: string) => {
+    handleClearFilter()
     setSelectedCategory(value)
-    value === 'main' ? navigate('/') : navigate(`/danh-muc/${value}`)
+    dispatch(selectCategory(categories.find(x => x._id === value) as Category))
+    const filterString = `?categoryId=${value}`
+    dispatch(setFilterQuery(filterString))
+  }
+
+  const handleClearFilter = () => {
+    dispatch(setFilterQuery(''))
+    dispatch(setPriceFilter([0, 0]))
+    dispatch(setAcreageFilter([0, 0]))
+    dispatch(selectCategory(null))
+    dispatch(selectProvince(null))
+    dispatch(selectDistrict(null))
+    dispatch(selectWard(null))
   }
   // #331d66 30%,
   // #3c3fa3 30%,
@@ -97,13 +120,27 @@ export const Header = (): JSX.Element => {
           <Tabs
             value={selectedCategory}
             onChange={handleChangeCategory}
-            textColor="secondary.main"
+            textColor="secondary"
             indicatorColor="secondary"
           >
-            <Tab key={'main'} label="Trang chủ" value={'main'} />
+            <Tab
+              component={Link}
+              to={'/'}
+              key={'main'}
+              label="Trang chủ"
+              value={''}
+              sx={{ color: '#fff' }}
+            />
             {Array.isArray(categories) &&
               categories.map(c => (
-                <Tab key={c._id} label={c.name} value={c._id} color={'#fff'} />
+                <Tab
+                  component={Link}
+                  to={`/danh-muc/${c._id}`}
+                  key={c._id}
+                  label={c.name}
+                  value={c._id}
+                  sx={{ color: '#fff' }}
+                />
               ))}
           </Tabs>
           {currentUser?._id !== '' ? (

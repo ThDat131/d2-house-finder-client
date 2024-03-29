@@ -55,9 +55,10 @@ interface EditCommentProps {
   }
 }
 
-interface meta {
+interface Meta {
   current: number
   categoryId?: string
+  filter?: string
 }
 
 const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
@@ -76,10 +77,10 @@ const { authHttpService, httpService } = new HttpService()
 
 export const getArticles = createAsyncThunk(
   'article/getArticles',
-  async (data: meta, thunkAPI) => {
+  async (data: Meta, thunkAPI) => {
     try {
       const response = await httpService.get<GetArticlesResponse>(
-        ApiPathEnum.Article,
+        `${ApiPathEnum.Article}${data.filter ?? ''}`,
         {
           params: {
             current: data.current,
@@ -87,7 +88,6 @@ export const getArticles = createAsyncThunk(
             populate: 'createdBy',
             fields:
               'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone',
-            categoryId: data.categoryId,
           },
           signal: thunkAPI.signal,
         },
@@ -250,7 +250,6 @@ const articleSlice = createSlice({
         const index = state.comments[commentIndex].replies.findIndex(
           x => x._id === action.payload.reply._id,
         )
-        console.log(state.comments)
         if (index >= 0) {
           state.comments[commentIndex].replies[index].content =
             action.payload.reply.content

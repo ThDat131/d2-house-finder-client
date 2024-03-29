@@ -16,11 +16,21 @@ import { getArticles } from '../../app/slice/article.slice.'
 import { type RootState } from '../../app/store'
 import { useTranslation } from 'react-i18next'
 import UserLayout from '../../components/Layout/UserLayout'
+import {
+  setAcreageFilter,
+  setFilterQuery,
+  setPriceFilter,
+} from '../../app/slice/filter.slice'
+import { selectCategory } from '../../app/slice/category.slice'
+import { selectProvince } from '../../app/slice/province.slice'
+import { selectDistrict } from '../../app/slice/district.slice'
+import { selectWard } from '../../app/slice/ward.slice'
 
 export const Home = (): JSX.Element => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
 
+  const filter = useAppSelector((state: RootState) => state.filter)
   const articles = useAppSelector((state: RootState) => state.article.articles)
   const articlesLoading = useAppSelector(
     (state: RootState) => state.article.loading,
@@ -44,7 +54,22 @@ export const Home = (): JSX.Element => {
     event: React.ChangeEvent<unknown>,
     value: number,
   ) => {
-    dispatch(getArticles({ current: value }))
+    dispatch(getArticles({ current: value, filter: filter.filterQuery }))
+  }
+
+  const handleClearFilter = () => {
+    dispatch(setFilterQuery(''))
+    dispatch(setPriceFilter([0, 0]))
+    dispatch(setAcreageFilter([0, 0]))
+    dispatch(selectCategory(null))
+    dispatch(selectProvince(null))
+    dispatch(selectDistrict(null))
+    dispatch(selectWard(null))
+    dispatch(
+      getArticles({
+        current: 1,
+      }),
+    )
   }
 
   return (
@@ -52,16 +77,28 @@ export const Home = (): JSX.Element => {
       <Grid container spacing={2} justifyContent={'space-between'}>
         <Grid item xs={8}>
           <Box padding={2} sx={{ background: '#f0f0f0', borderRadius: '5px' }}>
-            <Typography>
-              {t('home.totalNumberOfPost', { number: totalPost })}
-            </Typography>
-            <Box display={'flex'} alignItems={'center'} gap={1}>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant={'h4'} mb={2}>
+                {t('home.totalNumberOfPost', { number: totalPost })}
+              </Typography>
+              {filter.filterQuery !== '' ? (
+                <Button
+                  onClick={() => {
+                    handleClearFilter()
+                  }}
+                >
+                  {t('home.clearFilter')}
+                </Button>
+              ) : null}
+            </Stack>
+
+            {/* <Box display={'flex'} alignItems={'center'} gap={1}>
               <Typography>{t('home.sort')}</Typography>
               <Stack direction={'row'}>
                 <Button>{t('home.default')}</Button>
                 <Button>{t('home.newest')}</Button>
               </Stack>
-            </Box>
+            </Box> */}
             <Stack spacing={1} mb={3}>
               {!articlesLoading &&
                 articles.map(article => (

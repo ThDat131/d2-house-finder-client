@@ -15,6 +15,7 @@ const ArticleCategory = (): JSX.Element => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
 
+  const filter = useAppSelector((state: RootState) => state.filter)
   const articles = useAppSelector((state: RootState) => state.article.articles)
   const articlesLoading = useAppSelector(
     (state: RootState) => state.article.loading,
@@ -28,7 +29,7 @@ const ArticleCategory = (): JSX.Element => {
 
   useEffect(() => {
     const articlesPromise = dispatch(
-      getArticles({ current: 1, categoryId: `${name}` }),
+      getArticles({ current: 1, filter: filter.filterQuery }),
     )
 
     return () => {
@@ -40,7 +41,12 @@ const ArticleCategory = (): JSX.Element => {
     event: React.ChangeEvent<unknown>,
     value: number,
   ) => {
-    dispatch(getArticles({ current: value, categoryId: `${name}` }))
+    dispatch(
+      getArticles({
+        current: value,
+        filter: filter.filterQuery,
+      }),
+    )
   }
   return (
     <UserLayout haveSearch={true}>

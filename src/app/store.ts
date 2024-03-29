@@ -6,6 +6,7 @@ import userReducer from '../views/Admin/Users/user.slice'
 import districtReducer from './slice/district.slice'
 import wardReducer from './slice/ward.slice'
 import articleReducer from './slice/article.slice.'
+import filterReducer from './slice/filter.slice'
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     wards: wardReducer,
     auth: authReducer,
     user: userReducer,
+    filter: filterReducer,
   },
 })
 
