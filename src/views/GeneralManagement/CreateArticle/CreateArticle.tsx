@@ -141,6 +141,7 @@ const CreateArticle = () => {
   }
 
   const handleChangeProvince = (province: Province) => {
+    handleMoveMap(province.province_name, 'province')
     dispatch(selectProvince(province))
 
     dispatch(getAllDistricts(province.province_id)).then(response => {
@@ -151,7 +152,6 @@ const CreateArticle = () => {
 
     setWards([])
     setExactAddress(province.province_name)
-    handleMoveMap(province.province_name, 'province')
   }
 
   const handleChangeDistrict = (district: District) => {
@@ -277,6 +277,9 @@ const CreateArticle = () => {
       .unwrap()
       .then(() => {
         toast.success(t('generalManagement.createNewArticle.createSuccess'))
+        dispatch(selectProvince(null))
+        dispatch(selectDistrict(null))
+        dispatch(selectWard(null))
         navigate('/')
       })
   }

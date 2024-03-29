@@ -82,10 +82,10 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
   const handleChangeProvince = (province: Province) => {
     if (page === 0) {
       dispatch(selectProvince(province))
-
       dispatch(getAllDistricts(province.province_id)).then(response => {
         setDistricts(response.payload.results)
       })
+      dispatch(selectDistrict(null))
 
       setPage(1)
     }
@@ -93,10 +93,10 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
   const handleChangeDistrict = (district: District) => {
     if (page === 1) {
       dispatch(selectDistrict(district))
-
       dispatch(getAllWards(district.district_id)).then(response => {
         setWards(response.payload.results)
       })
+      dispatch(selectWard(null))
 
       setPage(2)
     }

@@ -8,6 +8,10 @@ import {
   Slider,
   Typography,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { setAcreageFilter } from '../../app/slice/filter.slice'
+import { RootState } from '../../app/store'
 
 interface ChooseAcreageModalProps {
   open: boolean
@@ -18,7 +22,10 @@ const ChooseAcreageModal: React.FC<ChooseAcreageModalProps> = ({
   open,
   setOpen,
 }) => {
-  const [acreage, setAcreage] = useState<number[]>([10, 20])
+  const dispatch = useAppDispatch()
+  const { t } = useTranslation()
+  const acreageFilter = useAppSelector((root: RootState) => root.filter.acreage)
+  const [acreage, setAcreage] = useState<number[]>(acreageFilter)
   const valuetext = (value: number) => {
     return `${value}`
   }
@@ -42,7 +49,7 @@ const ChooseAcreageModal: React.FC<ChooseAcreageModalProps> = ({
         borderBottom={1}
         borderColor={'grey.500'}
       >
-        Chọn diện tích
+        {t('chooseAcreageModal.chooseAcreage')}
       </DialogTitle>
       <DialogContent>
         <Typography textAlign={'center'} mt={2}>
@@ -60,7 +67,15 @@ const ChooseAcreageModal: React.FC<ChooseAcreageModalProps> = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained">Xác nhận</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setOpen(false)
+            dispatch(setAcreageFilter(acreage))
+          }}
+        >
+          {t('chooseAcreageModal.confirm')}
+        </Button>
       </DialogActions>
     </Dialog>
   )

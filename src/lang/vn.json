@@ -38,6 +38,12 @@
       "statistic": "Thống kê"
     }
   },
+  "acreageFilter": {
+    "byAcreage": "Xem theo diện tích",
+    "fromAcreageToAcreage": "Từ {{from}} đến {{to}}",
+    "overAcreage": "Trên {{acreage}} ",
+    "underAcreage": "Dưới {{acreage}} "
+  },
   "articleBox": {
     "vndPerMonth": "{{price}}/tháng"
   },
@@ -65,6 +71,18 @@
     "chooseProvince": "Chọn tỉnh thành",
     "nationWide": "Toàn quốc",
     "submit": "Xác nhận"
+  },
+  "choosePriceModal": {
+    "choosePrice": "Chọn giá bất động sản",
+    "millionDong": "{{price}} triệu",
+    "confirm": "Xác nhận"
+  },
+  "chooseCategoryModal": {
+    "chooseCategory": "Chọn loại bất động sản"
+  },
+  "chooseAcreageModal": {
+    "chooseAcreage": "Chọn diện tích bất động sản",
+    "confirm": "Xác nhận"
   },
   "generalManagement": {
     "createNewArticle": {
@@ -144,6 +162,9 @@
     "choosePrice": "Chọn giá",
     "hello": "Xin chào, {{name}}!",
     "manageArticles": "Quản lý tin đăng",
+    "millionDong": "{{price}} triệu",
+    "overMillionDong": "Trên {{price}} triệu",
+    "over": "Trên {{acreage}}",
     "personalInformation": "Thông tin cá nhân",
     "postAnArticle": "Đăng tin cho thuê",
     "search": "Tìm kiếm",
@@ -152,12 +173,19 @@
     "signup": "Đăng ký"
   },
   "home": {
+    "clearFilter": "Xóa bộ lọc",
     "default": "Mặc định",
     "newest": "Mới nhất",
     "signin": "Đăng nhập",
     "signout": "Đăng xuất",
     "sort": "Sắp xếp",
     "totalNumberOfPost": "Tổng quan {{number}} kết quả"
+  },
+  "priceFilter": {
+    "byPrice": "Xem theo giá",
+    "fromPriceToPrice": "Từ {{fromPrice}} đến {{toPrice}} triệu",
+    "overMillion": "Trên {{price}} triệu",
+    "underMillion": "Dưới {{price}} triệu"
   },
   "profile": {
     "article": "Bài đăng",

@@ -61,7 +61,6 @@ const Verify = (): JSX.Element => {
 
   const handleSubmitCode = () => {
     const check = codes.every(x => x !== '')
-    console.log(check)
 
     if (!check) {
       setError(true)
@@ -83,7 +82,7 @@ const Verify = (): JSX.Element => {
         }
       })
       .catch(res => {
-        if (res.response.status === 404) {
+        if (res.response.status === 402) {
           toast.error(t('verify.verifyFailed'))
         }
       })

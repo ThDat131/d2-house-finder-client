@@ -8,17 +8,24 @@ import {
   Slider,
   Typography,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { setPriceFilter } from '../../app/slice/filter.slice'
+import { RootState } from '../../app/store'
 
-interface ChoosePricemodalProps {
+interface ChoosePriceModalProps {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ChoosePricemodal: React.FC<ChoosePricemodalProps> = ({
+const ChoosePriceModal: React.FC<ChoosePriceModalProps> = ({
   open,
   setOpen,
 }) => {
-  const [price, setPrice] = useState<number[]>([4, 6])
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const priceFilter = useAppSelector((root: RootState) => root.filter.price)
+  const [price, setPrice] = useState<number[]>(priceFilter)
   const valuetext = (value: number) => {
     return `${value}`
   }
@@ -42,29 +49,36 @@ const ChoosePricemodal: React.FC<ChoosePricemodalProps> = ({
         borderBottom={1}
         borderColor={'grey.500'}
       >
-        Chọn giá bất động sản
+        {t('choosePriceModal.choosePrice')}
       </DialogTitle>
       <DialogContent>
-        <Typography
-          textAlign={'center'}
-          mt={2}
-        >{`${price[0]} - ${price[1]} triệu`}</Typography>
+        <Typography textAlign={'center'} mt={2}>
+          {t('choosePriceModal.millionDong', {
+            price: `${price[0]} - ${price[1]}`,
+          })}
+        </Typography>
         <Slider
-          getAriaLabel={() => 'Temperature range'}
           value={price}
           onChange={handleChangePrice}
-          valueLabelDisplay="auto"
           getAriaValueText={valuetext}
           sx={{ marginTop: 5 }}
-          max={10}
+          max={30}
           min={0}
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="contained">Xác nhận</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            dispatch(setPriceFilter(price))
+            setOpen(false)
+          }}
+        >
+          {t('choosePriceModal.confirm')}
+        </Button>
       </DialogActions>
     </Dialog>
   )
 }
 
-export default ChoosePricemodal
+export default ChoosePriceModal

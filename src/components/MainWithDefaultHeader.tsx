@@ -8,7 +8,8 @@ interface Props {
 const MainWithDefaultHeader: React.FC<Props> = ({ children }) => {
   return (
     <>
-      <HeaderDefault />;<Box>{children}</Box>
+      <HeaderDefault />
+      <Box>{children}</Box>
     </>
   )
 }

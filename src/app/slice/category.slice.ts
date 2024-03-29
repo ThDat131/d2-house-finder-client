@@ -14,6 +14,7 @@ import { type ErrorResponse } from '../../model/common/error-response'
 const initialState = {
   category: [] as Category[],
   error: '',
+  selected: null as Category | null,
 }
 const { authHttpService, httpService } = new HttpService()
 
@@ -68,6 +69,9 @@ const categorySlice = createSlice({
     clearError: state => {
       state.error = ''
     },
+    selectCategory: (state, action: PayloadAction<Category | null>) => {
+      state.selected = action.payload
+    },
   },
   extraReducers(builder) {
     builder.addCase(
@@ -89,7 +93,7 @@ const categorySlice = createSlice({
   },
 })
 
-export const { clearError } = categorySlice.actions
+export const { clearError, selectCategory } = categorySlice.actions
 
 const categoryReducer = categorySlice.reducer
 
