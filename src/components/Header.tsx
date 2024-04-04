@@ -11,15 +11,17 @@ import {
   List,
   ListItemButton,
   Container,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
 } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
-import { getCurrentUser, signout } from '../app/slice/auth.slice'
+import { signout } from '../app/slice/auth.slice'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { type RootState } from '../app/store'
-import { useEffect, useRef, useState } from 'react'
-import Loading from './Loading'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getCategories, selectCategory } from '../app/slice/category.slice'
+import { selectCategory } from '../app/slice/category.slice'
 import Logo from '../assets/image/logo/D2-logos_white.png'
 import {
   setAcreageFilter,
@@ -36,53 +38,32 @@ export const Header = (): JSX.Element => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
 
-  const [loading, setLoading] = useState<boolean>(true)
   const [showUserOpts, setShowUserOpts] = useState<boolean>(false)
-  const categories = useAppSelector(
-    (state: RootState) => state.category?.category,
-  )
-  const filter = useAppSelector((state: RootState) => state.filter)
+  const categoryState = useAppSelector((state: RootState) => state.category)
   const currentUser = useAppSelector((state: RootState) => state.auth.user)
-  const currentUserRef = useRef(false)
-  const [selectedCategory, setSelectedCategory] = useState('')
-
-  useEffect(() => {
-    const fetchData = async () => {
-      let categoryPromise
-      let currentUserPromise
-
-      if (!categories || categories.length <= 0) {
-        categoryPromise = dispatch(getCategories())
-      }
-
-      if (!currentUserRef.current) {
-        currentUserPromise = dispatch(getCurrentUser())
-      }
-
-      await Promise.all([categoryPromise, currentUserPromise])
-
-      setLoading(false)
-    }
-
-    fetchData()
-
-    return () => {
-      dispatch(getCurrentUser())
-      currentUserRef.current = true
-    }
-  }, [])
 
   const handleSignout = () => {
     dispatch(signout())
     navigate('/dang-nhap')
   }
 
-  const handleChangeCategory = (evt: React.SyntheticEvent, value: string) => {
-    handleClearFilter()
-    setSelectedCategory(value)
-    dispatch(selectCategory(categories.find(x => x._id === value) as Category))
+  const handleChangeCategory = (evt: SelectChangeEvent) => {
+    const value = evt.target.value
+
+    dispatch(
+      selectCategory(
+        categoryState.category.find(x => x._id === value) as Category,
+      ),
+    )
+
+    if (value === undefined) {
+      return
+    }
+
     const filterString = `?categoryId=${value}`
+    handleClearFilter()
     dispatch(setFilterQuery(filterString))
+    navigate(`/danh-muc/${value}`)
   }
 
   const handleClearFilter = () => {
@@ -94,55 +75,55 @@ export const Header = (): JSX.Element => {
     dispatch(selectDistrict(null))
     dispatch(selectWard(null))
   }
-  // #331d66 30%,
-  // #3c3fa3 30%,
-  //  #4e68f0
 
-  return loading ? (
-    <Loading />
-  ) : (
+  return (
     <AppBar position="sticky">
       <Container>
-        <Toolbar>
-          <Stack
-            spacing={1}
-            direction={'row'}
-            px={2}
+        <Toolbar sx={{ gap: 2 }}>
+          <Box
+            width={80}
+            height={80}
             sx={{ cursor: 'pointer' }}
             onClick={() => {
               navigate('/')
             }}
           >
-            <Box width={80} height={80}>
-              <Box component={'img'} src={Logo} width={1} height={1} />
-            </Box>
-          </Stack>
-          <Tabs
-            value={selectedCategory}
-            onChange={handleChangeCategory}
-            textColor="secondary"
-            indicatorColor="secondary"
-          >
+            <Box component={'img'} src={Logo} width={1} height={1} />
+          </Box>
+          <Tabs textColor="secondary" value={''}>
             <Tab
               component={Link}
               to={'/'}
               key={'main'}
-              label="Trang chủ"
+              label={t('header.home')}
               value={''}
               sx={{ color: '#fff' }}
             />
-            {Array.isArray(categories) &&
-              categories.map(c => (
-                <Tab
-                  component={Link}
-                  to={`/danh-muc/${c._id}`}
-                  key={c._id}
-                  label={c.name}
-                  value={c._id}
-                  sx={{ color: '#fff' }}
-                />
-              ))}
           </Tabs>
+          <Select
+            disableUnderline={true}
+            variant="standard"
+            value={categoryState.selected?._id}
+            sx={{
+              color: '#fff',
+              '.MuiSvgIcon-root ': {
+                fill: '#fff',
+              },
+            }}
+            onChange={evt => {
+              handleChangeCategory(evt)
+            }}
+            displayEmpty
+          >
+            <MenuItem value={undefined}>{t('header.category')}</MenuItem>
+            {Array.isArray(categoryState.category) &&
+              categoryState.category.map(c => (
+                <MenuItem key={c._id} value={c._id}>
+                  {c.name}
+                </MenuItem>
+              ))}
+          </Select>
+
           {currentUser?._id !== '' ? (
             <Box sx={{ marginLeft: 'auto' }}>
               <Stack
