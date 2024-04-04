@@ -64,6 +64,20 @@ const authSlice = createSlice({
         state.user = user
       }
     },
+    updateCurrentUser: (state, action: PayloadAction<User>) => {
+      const updatedUser = {
+        _id: action.payload._id,
+        active: action.payload.active,
+        avatar: action.payload.avatar,
+        email: action.payload.email,
+        fullName: action.payload.fullName,
+        phone: action.payload.phone,
+        role: action.payload.role,
+      }
+      state.user = updatedUser
+
+      localStorage.setItem('user', JSON.stringify(updatedUser))
+    },
   },
   extraReducers(builder) {
     builder.addCase(signinAPI.fulfilled, (state, action) => {
@@ -72,7 +86,8 @@ const authSlice = createSlice({
   },
 })
 
-export const { signin, signout, getCurrentUser } = authSlice.actions
+export const { signin, signout, getCurrentUser, updateCurrentUser } =
+  authSlice.actions
 
 const authReducer = authSlice.reducer
 

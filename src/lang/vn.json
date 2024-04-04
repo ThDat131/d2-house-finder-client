@@ -137,6 +137,8 @@
       "password": "Mật khẩu",
       "phone": "Số điện thoại",
       "saveUpdate": "Lưu & Cập nhật",
+      "updateFailed": "Có lỗi xảy ra, vui lòng thử lại",
+      "updateSuccess": "Cập nhật thông tin cá nhân thành công",
       "updatePassword": "Cập nhật mật khẩu",
       "updatePersonalInformation": "Cập nhật thông tin cá nhân"
     },
