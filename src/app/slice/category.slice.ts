@@ -15,6 +15,7 @@ const initialState = {
   category: [] as Category[],
   error: '',
   selected: null as Category | null,
+  loading: true,
 }
 const { authHttpService, httpService } = new HttpService()
 
@@ -74,10 +75,14 @@ const categorySlice = createSlice({
     },
   },
   extraReducers(builder) {
+    builder.addCase(getCategories.pending, state => {
+      state.loading = true
+    })
     builder.addCase(
       getCategories.fulfilled,
       (state, action: PayloadAction<Category[]>) => {
         state.category = action.payload
+        state.loading = false
       },
     )
     builder.addCase(
