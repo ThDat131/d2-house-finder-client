@@ -4,7 +4,7 @@ const Footer = (): JSX.Element => {
   const currYear: number = new Date().getFullYear()
 
   return (
-    <Box bgcolor={'primary.main'} color={'primary.contrastText'} mt={2}>
+    <Box bgcolor={'primary.main'} color={'primary.contrastText'}>
       <Container sx={{ paddingY: 2 }}>
         <Box textAlign={'center'}>
           <Typography>Copyright &copy; {currYear} Nhà trọ D2</Typography>

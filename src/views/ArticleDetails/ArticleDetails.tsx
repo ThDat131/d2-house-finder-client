@@ -57,10 +57,6 @@ const ArticleDetails = (): JSX.Element => {
     transitionDuration: 1000,
     transitionInterpolator: new FlyToInterpolator(),
   })
-  const [marker, setMarker] = useState({
-    longitude: 0,
-    latitude: 0,
-  })
   const [article, setArticle] = useState<Article>()
   const [articleList, setArticleList] = useState<Article[]>([])
   const [loadingPage, setLoadingPage] = useState<boolean>(true)
@@ -112,7 +108,6 @@ const ArticleDetails = (): JSX.Element => {
 
         setArticle(articleFromResult)
         setViewportData(prev => ({ ...prev, latitude, longitude }))
-        setMarker({ latitude, longitude })
         getNearestArticle(
           articleFromResult._id,
           articleFromResult.address.wardCode,
@@ -304,7 +299,7 @@ const ArticleDetails = (): JSX.Element => {
                 <Grid item xs={12} height={300}>
                   <GoongMap
                     data={viewportData}
-                    markers={[marker]}
+                    markers={[article as Article]}
                     layer={false}
                   />
                 </Grid>
