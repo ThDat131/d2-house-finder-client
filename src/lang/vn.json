@@ -173,7 +173,8 @@
     "search": "Tìm kiếm",
     "signin": "Đăng nhập",
     "signout": "Đăng xuất",
-    "signup": "Đăng ký"
+    "signup": "Đăng ký",
+    "smartSearch": "Tìm trọ thông minh"
   },
   "home": {
     "clearFilter": "Xóa bộ lọc",
@@ -183,6 +184,9 @@
     "signout": "Đăng xuất",
     "sort": "Sắp xếp",
     "totalNumberOfPost": "Tổng quan {{number}} kết quả"
+  },
+  "goongMap": {
+    "watchNow": "Xem ngay"
   },
   "priceFilter": {
     "byPrice": "Xem theo giá",

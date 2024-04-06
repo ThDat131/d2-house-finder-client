@@ -94,9 +94,15 @@ export const Header = (): JSX.Element => {
             <Tab
               component={Link}
               to={'/'}
-              key={'main'}
               label={t('header.home')}
               value={''}
+              sx={{ color: '#fff' }}
+            />
+            <Tab
+              component={Link}
+              to={'/tim-tro-theo-vi-tri'}
+              label={t('header.smartSearch')}
+              value={'smartSearch'}
               sx={{ color: '#fff' }}
             />
           </Tabs>

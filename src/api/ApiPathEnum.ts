@@ -1,18 +1,22 @@
 const prefix = '/api'
+const version = '/v1'
 
 export const ApiPathEnum = {
-  Article: `${prefix}/v1/articles`,
-  Categories: `${prefix}/v1/categories`,
-  Comments: `${prefix}/v1/comments`,
-  SendCode: `${prefix}/v1/mail/send-passcode`,
-  Users: `${prefix}/v1/users`,
-  Signin: `${prefix}/v1/auth/login`,
-  Signup: `${prefix}/v1/auth/register`,
-  Verify: `${prefix}/v1/auth/verify`,
-  Geocode: 'geocode',
-  GetUserByRefreshToken: `${prefix}/v1/auth/refresh`,
+  Article: `${prefix}${version}/articles`,
+  Categories: `${prefix}${version}/categories`,
+  Comments: `${prefix}${version}/comments`,
+  SendCode: `${prefix}${version}/mail/send-passcode`,
+  Users: `${prefix}${version}/users`,
+  Signin: `${prefix}${version}/auth/login`,
+  Signup: `${prefix}${version}/auth/register`,
+  Verify: `${prefix}${version}/auth/verify`,
+  GetUserByRefreshToken: `${prefix}${version}/auth/refresh`,
   GetAllProvinces: 'api/province',
   GetAllDistricts: 'api/province/district',
   GetAllWards: '/api/province/ward',
-  UploadSingleFile: `${prefix}/v1/files/upload`,
+  UploadSingleFile: `${prefix}${version}/files/upload`,
+  // GoongMap
+  AutoComplete: 'Place/AutoComplete',
+  Detail: 'Place/Detail',
+  Geocode: 'geocode',
 }
