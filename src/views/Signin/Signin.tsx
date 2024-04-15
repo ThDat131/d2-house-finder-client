@@ -124,7 +124,7 @@ const Signin = (): JSX.Element => {
   }
 
   return (
-    <Grid container component="main" sx={{ height: '100vh' }}>
+    <Grid container component="main" height={1}>
       <Grid
         item
         xs={false}
@@ -153,7 +153,6 @@ const Signin = (): JSX.Element => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            height: 1,
           }}
         >
           <Box width={200} height={200}>
