@@ -138,6 +138,28 @@ export const createArticle = createAsyncThunk(
   },
 )
 
+export const updateArticle = createAsyncThunk(
+  'article/updateArticle',
+  async (article: ArticleCreatedModel, thunkAPI) => {
+    try {
+      const response = await authHttpService.patch<
+        CommonResponse<Article> | ErrorResponse
+      >(`${ApiPathEnum.Article}/${article._id}`, article, {
+        signal: thunkAPI.signal,
+      })
+
+      if (response.status === 400) {
+        throw new Error(response.data.message)
+      }
+
+      return response.data as CommonResponse<Article>
+    } catch (ex) {
+      const error = ex as Error
+      return thunkAPI.rejectWithValue(error.message)
+    }
+  },
+)
+
 export const createComment = createAsyncThunk(
   'comment/createComment',
   async (data: any, thunkAPI) => {

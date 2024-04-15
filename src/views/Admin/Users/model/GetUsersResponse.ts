@@ -2,7 +2,12 @@ import { type CommonResponse } from '../../../../model/common/common-response'
 import { type User } from '../../../../model/user/user'
 
 interface Data {
-  meta: any
+  meta: {
+    current: number
+    pageSize: number
+    pages: number
+    total: number
+  }
   results: User[]
 }
 

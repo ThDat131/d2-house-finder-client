@@ -2,7 +2,12 @@ import { type Category } from '../../../../model/category/category'
 import { type CommonResponse } from '../../../../model/common/common-response'
 
 interface Data {
-  meta: any
+  meta: {
+    current: number
+    pageSize: number
+    pages: number
+    total: number
+  }
   results: Category[]
 }
 
