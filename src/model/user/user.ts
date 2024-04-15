@@ -11,4 +11,13 @@ export interface User {
   phone: string
   followers: FollowEntity[]
   followings: FollowEntity[]
+  streetAddress?: string
+  latitude?: string
+  longitude?: string
+  provinceCode?: string
+  districtCode?: string
+  wardCode?: string
+  provinceName?: string
+  districtName?: string
+  wardName?: string
 }

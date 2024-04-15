@@ -6,10 +6,12 @@ export interface Article {
   _id: string
   title: string
   description: string
-  categoryId: {
-    categoryId: string
-    name: string
-  }
+  categoryId:
+    | {
+        categoryId: string
+        name: string
+      }
+    | string
   price: number
   acreage: number
   status: string
@@ -30,4 +32,5 @@ export interface Article {
   }
   comments: Comment[]
   location: Location
+  quantity: number
 }

@@ -82,7 +82,7 @@ const CreateArticle = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [uploadedImages, setUploadedImages] = useState<ImageType[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [viewportData, setViewPortData] = useState({
+  const [viewPortData, setViewPortData] = useState({
     width: '100%',
     height: 400,
     latitude: 16.5552212,
@@ -760,7 +760,7 @@ const CreateArticle = () => {
             </Grid>
           </Grid>
           <Grid item xs={4}>
-            <GoongMap markers={[]} data={viewportData} layer={false} />
+            <GoongMap markers={[]} data={viewPortData} layer={false} />
           </Grid>
         </Grid>
       </form>

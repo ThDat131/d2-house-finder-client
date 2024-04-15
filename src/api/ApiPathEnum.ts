@@ -7,6 +7,8 @@ export const ApiPathEnum = {
   Comments: `${prefix}${version}/comments`,
   SendCode: `${prefix}${version}/mail/send-passcode`,
   Users: `${prefix}${version}/users`,
+  SigninWithFacebook: 'api/v1/auth/facebook',
+  SigninWithGoogle: 'api/v1/auth/google/login',
   Signin: `${prefix}${version}/auth/login`,
   Signup: `${prefix}${version}/auth/register`,
   Verify: `${prefix}${version}/auth/verify`,

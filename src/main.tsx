@@ -27,16 +27,18 @@ import {
   AdminAnalyticsView,
   AdminApplicationView,
   AdminCategoryCreateView,
-  AdminPostView,
+  AdminArticleView,
   AdminUserCreateView,
   AdminUserView,
   AdmninCategoriesView,
+  AdminArticleCreateView,
 } from './views/Admin'
 import { CssBaseline } from '@mui/material'
 import { I18nextProvider } from 'react-i18next'
 import i18n from './lang/i18n'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { ActionType } from './common/common-enum'
 
 const router = createBrowserRouter([
   {
@@ -95,7 +97,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'user/create',
-        element: <AdminUserCreateView />,
+        element: <AdminUserCreateView type={ActionType.CREATE} />,
+      },
+      {
+        path: 'user/update/:id',
+        element: <AdminUserCreateView type={ActionType.UPDATE} />,
       },
       {
         path: 'category/create',
@@ -114,8 +120,16 @@ const router = createBrowserRouter([
         element: <AdminApplicationView />,
       },
       {
-        path: 'post',
-        element: <AdminPostView />,
+        path: 'article',
+        element: <AdminArticleView />,
+      },
+      {
+        path: 'article/create',
+        element: <AdminArticleCreateView type={ActionType.CREATE} />,
+      },
+      {
+        path: 'article/update/:id',
+        element: <AdminArticleCreateView type={ActionType.UPDATE} />,
       },
     ],
   },

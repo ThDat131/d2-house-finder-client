@@ -1,5 +1,7 @@
 import {
   Button,
+  Checkbox,
+  FormControlLabel,
   FormHelperText,
   Grid,
   Paper,
@@ -27,6 +29,7 @@ const CreateCategory = (): JSX.Element => {
 
   const initialValues = {
     name: '',
+    active: true,
   }
 
   const validationSchema = Yup.object().shape({
@@ -59,20 +62,14 @@ const CreateCategory = (): JSX.Element => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container spacing={2}>
-        <Grid
-          item
-          xs={12}
-          display={'flex'}
-          justifyContent={'space-between'}
-          mb={4}
-        >
+      <Grid container spacing={2} height={1}>
+        <Grid item>
           <Typography variant={'h3'} mb={2}>
             {t('admin.category.createACategory')}
           </Typography>
         </Grid>
-        <Grid item container xs={12} minHeight={'70vh'}>
-          <Paper style={{ width: '100%' }}>
+        <Grid item container xs={12} flex={1}>
+          <Paper sx={{ width: 1, height: 1 }}>
             <Grid container spacing={4} borderRadius={2} p={3}>
               <Grid item xs={12}>
                 <TextField
@@ -92,6 +89,18 @@ const CreateCategory = (): JSX.Element => {
                     {handleShowError(error)}
                   </FormHelperText>
                 ) : null}
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      defaultChecked
+                      name="active"
+                      onChange={formik.handleChange}
+                    />
+                  }
+                  label={t('admin.category.active')}
+                />
               </Grid>
               <Grid item xs={12} display={'flex'} justifyContent={'flex-end'}>
                 <Button

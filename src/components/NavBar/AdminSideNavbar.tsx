@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Drawer,
   List,
   ListItem,
@@ -20,10 +21,13 @@ import AddIcon from '@mui/icons-material/Add'
 import ListIcon from '@mui/icons-material/List'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import theme from '../../theme'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const AdminSideNavBar = (): JSX.Element => {
   const { t } = useTranslation()
-
+  const [selectedIndex, setSelectedIndex] = useState(1)
+  const [selectedChildUrl, setSelectedChildUrl] = useState<string>('')
   const [open, setOpen] = useState<boolean>(true)
   const [expanded, setExpanded] = useState(-1)
 
@@ -53,7 +57,7 @@ const AdminSideNavBar = (): JSX.Element => {
       id: 4,
       title: t('admin.sideNav.post'),
       icon: <FeedIcon />,
-      url: '/admin/post',
+      url: '/admin/article',
     },
     {
       id: 5,
@@ -65,6 +69,51 @@ const AdminSideNavBar = (): JSX.Element => {
 
   const headingStyle: CSSProperties = {
     paddingLeft: 10,
+  }
+
+  const listStyle = {
+    '&& .Mui-expanded > .MuiAccordionSummary-root.MuiButtonBase-root ': {
+      backgroundColor: theme.palette.primary.main,
+      '& .MuiAccordionSummary-expandIconWrapper': {
+        color: theme.palette.primary.contrastText,
+      },
+      '& .Mui-selected, && .Mui-selected:hover': {
+        '&, & .MuiListItemIcon-root': {
+          fontWeight: 700,
+          color: theme.palette.primary.contrastText,
+        },
+        '&, & .MuiListItemText-root > span': {
+          fontWeight: 700,
+          color: theme.palette.primary.contrastText,
+        },
+      },
+    },
+    '&& .Mui-selected.parent, && .Mui-selected:hover.parent': {
+      '&, & .MuiListItemIcon-root': {
+        fontWeight: 700,
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+      },
+      '&, & .MuiListItemText-root > span': {
+        fontWeight: 700,
+        color: theme.palette.primary.contrastText,
+      },
+    },
+  }
+
+  const childListStyle = {
+    '&& .Mui-selected, && .Mui-selected:hover': {
+      '&, & .MuiListItemIcon-root': {
+        fontWeight: 700,
+        backgroundColor: theme.palette.primary.contrastText,
+        color: theme.palette.primary.main,
+      },
+      '&, & .MuiListItemText-root > span': {
+        fontWeight: 700,
+        backgroundColor: theme.palette.primary.contrastText,
+        color: theme.palette.primary.main,
+      },
+    },
   }
 
   const toggleDrawer =
@@ -84,9 +133,9 @@ const AdminSideNavBar = (): JSX.Element => {
     <Drawer
       anchor="left"
       variant="permanent"
-      sx={{ width: 200 }}
+      sx={{ minWidth: 200, height: 1, position: 'relative' }}
       open={open}
-      PaperProps={{ sx: { width: '10%', minWidth: 200 } }}
+      PaperProps={{ sx: { minWidth: 200, position: 'absolute', right: 0 } }}
     >
       <Accordion
         disableGutters
@@ -101,13 +150,18 @@ const AdminSideNavBar = (): JSX.Element => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <List>
+          <List sx={listStyle}>
             {overviewData.map(x => (
               <ListItem key={x.title} disablePadding>
                 <ListItemButton
+                  className="parent"
                   onClick={() => {
                     navigate(x.url)
+                    setSelectedIndex(x.id)
+                    setSelectedChildUrl('')
+                    setExpanded(-1)
                   }}
+                  selected={selectedIndex === x.id}
                 >
                   <ListItemIcon>{x.icon}</ListItemIcon>
                   <ListItemText primary={x.title} />
@@ -124,7 +178,7 @@ const AdminSideNavBar = (): JSX.Element => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <List>
+          <List sx={listStyle}>
             {managementData.map(x => (
               <ListItem key={x.title} disablePadding>
                 <Accordion
@@ -132,23 +186,30 @@ const AdminSideNavBar = (): JSX.Element => {
                   elevation={0}
                   expanded={x.id === expanded}
                 >
-                  <AccordionSummary>
-                    <ListItemButton
-                      onClick={() => {
-                        setExpanded(x.id)
-                        navigate(x.url)
-                      }}
-                    >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    onClick={() => {
+                      x.id === selectedIndex
+                        ? setSelectedIndex(-1)
+                        : setSelectedIndex(x.id)
+                      x.id === expanded ? setExpanded(-1) : setExpanded(x.id)
+                    }}
+                  >
+                    <ListItemButton selected={selectedIndex === x.id}>
                       <ListItemIcon>{x.icon}</ListItemIcon>
                       <ListItemText primary={x.title} />
                     </ListItemButton>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <List>
+                    <List sx={childListStyle}>
                       <ListItem>
                         <ListItemButton
+                          sx={{ pl: 5 }}
+                          selected={selectedChildUrl === `${x.url}/create`}
                           onClick={() => {
+                            setSelectedIndex(x.id)
                             navigate(`${x.url}/create`)
+                            setSelectedChildUrl(`${x.url}/create`)
                           }}
                         >
                           <ListItemIcon>
@@ -159,8 +220,11 @@ const AdminSideNavBar = (): JSX.Element => {
                       </ListItem>
                       <ListItem>
                         <ListItemButton
+                          sx={{ pl: 5 }}
+                          selected={selectedChildUrl === x.url}
                           onClick={() => {
                             navigate(`${x.url}`)
+                            setSelectedChildUrl(x.url)
                           }}
                         >
                           <ListItemIcon>
