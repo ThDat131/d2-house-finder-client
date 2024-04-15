@@ -34,11 +34,11 @@ const theme = responsiveFontSizes(
             scrollbarColor: '#6b6b6b',
             '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
               backgroundColor: '#ffffff',
-              width: '7px',
+              width: '6px',
             },
             '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
               borderRadius: 8,
-              backgroundColor: '#00ABE4',
+              backgroundColor: 'rgba(0,0,0,0.5)',
               minHeight: 24,
               border: '1px solid #2b2b2b',
             },
