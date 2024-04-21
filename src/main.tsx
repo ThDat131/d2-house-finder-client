@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { store } from './app/store'
+import { persistor, store } from './app/store'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Signin from './views/Signin/Signin'
@@ -39,6 +39,7 @@ import i18n from './lang/i18n'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ActionType } from './common/common-enum'
+import { PersistGate } from 'redux-persist/integration/react'
 
 const router = createBrowserRouter([
   {
@@ -153,11 +154,13 @@ root.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <RouterProvider router={router} />
-          <ToastContainer />
-        </ThemeProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <RouterProvider router={router} />
+            <ToastContainer />
+          </ThemeProvider>
+        </PersistGate>
       </Provider>
     </I18nextProvider>
   </React.StrictMode>,

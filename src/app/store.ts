@@ -7,6 +7,24 @@ import districtReducer from './slice/district.slice'
 import wardReducer from './slice/ward.slice'
 import articleReducer from './slice/article.slice.'
 import filterReducer from './slice/filter.slice'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
+const authPersistedReducer = persistReducer(persistConfig, authReducer)
 
 export const store = configureStore({
   reducer: {
@@ -15,10 +33,16 @@ export const store = configureStore({
     provinces: provinceReducer,
     districts: districtReducer,
     wards: wardReducer,
-    auth: authReducer,
+    auth: authPersistedReducer,
     user: userReducer,
     filter: filterReducer,
   },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 })
 
 export type AppDispatch = typeof store.dispatch
@@ -29,3 +53,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >
+
+export const persistor = persistStore(store)

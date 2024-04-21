@@ -38,13 +38,16 @@ import { GetArticlesResponse } from '../../model/article/article-response'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import PostItem from '../../components/PostItem'
 import UserLayout from '../../components/Layout/UserLayout'
+import { toast } from 'react-toastify'
+import { LoadingButton } from '@mui/lab'
+import { addFollow, removeFollow } from '../../app/slice/auth.slice'
 
 const ArticleDetails = (): JSX.Element => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { httpService } = new HttpService()
+  const { httpService, authHttpService } = new HttpService()
 
   const [viewportData, setViewportData] = useState<ViewPort>({
     width: '100%',
@@ -60,7 +63,8 @@ const ArticleDetails = (): JSX.Element => {
   const [article, setArticle] = useState<Article>()
   const [articleList, setArticleList] = useState<Article[]>([])
   const [loadingPage, setLoadingPage] = useState<boolean>(true)
-  const currentUser = useAppSelector((state: RootState) => state.auth.user)
+  const [followLoading, setFollowLoading] = useState<boolean>(false)
+  const authState = useAppSelector((state: RootState) => state.auth)
   const loading = useAppSelector((state: RootState) => state.article.loading)
   const comments = useAppSelector((state: RootState) => state.article.comments)
   const ref = useRef(false)
@@ -96,6 +100,67 @@ const ArticleDetails = (): JSX.Element => {
     }
   }
 
+  const handleFollow = () => {
+    if (article?.createdBy?._id === authState.user._id) {
+      toast.warning(t('profile.canNotFollowYourSelf'))
+      return
+    }
+
+    const isFollow = authState.user.followings?.some(
+      x => x._id === article?.createdBy._id,
+    )
+
+    console.log(isFollow)
+
+    if (isFollow) {
+      unFollow()
+    } else {
+      follow()
+    }
+  }
+
+  const follow = () => {
+    setFollowLoading(true)
+
+    authHttpService
+      .post(ApiPathEnum.Follow, {
+        follower_id: article?.createdBy._id,
+      })
+      .then(res => {
+        dispatch(
+          addFollow({
+            _id: article?.createdBy._id as string,
+            avatar: article?.createdBy.avatar as string,
+            fullName: article?.createdBy.fullName as string,
+          }),
+        )
+      })
+      .finally(() => {
+        setFollowLoading(false)
+      })
+  }
+
+  const unFollow = () => {
+    setFollowLoading(true)
+
+    authHttpService
+      .put(ApiPathEnum.UnFollow, {
+        follower_id: article?.createdBy._id,
+      })
+      .then(res => {
+        dispatch(
+          removeFollow({
+            _id: article?.createdBy._id as string,
+            avatar: article?.createdBy.avatar as string,
+            fullName: article?.createdBy.fullName as string,
+          }),
+        )
+      })
+      .finally(() => {
+        setFollowLoading(false)
+      })
+  }
+
   useEffect(() => {
     const promise = dispatch(getArticle(id as string))
 
@@ -111,7 +176,7 @@ const ArticleDetails = (): JSX.Element => {
         getNearestArticle(
           articleFromResult._id,
           articleFromResult.address.wardCode,
-          articleFromResult.categoryId.categoryId,
+          articleFromResult.categoryId._id as string,
         )
 
         setLoadingPage(false)
@@ -180,7 +245,7 @@ const ArticleDetails = (): JSX.Element => {
                   {article?.images.map((x, index) => {
                     return (
                       index !== 0 && (
-                        <Button key={x} data-fancybox="gallery" href={x} />
+                        <Button key={index} data-fancybox="gallery" href={x} />
                       )
                     )
                   })}
@@ -319,7 +384,7 @@ const ArticleDetails = (): JSX.Element => {
                   <Grid item xs={12} key={x._id}>
                     <Comment
                       comment={x}
-                      showAction={currentUser._id === x.createdBy._id}
+                      showAction={authState.user._id === x.createdBy._id}
                     />
                   </Grid>
                 ))}
@@ -367,14 +432,22 @@ const ArticleDetails = (): JSX.Element => {
                 >
                   {article?.createdBy.phone ?? 0}
                 </Button>
-                <Button
+                <LoadingButton
                   variant="contained"
                   size="large"
                   endIcon={<ConnectWithoutContactIcon />}
                   fullWidth
+                  onClick={() => {
+                    handleFollow()
+                  }}
+                  loading={followLoading}
                 >
-                  {t('articleDetails.follow')}
-                </Button>
+                  {authState.user.followings?.find(
+                    x => x._id === article?.createdBy._id,
+                  )
+                    ? t('articleDetails.unFollow')
+                    : t('articleDetails.follow')}
+                </LoadingButton>
               </Stack>
             </Paper>
           </Grid>

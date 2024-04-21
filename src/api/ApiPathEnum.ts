@@ -17,6 +17,8 @@ export const ApiPathEnum = {
   GetAllDistricts: 'api/province/district',
   GetAllWards: '/api/province/ward',
   UploadSingleFile: `${prefix}${version}/files/upload`,
+  Follow: `${prefix}${version}/follow`,
+  UnFollow: `${prefix}${version}/unFollow`,
   // GoongMap
   AutoComplete: 'Place/AutoComplete',
   Detail: 'Place/Detail',

@@ -9,8 +9,8 @@ export interface User {
   active: boolean
   fullName: string
   phone: string
-  followers: FollowEntity[]
-  followings: FollowEntity[]
+  followers?: FollowEntity[]
+  followings?: FollowEntity[]
   streetAddress?: string
   latitude?: string
   longitude?: string

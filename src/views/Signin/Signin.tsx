@@ -63,8 +63,6 @@ const Signin = (): JSX.Element => {
     dispatch(signinAPI(formik.values))
       .unwrap()
       .then(res => {
-        localStorage.setItem('user', JSON.stringify(res.user))
-        localStorage.setItem('access_token', res.access_token)
         setLoading(false)
         navigate('/')
       })
