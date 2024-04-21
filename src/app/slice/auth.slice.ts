@@ -9,8 +9,14 @@ import { type SigninModel } from '../../model/auth/signin-model'
 import { type CredentialUser } from '../../model/auth/current-user'
 import { type CommonResponse } from '../../model/common/common-response'
 import { type User } from '../../model/user/user'
+import { FollowEntity } from '../../model/follow/follow-entity'
 
-const initialState = {
+interface AuthProps {
+  access_token: string
+  user: User
+}
+
+const initialState: AuthProps = {
   access_token: '',
   user: {
     _id: '',
@@ -20,6 +26,8 @@ const initialState = {
     active: false,
     fullName: '',
     phone: '',
+    followers: [] as FollowEntity[],
+    followings: [] as FollowEntity[],
   },
 }
 const { httpService } = new HttpService()
@@ -27,7 +35,7 @@ export const signinAPI = createAsyncThunk(
   'user/signin',
   async (user: SigninModel, thunkAPI) => {
     try {
-      const response = await httpService.post<CommonResponse<any>>(
+      const response = await httpService.post<CommonResponse<CredentialUser>>(
         ApiPathEnum.Signin,
         user,
         {
@@ -35,7 +43,7 @@ export const signinAPI = createAsyncThunk(
         },
       )
 
-      return response.data.data as CredentialUser
+      return response.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
     }
@@ -47,13 +55,10 @@ const authSlice = createSlice({
   initialState,
 
   reducers: {
-    signin: (state, action: PayloadAction<CredentialUser>) => {
-      return action.payload
+    signin: (state, action: PayloadAction<CommonResponse<CredentialUser>>) => {
+      return action.payload.data
     },
     signout: () => {
-      localStorage.removeItem('user')
-      localStorage.removeItem('access_token')
-
       return initialState
     },
     getCurrentUser: state => {
@@ -75,19 +80,33 @@ const authSlice = createSlice({
         role: action.payload.role,
       }
       state.user = updatedUser
+    },
+    addFollow: (state, action: PayloadAction<FollowEntity>) => {
+      const temp = state.user.followings ?? []
 
-      localStorage.setItem('user', JSON.stringify(updatedUser))
+      state.user.followings = [...temp, action.payload]
+    },
+    removeFollow: (state, action: PayloadAction<FollowEntity>) => {
+      state.user.followings = state.user.followings?.filter(
+        x => x._id !== action.payload._id,
+      )
     },
   },
   extraReducers(builder) {
     builder.addCase(signinAPI.fulfilled, (state, action) => {
-      return action.payload
+      return action.payload.data
     })
   },
 })
 
-export const { signin, signout, getCurrentUser, updateCurrentUser } =
-  authSlice.actions
+export const {
+  signin,
+  signout,
+  getCurrentUser,
+  updateCurrentUser,
+  addFollow,
+  removeFollow,
+} = authSlice.actions
 
 const authReducer = authSlice.reducer
 

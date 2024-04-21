@@ -11,19 +11,24 @@ import { useParams } from 'react-router-dom'
 import Loading from '../../components/Loading'
 import { Article } from '../../model/article/article'
 import { useTranslation } from 'react-i18next'
-import { useAppSelector } from '../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
 import { toast } from 'react-toastify'
+import { LoadingButton } from '@mui/lab'
+import { addFollow, removeFollow } from '../../app/slice/auth.slice'
+import { FollowEntity } from '../../model/follow/follow-entity'
 
 export const Profile = () => {
   const { t } = useTranslation()
-  const { httpService } = new HttpService()
+  const { httpService, authHttpService } = new HttpService()
   const [user, setUser] = useState<User>()
   const [articles, setArticles] = useState<Article[]>([])
   const { id } = useParams()
   const [loading, setLoading] = useState<boolean>(true)
   const ref = useRef(false)
-  const currentUser = useAppSelector((root: RootState) => root.auth.user)
+  const authState = useAppSelector((root: RootState) => root.auth)
+  const [followLoading, setFollowLoading] = useState<boolean>(false)
+  const dispatch = useAppDispatch()
 
   const fetchUser = async () => {
     return await httpService.get(`${ApiPathEnum.Users}/${id}`)
@@ -38,9 +43,88 @@ export const Profile = () => {
   }
 
   const handleFollow = () => {
-    if (user?._id === currentUser._id) {
+    if (user?._id === authState.user._id) {
       toast.warning(t('profile.canNotFollowYourSelf'))
+      return
     }
+
+    const isFollow = authState.user.followings?.some(x => x._id === user?._id)
+
+    if (isFollow) {
+      unFollow()
+    } else {
+      follow()
+    }
+  }
+
+  const follow = () => {
+    setFollowLoading(true)
+
+    authHttpService
+      .post(ApiPathEnum.Follow, {
+        follower_id: user?._id,
+      })
+      .then(res => {
+        dispatch(
+          addFollow({
+            _id: user?._id as string,
+            avatar: user?.avatar as string,
+            fullName: user?.fullName as string,
+          }),
+        )
+
+        addFollowForUser({
+          _id: authState.user._id,
+          fullName: authState.user.fullName,
+          avatar: authState.user.avatar,
+        })
+      })
+      .finally(() => {
+        setFollowLoading(false)
+      })
+  }
+
+  const unFollow = () => {
+    setFollowLoading(true)
+
+    authHttpService
+      .put(ApiPathEnum.UnFollow, {
+        follower_id: user?._id,
+      })
+      .then(res => {
+        dispatch(
+          removeFollow({
+            _id: user?._id as string,
+            avatar: user?.avatar as string,
+            fullName: user?.fullName as string,
+          }),
+        )
+
+        removeFollowForUser({
+          _id: authState.user._id,
+          fullName: authState.user.fullName,
+          avatar: authState.user.avatar,
+        })
+      })
+      .finally(() => {
+        setFollowLoading(false)
+      })
+  }
+
+  const addFollowForUser = (item: FollowEntity) => {
+    const current = { ...user }
+
+    current.followers?.push(item)
+
+    setUser(current as User)
+  }
+
+  const removeFollowForUser = (item: FollowEntity) => {
+    const current = { ...user }
+
+    current.followers = current.followers?.filter(x => x._id !== item._id)
+
+    setUser(current as User)
   }
 
   useEffect(() => {
@@ -117,7 +201,7 @@ export const Profile = () => {
                   </Box>
                   <Box>
                     <Typography fontSize={20}>
-                      {user?.followers.length}
+                      {user?.followers ? user?.followers?.length : 0}
                     </Typography>
                   </Box>
                 </Stack>
@@ -136,19 +220,22 @@ export const Profile = () => {
                   </Box>
                   <Box>
                     <Typography fontSize={20}>
-                      {user?.followings.length}
+                      {user?.followings ? user?.followings?.length : 0}
                     </Typography>
                   </Box>
                 </Stack>
               </Stack>
               <Stack direction={'row'} spacing={2}>
-                <Button
+                <LoadingButton
                   startIcon={<ConnectWithoutContactIcon />}
                   variant="contained"
                   onClick={handleFollow}
+                  loading={followLoading}
                 >
-                  {t('profile.follow')}
-                </Button>
+                  {user?.followers?.find(x => authState.user._id === x._id)
+                    ? t('profile.unFollow')
+                    : t('profile.follow')}
+                </LoadingButton>
                 <Button startIcon={<PhoneIcon />} variant="contained">
                   {user?.phone}
                 </Button>

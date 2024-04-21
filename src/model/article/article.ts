@@ -1,4 +1,5 @@
 import { type Address } from '../address/address'
+import { Category } from '../category/category'
 import { Comment } from '../comment/comment'
 import { Location } from '../location/location'
 
@@ -6,12 +7,7 @@ export interface Article {
   _id: string
   title: string
   description: string
-  categoryId:
-    | {
-        categoryId: string
-        name: string
-      }
-    | string
+  categoryId: Category
   price: number
   acreage: number
   status: string

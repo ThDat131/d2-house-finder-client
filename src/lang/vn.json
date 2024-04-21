@@ -140,6 +140,7 @@
     "price": "Giá",
     "reply": "Phản hồi",
     "submitYourComment": "Nhập bình luận...",
+    "unFollow": "Hủy theo dõi",
     "updatedAt": "Ngày cập nhật"
   },
   "chooseAddressModal": {
@@ -279,6 +280,7 @@
     "followers": "Người theo dõi",
     "followings": "Đang theo dõi",
     "follow": "Theo dõi",
+    "unFollow": "Hủy theo dõi",
     "userArticles": "Các bài đăng"
   },
   "userSideNav": {
