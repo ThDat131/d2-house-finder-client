@@ -101,16 +101,30 @@
       "updateSuccess": "Cập nhật danh mục thành công",
       "update": "Cập nhật"
     },
+    "landlordRequest": {
+      "action": "Thao tác",
+      "approved": "Chấp thuận",
+      "cancel": "Hủy bỏ",
+      "feedBack": "Phản hồi",
+      "listOfLandlordRequest": "Danh sách yêu cầu nâng cấp chủ trọ",
+      "rejected": "Từ chối",
+      "status": "Trạng thái",
+      "updateRequestId": "Cập nhật yêu cầu {{id}}",
+      "updateSuccess": "Cập nhật yêu cầu thành công",
+      "update": "Cập nhật"
+    },
     "sideNav": {
       "application": "Ứng dụng",
       "category": "Danh mục",
       "create": "Tạo mới",
+      "landlordRequest": "Yêu cầu nâng cấp chủ trọ",
       "list": "Danh sách",
       "manage": "Quản lý",
       "overview": "Tổng quan",
       "post": "Bài đăng",
-      "user": "Người dùng",
-      "statistic": "Thống kê"
+      "requests": "Yêu cầu",
+      "statistic": "Thống kê",
+      "user": "Người dùng"
     }
   },
   "acreageFilter": {
@@ -228,6 +242,41 @@
       "oldPassword": "Mật khẩu cũ",
       "update": "Cập nhật"
     },
+    "upgradeLandlord": {
+      "action": "Thao tác",
+      "address": "Nơi thường trú",
+      "alreadyHaveRequest": "Đã gửi yêu cầu trước đó. Vui lòng xem danh sách yêu cầu",
+      "approved": "Chấp thuận",
+      "createdAt": "Ngày tạo",
+      "create": "Tạo mới",
+      "dateOfIssue": "Ngày cấp",
+      "dayOfBirth": "Ngày sinh",
+      "details": "Chi tiết",
+      "email": "Email",
+      "feedBack": "Phản hồi",
+      "female": "Nữ",
+      "fullName": "Họ tên",
+      "gender": "Giới tính",
+      "id": "ID",
+      "requestedList": "Danh sách yêu cầu",
+      "male": "Nam",
+      "nationality": "Quốc tịch",
+      "noEnteredAddress": "Chưa nhập địa chỉ thường trú",
+      "noEnteredNationality": "Chưa nhập quốc tịch",
+      "noEnteredPersonalId": "Chưa nhập số CCCD/CMND",
+      "noEnteredPlaceOfIssue": "Chưa nhập nơi cấp",
+      "ok": "Đồng ý",
+      "pending": "Đang chờ",
+      "personalId": "Số căn cước công dân",
+      "pleaseInputInfo": "Vui lòng nhập thông tin trong thẻ CCCD/CMND",
+      "placeOfIssue": "Nơi cấp",
+      "rejected": "Từ chối",
+      "requestDetailsInformation": "Thông tin chi tiết yêu cầu",
+      "sendRequestSuccessfully": "Gửi yêu cầu thành công. Vui lòng đợi quản trị viên duyệt",
+      "status": "Trạng thái",
+      "updatedAt": "Ngày cập nhật",
+      "upgradeLandlord": "Nâng cấp tài khoản chủ trọ"
+    },
     "verifyArticle": {
       "contract": "Giấy tờ nhà",
       "latedImage": "Ảnh nhà trọ hiện tại",
@@ -287,7 +336,7 @@
     "newArticle": "Đăng tin mới",
     "manageArticles": "Quản lý tin đăng",
     "updatePersonalInformation": "Cập nhật thông tin cá nhân",
-    "requestVerify": "Yêu cầu xác thực",
+    "upgradeLandlord": "Nâng cấp tài khoản chủ trọ",
     "returnToHome": "Trở về trang chủ"
   },
   "signin": {

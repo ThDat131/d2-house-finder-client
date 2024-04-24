@@ -56,21 +56,19 @@ export const Header = (): JSX.Element => {
       ),
     )
 
-    if (value === undefined) {
-      return
-    }
-
     const filterString = `?categoryId=${value}`
-    handleClearFilter()
+    handleClearFilter({ category: false })
     dispatch(setFilterQuery(filterString))
     navigate(`/danh-muc/${value}`)
   }
 
-  const handleClearFilter = () => {
+  const handleClearFilter = ({ category }: { category: boolean }) => {
+    if (category) {
+      dispatch(selectCategory(null))
+    }
     dispatch(setFilterQuery(''))
     dispatch(setPriceFilter([0, 0]))
     dispatch(setAcreageFilter([0, 0]))
-    dispatch(selectCategory(null))
     dispatch(selectProvince(null))
     dispatch(selectDistrict(null))
     dispatch(selectWard(null))
@@ -117,6 +115,8 @@ export const Header = (): JSX.Element => {
               },
             }}
             onChange={evt => {
+              if (evt.target.value === undefined) return
+
               handleChangeCategory(evt)
             }}
             displayEmpty

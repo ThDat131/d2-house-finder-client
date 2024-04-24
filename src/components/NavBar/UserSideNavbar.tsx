@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   List,
   ListItemButton,
@@ -39,15 +40,11 @@ const UserSideNavbar = () => {
 
   return (
     <Stack alignItems={'center'} py={3} style={SideBarStyle}>
-      <Stack direction={'row'} gap={1} mb={2}>
-        <Box width={50} height={50}>
-          <Box
-            component={'img'}
-            src={user.avatar}
-            width={1}
-            borderRadius={'50%'}
-          />
-        </Box>
+      <Stack direction={'row'} gap={1} mb={2} alignItems={'center'}>
+        <Avatar src={user.avatar} />
+        {/* <Box width={50} height={50}>
+          <Box component={'img'} src={user.avatar} width={1} height={1} />
+        </Box> */}
         <Stack spacing={1} width={1}>
           <Typography fontWeight={'bold'}>{user.fullName}</Typography>
           <Typography>{user.phone}</Typography>
@@ -106,11 +103,11 @@ const UserSideNavbar = () => {
           selected={selectedIndex === 4}
           onClick={() => {
             handleListItemClick(4)
-            navigate('/quan-ly/yeu-cau-xac-thuc')
+            navigate('/quan-ly/nang-cap-tai-khoan')
           }}
         >
           <VerifiedUserIcon />
-          <ListItemText>{t('userSideNav.requestVerify')}</ListItemText>
+          <ListItemText>{t('userSideNav.upgradeLandlord')}</ListItemText>
         </ListItemButton>
         <ListItemButton
           style={ListItemButtonStyle}

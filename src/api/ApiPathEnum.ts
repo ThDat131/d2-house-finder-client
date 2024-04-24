@@ -5,6 +5,7 @@ export const ApiPathEnum = {
   Article: `${prefix}${version}/articles`,
   Categories: `${prefix}${version}/categories`,
   Comments: `${prefix}${version}/comments`,
+  LandlordRequest: `${prefix}${version}/landlord-request`,
   SendCode: `${prefix}${version}/mail/send-passcode`,
   Users: `${prefix}${version}/users`,
   SigninWithFacebook: 'api/v1/auth/facebook',

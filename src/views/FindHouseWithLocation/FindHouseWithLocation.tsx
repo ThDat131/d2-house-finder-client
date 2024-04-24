@@ -50,6 +50,8 @@ const FindHouseWithLocation = () => {
     transitionInterpolator: new FlyToInterpolator(),
   })
   const [markers, setMarkers] = useState<Article[]>([])
+  const [radius, setRadius] = useState<number>(0)
+
   const handleSearch = () => {
     httpGoongService
       .get(ApiPathEnum.AutoComplete, {
@@ -99,6 +101,7 @@ const FindHouseWithLocation = () => {
   }
 
   const handleChange = (event: any, newValue: PlaceType | null) => {
+    setRadius(3000)
     setAddresses(newValue ? [newValue, ...addresses] : addresses)
     setValue(newValue)
     handleUpdateViewport(newValue?.place_id ?? '')
@@ -207,6 +210,7 @@ const FindHouseWithLocation = () => {
             markers={markers}
             lock={true}
             showPopup={true}
+            radiusMeters={radius}
           />
         </Box>
       </Box>

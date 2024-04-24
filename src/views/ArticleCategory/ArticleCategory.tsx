@@ -9,6 +9,7 @@ import PostItem from '../../components/PostItem'
 import PriceFilter from '../../components/PriceFilter'
 import AcreageFilter from '../../components/AcreageFilter'
 import { useParams } from 'react-router-dom'
+import Loading from '../../components/Loading'
 
 const ArticleCategory = (): JSX.Element => {
   const { name } = useParams()
@@ -48,6 +49,11 @@ const ArticleCategory = (): JSX.Element => {
       }),
     )
   }
+
+  if (articlesLoading) {
+    return <Loading />
+  }
+
   return (
     <UserLayout haveSearch={true}>
       <Grid

@@ -2,7 +2,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   Drawer,
   List,
   ListItem,
@@ -23,6 +22,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import theme from '../../theme'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 
 const AdminSideNavBar = (): JSX.Element => {
   const { t } = useTranslation()
@@ -64,6 +64,15 @@ const AdminSideNavBar = (): JSX.Element => {
       title: t('admin.sideNav.category'),
       icon: <CategoryIcon />,
       url: '/admin/category',
+    },
+  ]
+
+  const requestsData = [
+    {
+      id: 6,
+      title: t('admin.sideNav.landlordRequest'),
+      icon: <AccountCircleIcon />,
+      url: '/admin/landlord-requests',
     },
   ]
 
@@ -187,6 +196,7 @@ const AdminSideNavBar = (): JSX.Element => {
                   expanded={x.id === expanded}
                 >
                   <AccordionSummary
+                    sx={{ paddingRight: 3 }}
                     expandIcon={<ExpandMoreIcon />}
                     onClick={() => {
                       x.id === selectedIndex
@@ -236,6 +246,34 @@ const AdminSideNavBar = (): JSX.Element => {
                     </List>
                   </AccordionDetails>
                 </Accordion>
+              </ListItem>
+            ))}
+          </List>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion disableGutters defaultExpanded elevation={0}>
+        <AccordionSummary>
+          <Typography style={headingStyle} variant={'h4'}>
+            {t('admin.sideNav.requests')}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <List sx={listStyle}>
+            {requestsData.map(x => (
+              <ListItem key={x.title} disablePadding>
+                <ListItemButton
+                  className="parent"
+                  onClick={() => {
+                    navigate(x.url)
+                    setSelectedIndex(x.id)
+                    setSelectedChildUrl('')
+                    setExpanded(-1)
+                  }}
+                  selected={selectedIndex === x.id}
+                >
+                  <ListItemIcon>{x.icon}</ListItemIcon>
+                  <ListItemText primary={x.title} />
+                </ListItemButton>
               </ListItem>
             ))}
           </List>

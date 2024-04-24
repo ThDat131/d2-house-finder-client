@@ -1,0 +1,272 @@
+import {
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { Dispatch, SetStateAction } from 'react'
+import { useTranslation } from 'react-i18next'
+import { UpgradeLandlordRequest } from '../../../../model/upgrade-landlord-request/upgrade-landlord-request'
+import moment from 'moment'
+import {
+  GenderEnum,
+  LandlordRequestStatusEnum,
+} from '../../../../common/common-enum'
+import { DatePicker } from '@mui/x-date-pickers'
+import { DEFAULT_FORMAT_DATE } from '../../../../common/common-constant'
+
+interface DetailsUpgradeDialogProps {
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+  request: UpgradeLandlordRequest | undefined
+}
+
+const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
+  open,
+  setOpen,
+  request,
+}) => {
+  const { t } = useTranslation()
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  if (!request) return <></>
+
+  return (
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth={'lg'}>
+      <DialogTitle>
+        {t('generalManagement.upgradeLandlord.requestDetailsInformation')}
+      </DialogTitle>
+      <DialogContent>
+        <Grid container spacing={2}>
+          <Grid container item spacing={2} alignItems={'center'}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.id')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <TextField
+                id="id"
+                name="id"
+                value={request._id}
+                size="small"
+                fullWidth
+                InputProps={{ readOnly: true }}
+              />
+            </Grid>
+          </Grid>
+          <Grid item container xs={12} alignItems={'center'} spacing={2}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.status')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              {request.status === LandlordRequestStatusEnum.PENDING ? (
+                <Chip
+                  label={t('generalManagement.upgradeLandlord.pending')}
+                  color="warning"
+                />
+              ) : request.status === LandlordRequestStatusEnum.APPROVED ? (
+                <Chip
+                  label={t('generalManagement.upgradeLandlord.approved')}
+                  color="primary"
+                />
+              ) : (
+                <Chip
+                  label={t('generalManagement.upgradeLandlord.rejected')}
+                  color="error"
+                />
+              )}
+            </Grid>
+          </Grid>
+          <Grid container item spacing={2} alignItems={'center'}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.personalId')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <TextField
+                id="personalID"
+                name="personalID"
+                value={request.personalID}
+                size="small"
+                fullWidth
+                InputProps={{ readOnly: true }}
+              />
+            </Grid>
+          </Grid>
+          <Grid container item spacing={2} alignItems={'center'}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.dayOfBirth')}
+              </Typography>
+            </Grid>
+            <Grid item xs={5}>
+              <DatePicker
+                name="dayOfBirth"
+                sx={{ width: 1 }}
+                value={moment(request.dayOfBirth)}
+                readOnly
+              />
+            </Grid>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.gender')}
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <RadioGroup name="gender" row value={request.gender}>
+                <FormControlLabel
+                  value={GenderEnum.FEMALE}
+                  control={<Radio />}
+                  label={t('generalManagement.upgradeLandlord.female')}
+                />
+                <FormControlLabel
+                  value={GenderEnum.MALE}
+                  control={<Radio />}
+                  label={t('generalManagement.upgradeLandlord.male')}
+                />
+              </RadioGroup>
+            </Grid>
+          </Grid>
+          <Grid container item spacing={2} alignItems={'center'}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.address')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <TextField
+                id="address"
+                name="address"
+                value={request.address}
+                InputProps={{ readOnly: true }}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+          <Grid container item spacing={2} alignItems={'center'}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.nationality')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <TextField
+                id="nationality"
+                name="nationality"
+                value={request.nationality}
+                InputProps={{ readOnly: true }}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+          <Grid container item spacing={2} alignItems={'center'}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.placeOfIssue')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <TextField
+                id="placeOfIssue"
+                name="placeOfIssue"
+                value={request.placeOfIssue}
+                InputProps={{ readOnly: true }}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+          <Grid container item spacing={2} alignItems={'center'}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.dateOfIssue')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <DatePicker
+                name="dateOfIssue"
+                sx={{ width: 1 }}
+                value={moment(request.dateOfIssue)}
+                readOnly
+              />
+            </Grid>
+          </Grid>
+          <Grid container item spacing={2} alignItems={'center'}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.feedBack')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <TextField
+                id="feedBack"
+                name="feedBack"
+                value={request.feedBack}
+                InputProps={{ readOnly: true }}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+          <Grid container item spacing={2} alignItems={'center'}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.createdAt')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <TextField
+                id="createdAt"
+                name="createdAt"
+                value={moment(request.createdAt).format(DEFAULT_FORMAT_DATE)}
+                InputProps={{ readOnly: true }}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+          <Grid item container xs={12} alignItems={'center'} spacing={2}>
+            <Grid item textAlign={'right'} xs={2}>
+              <Typography>
+                {t('generalManagement.upgradeLandlord.updatedAt')}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <TextField
+                id="updatedAt"
+                name="updatedAt"
+                value={moment(request.updatedAt).format(DEFAULT_FORMAT_DATE)}
+                InputProps={{ readOnly: true }}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => {
+            handleClose()
+          }}
+        >
+          {t('generalManagement.upgradeLandlord.ok')}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
+
+export default DetailsUpgradeDialog

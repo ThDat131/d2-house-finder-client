@@ -33,8 +33,9 @@ const theme = responsiveFontSizes(
           body: {
             scrollbarColor: '#6b6b6b',
             '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
-              backgroundColor: '#ffffff',
-              width: '6px',
+              backgroundColor: '#fff',
+              width: 6,
+              height: 6,
             },
             '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
               borderRadius: 8,
