@@ -152,7 +152,7 @@ const Articles = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item xs={12} height={'80%'}>
+      <Grid item xs={12} height={'90%'}>
         <DataGrid
           getRowId={x => x._id}
           rows={articleState.articles}

@@ -1,12 +1,11 @@
-import { Box } from '@mui/material'
-import { Header } from '../../components/Header'
+import { Box, Grid } from '@mui/material'
 import UserSideNavbar from '../../components/NavBar/UserSideNavbar'
 import { Outlet } from 'react-router-dom'
+import UserLayout from '../../components/Layout/UserLayout'
 
 const GeneralManagement = (): JSX.Element => {
   return (
-    <>
-      <Header />
+    <UserLayout haveSearch={false} fluid={true}>
       <Box
         display={'flex'}
         alignItems={'stretch'}
@@ -14,17 +13,11 @@ const GeneralManagement = (): JSX.Element => {
         minHeight={1}
       >
         <UserSideNavbar />
-        <Box
-          p={4}
-          width={1}
-          height={1}
-          display={'flex'}
-          flexDirection={'column'}
-        >
+        <Grid container p={4} width={1} height={1} direction={'column'}>
           <Outlet />
-        </Box>
+        </Grid>
       </Box>
-    </>
+    </UserLayout>
   )
 }
 

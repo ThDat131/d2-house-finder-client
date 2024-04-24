@@ -18,6 +18,7 @@ import {
   Profile,
   UpdateInformation,
   UpdatePassword,
+  UpgradeLandlord,
   Verify,
   VerifyArticle,
 } from './views/index.view'
@@ -30,8 +31,9 @@ import {
   AdminArticleView,
   AdminUserCreateView,
   AdminUserView,
-  AdmninCategoriesView,
+  AdminCategoriesView,
   AdminArticleCreateView,
+  AdminLandlordRequestsView,
 } from './views/Admin'
 import { CssBaseline } from '@mui/material'
 import { I18nextProvider } from 'react-i18next'
@@ -39,6 +41,8 @@ import i18n from './lang/i18n'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ActionType } from './common/common-enum'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { PersistGate } from 'redux-persist/integration/react'
 
 const router = createBrowserRouter([
@@ -78,6 +82,10 @@ const router = createBrowserRouter([
         path: 'yeu-cau-xac-thuc',
         element: <VerifyArticle />,
       },
+      {
+        path: 'nang-cap-tai-khoan',
+        element: <UpgradeLandlord />,
+      },
     ],
   },
   {
@@ -110,7 +118,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'category',
-        element: <AdmninCategoriesView />,
+        element: <AdminCategoriesView />,
       },
       {
         path: 'statistic',
@@ -131,6 +139,10 @@ const router = createBrowserRouter([
       {
         path: 'article/update/:id',
         element: <AdminArticleCreateView type={ActionType.UPDATE} />,
+      },
+      {
+        path: 'landlord-requests',
+        element: <AdminLandlordRequestsView />,
       },
     ],
   },
@@ -155,11 +167,13 @@ root.render(
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <RouterProvider router={router} />
-            <ToastContainer />
-          </ThemeProvider>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <RouterProvider router={router} />
+              <ToastContainer />
+            </ThemeProvider>
+          </LocalizationProvider>
         </PersistGate>
       </Provider>
     </I18nextProvider>

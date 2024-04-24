@@ -18,6 +18,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { VNDCurrencyFormat } from '../utils/utils'
 
 interface GoongMapProps {
   data: ViewPort
@@ -25,6 +26,7 @@ interface GoongMapProps {
   layer: boolean
   lock?: boolean
   showPopup?: boolean
+  radiusMeters?: number
 }
 
 const GoongMap: React.FC<GoongMapProps> = ({
@@ -33,6 +35,7 @@ const GoongMap: React.FC<GoongMapProps> = ({
   layer,
   lock,
   showPopup,
+  radiusMeters,
 }) => {
   const { t } = useTranslation()
   const MapAPIKey = import.meta.env.VITE_GOONG_MAPTILES_KEY
@@ -45,9 +48,7 @@ const GoongMap: React.FC<GoongMapProps> = ({
   })
   const [popups, setPopups] = useState<Article[]>([])
 
-  const generatePolygon = (): number[][] => {
-    const radiusMeters = 3000
-
+  const generatePolygon = (radiusMeters: number): number[][] => {
     const radiusDegreesLatitude = radiusMeters / 111320
     const radiusDegreesLongitude =
       radiusMeters / (111320 * Math.cos((viewPort.latitude * Math.PI) / 180))
@@ -74,7 +75,7 @@ const GoongMap: React.FC<GoongMapProps> = ({
         type: 'Feature',
         geometry: {
           type: 'Polygon',
-          coordinates: [generatePolygon()],
+          coordinates: [generatePolygon(radiusMeters ?? 0)],
         },
         properties: ['polygon'],
       },
@@ -135,6 +136,16 @@ const GoongMap: React.FC<GoongMapProps> = ({
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     {x.title}
+                  </Typography>
+                  <Typography>
+                    {t('articleDetails.price')}
+                    {': '}
+                    {VNDCurrencyFormat.format(x.price)}
+                  </Typography>
+                  <Typography>
+                    {t('articleDetails.acreage')}
+                    {': '}
+                    {x.acreage}m<sup>2</sup>
                   </Typography>
                 </CardContent>
                 <CardActions>

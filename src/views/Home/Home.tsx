@@ -17,6 +17,7 @@ import { selectCategory } from '../../app/slice/category.slice'
 import { selectProvince } from '../../app/slice/province.slice'
 import { selectDistrict } from '../../app/slice/district.slice'
 import { selectWard } from '../../app/slice/ward.slice'
+import Loading from '../../components/Loading'
 
 export const Home = (): JSX.Element => {
   const dispatch = useAppDispatch()
@@ -26,6 +27,8 @@ export const Home = (): JSX.Element => {
   const articleState = useAppSelector((state: RootState) => state.article)
 
   useEffect(() => {
+    handleClearFilter()
+
     const articlesPromise = dispatch(getArticles({ current: 1 }))
 
     return () => {
@@ -48,11 +51,10 @@ export const Home = (): JSX.Element => {
     dispatch(selectProvince(null))
     dispatch(selectDistrict(null))
     dispatch(selectWard(null))
-    dispatch(
-      getArticles({
-        current: 1,
-      }),
-    )
+  }
+
+  if (articleState.loading) {
+    return <Loading />
   }
 
   return (
@@ -70,6 +72,11 @@ export const Home = (): JSX.Element => {
                 <Button
                   onClick={() => {
                     handleClearFilter()
+                    dispatch(
+                      getArticles({
+                        current: 1,
+                      }),
+                    )
                   }}
                 >
                   {t('home.clearFilter')}
@@ -95,6 +102,7 @@ export const Home = (): JSX.Element => {
               count={articleState.totalPage}
               size="large"
               onChange={handleChangePage}
+              page={articleState.pageCurrent}
             />
           </Box>
         </Grid>

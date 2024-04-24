@@ -7,6 +7,7 @@ import districtReducer from './slice/district.slice'
 import wardReducer from './slice/ward.slice'
 import articleReducer from './slice/article.slice.'
 import filterReducer from './slice/filter.slice'
+import landlordRequestReducer from './slice/landlord-requests.slice'
 import {
   persistStore,
   persistReducer,
@@ -36,6 +37,7 @@ export const store = configureStore({
     auth: authPersistedReducer,
     user: userReducer,
     filter: filterReducer,
+    landlordRequest: landlordRequestReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

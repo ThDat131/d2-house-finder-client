@@ -11,3 +11,4 @@ export { default as UpdateInformation } from './GeneralManagement/UpdateInformat
 export { default as UpdatePassword } from './GeneralManagement/UpdatePassword/UpdatePassword'
 export { default as ManageArticles } from './GeneralManagement/ManageArticle/ManageArticles'
 export { default as VerifyArticle } from './GeneralManagement/VerifyArticle/VerifyArticle'
+export { default as UpgradeLandlord } from './GeneralManagement/UpgradeLandlord/UpgradeLandlord'

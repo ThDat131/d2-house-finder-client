@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import { useFormik } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { RootState } from '../../../app/store'
@@ -34,6 +34,8 @@ const UpdateInformation = (): JSX.Element => {
   const dispatch = useAppDispatch()
   const { authHttpService, httpService } = new HttpService()
   const auth = useAppSelector((state: RootState) => state.auth.user)
+  const navigate = useNavigate()
+
   const [avatar, setAvatar] = useState<ImageType>({
     blob: null,
     url: null,
@@ -118,109 +120,114 @@ const UpdateInformation = (): JSX.Element => {
       </Box>
       <Container>
         <form onSubmit={formik.handleSubmit}>
-          <Stack spacing={5}>
-            <Grid container item alignItems={'center'}>
-              <Grid item textAlign={'center'} xs={2}>
-                <Typography>
-                  {t('generalManagement.updateInformation.email')}
-                </Typography>
+          <Grid container spacing={5}>
+            <Grid container item xs={9} spacing={4}>
+              <Grid container item alignItems={'center'}>
+                <Grid item xs={2}>
+                  <Typography>
+                    {t('generalManagement.updateInformation.email')}
+                  </Typography>
+                </Grid>
+                <Grid item xs={10}>
+                  <TextField
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                  error={formik.touched.email && Boolean(formik.errors.email)}
-                  helperText={formik.touched.email && formik.errors.email}
-                  size="small"
-                  fullWidth
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
+              <Grid container item alignItems={'center'}>
+                <Grid item xs={2}>
+                  <Typography>
+                    {t('generalManagement.updateInformation.phone')}
+                  </Typography>
+                </Grid>
+                <Grid item xs={10}>
+                  <TextField
+                    id="phone"
+                    name="phone"
+                    value={formik.values.phone}
+                    onChange={formik.handleChange}
+                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                    helperText={formik.touched.phone && formik.errors.phone}
+                    size="small"
+                    fullWidth
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container item alignItems={'center'}>
-              <Grid item textAlign={'center'} xs={2}>
-                <Typography>
-                  {t('generalManagement.updateInformation.phone')}
-                </Typography>
+              <Grid container item alignItems={'center'}>
+                <Grid item xs={2}>
+                  <Typography>
+                    {t('generalManagement.updateInformation.fullName')}
+                  </Typography>
+                </Grid>
+                <Grid item xs={10}>
+                  <TextField
+                    id="fullName"
+                    name="fullName"
+                    value={formik.values.fullName}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched.fullName && Boolean(formik.errors.fullName)
+                    }
+                    helperText={
+                      formik.touched.fullName && formik.errors.fullName
+                    }
+                    size="small"
+                    fullWidth
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  id="phone"
-                  name="phone"
-                  value={formik.values.phone}
-                  onChange={formik.handleChange}
-                  error={formik.touched.phone && Boolean(formik.errors.phone)}
-                  helperText={formik.touched.phone && formik.errors.phone}
-                  size="small"
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
-            <Grid container item alignItems={'center'}>
-              <Grid item textAlign={'center'} xs={2}>
-                <Typography>
-                  {t('generalManagement.updateInformation.fullName')}
-                </Typography>
-              </Grid>
-              <Grid item xs={10}>
-                <TextField
-                  id="fullName"
-                  name="fullName"
-                  value={formik.values.fullName}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.fullName && Boolean(formik.errors.fullName)
-                  }
-                  helperText={formik.touched.fullName && formik.errors.fullName}
-                  size="small"
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
-            <Grid container item alignItems={'center'}>
-              <Grid item textAlign={'center'} xs={2}>
-                <Typography>
-                  {t('generalManagement.updateInformation.password')}
-                </Typography>
-              </Grid>
-              <Grid item xs={10}>
-                <Link to="/quan-ly/cap-nhat-mat-khau">
-                  {t('generalManagement.updateInformation.updatePassword')}
-                </Link>
-              </Grid>
-            </Grid>
-            <Grid container item alignItems={'center'}>
-              <Grid item textAlign={'center'} xs={2}>
-                <Typography>
-                  {t('generalManagement.updateInformation.avatar')}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Stack spacing={2}>
-                  <Box
-                    width={150}
-                    height={150}
-                    borderRadius={'50%'}
-                    overflow={'hidden'}
-                    boxShadow={1}
+              <Grid container item alignItems={'center'}>
+                <Grid item xs={2}>
+                  <Typography>
+                    {t('generalManagement.updateInformation.password')}
+                  </Typography>
+                </Grid>
+                <Grid item xs={10}>
+                  <Button
+                    onClick={() => {
+                      navigate('/quan-ly/cap-nhat-mat-khau')
+                    }}
                   >
-                    <Box
-                      component={'img'}
-                      src={avatar.blob ?? auth.avatar}
-                      width={1}
-                      height={1}
-                    />
-                  </Box>
-                  <Button component="label">
-                    {t('generalManagement.updateInformation.choosePicture')}
-                    <input type="file" hidden onChange={handleChangeFile} />
+                    {t('generalManagement.updateInformation.updatePassword')}
                   </Button>
-                </Stack>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid container item xs={3}>
+              <Grid container item alignItems={'center'}>
+                <Grid item width={1}>
+                  <Stack spacing={3} alignItems={'center'}>
+                    <Box
+                      width={150}
+                      height={150}
+                      borderRadius={'50%'}
+                      overflow={'hidden'}
+                      boxShadow={1}
+                    >
+                      <Box
+                        component={'img'}
+                        src={avatar.blob ?? auth.avatar}
+                        width={1}
+                        height={1}
+                      />
+                    </Box>
+                    <Button component="label">
+                      {t('generalManagement.updateInformation.choosePicture')}
+                      <input type="file" hidden onChange={handleChangeFile} />
+                    </Button>
+                  </Stack>
+                </Grid>
               </Grid>
             </Grid>
             <Grid container item xs={12}>
@@ -235,7 +242,7 @@ const UpdateInformation = (): JSX.Element => {
                 </LoadingButton>
               </Grid>
             </Grid>
-          </Stack>
+          </Grid>
         </form>
       </Container>
     </>
