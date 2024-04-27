@@ -20,6 +20,7 @@ export const ApiPathEnum = {
   UploadSingleFile: `${prefix}${version}/files/upload`,
   Follow: `${prefix}${version}/follow`,
   UnFollow: `${prefix}${version}/unFollow`,
+  Permission: `${prefix}${version}/permissions`,
   // GoongMap
   AutoComplete: 'Place/AutoComplete',
   Detail: 'Place/Detail',

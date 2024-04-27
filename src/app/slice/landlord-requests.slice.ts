@@ -110,7 +110,6 @@ const landlordRequestSlice = createSlice({
         const idx = requests.findIndex(x => x._id === action.payload.data._id)
 
         state.requests[idx] = action.payload.data
-        console.log(state.requests[idx])
         state.loading = false
       },
     )
