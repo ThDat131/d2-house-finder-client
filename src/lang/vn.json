@@ -262,7 +262,10 @@
       "updatePassword": "Cập nhật mật khẩu",
       "newPassword": "Mật khẩu mới",
       "oldPassword": "Mật khẩu cũ",
-      "update": "Cập nhật"
+      "passwordMustMatch": "Mật khẩu phải trùng khớp",
+      "reNewPassword": "Xác nhận mật khẩu mới",
+      "update": "Cập nhật",
+      "youCantLeaveThisEmpty": "Bạn không thể để trống trường này"
     },
     "upgradeLandlord": {
       "action": "Thao tác",
