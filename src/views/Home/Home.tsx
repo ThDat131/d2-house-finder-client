@@ -18,6 +18,7 @@ import { selectProvince } from '../../app/slice/province.slice'
 import { selectDistrict } from '../../app/slice/district.slice'
 import { selectWard } from '../../app/slice/ward.slice'
 import Loading from '../../components/Loading'
+import PostItemSkeleton from '../../components/PostItemSkeleton'
 
 export const Home = (): JSX.Element => {
   const dispatch = useAppDispatch()
@@ -53,9 +54,9 @@ export const Home = (): JSX.Element => {
     dispatch(selectWard(null))
   }
 
-  if (articleState.loading) {
-    return <Loading />
-  }
+  // if (articleState.loading) {
+  //   return <Loading />
+  // }
 
   return (
     <UserLayout haveSearch={true}>
@@ -92,10 +93,17 @@ export const Home = (): JSX.Element => {
               </Stack>
             </Box> */}
             <Stack spacing={1} mb={3}>
-              {!articleState.loading &&
+              {articleState.loading ? (
+                <>
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                </>
+              ) : (
                 articleState.articles.map(article => (
                   <PostItem key={article._id} data={article} />
-                ))}
+                ))
+              )}
             </Stack>
             <Pagination
               shape="rounded"
