@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next'
 import theme from '../../theme'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import VpnKeyIcon from '@mui/icons-material/VpnKey'
 
 const AdminSideNavBar = (): JSX.Element => {
   const { t } = useTranslation()
@@ -64,6 +65,15 @@ const AdminSideNavBar = (): JSX.Element => {
       title: t('admin.sideNav.category'),
       icon: <CategoryIcon />,
       url: '/admin/category',
+    },
+  ]
+
+  const managementDataV2 = [
+    {
+      id: 7,
+      title: t('admin.sideNav.permission'),
+      icon: <VpnKeyIcon />,
+      url: '/admin/permission',
     },
   ]
 
@@ -246,6 +256,28 @@ const AdminSideNavBar = (): JSX.Element => {
                     </List>
                   </AccordionDetails>
                 </Accordion>
+              </ListItem>
+            ))}
+          </List>
+          <List sx={listStyle}>
+            {managementDataV2.map(x => (
+              <ListItem key={x.id}>
+                <ListItemButton
+                  className="parent"
+                  selected={selectedIndex === x.id}
+                  sx={{ pl: 2 }}
+                  onClick={() => {
+                    navigate(x.url)
+                    setSelectedIndex(x.id)
+                    setSelectedChildUrl('')
+                    setExpanded(-1)
+                  }}
+                >
+                  <ListItemIcon>
+                    <VpnKeyIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={x.title} />
+                </ListItemButton>
               </ListItem>
             ))}
           </List>

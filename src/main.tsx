@@ -34,6 +34,7 @@ import {
   AdminCategoriesView,
   AdminArticleCreateView,
   AdminLandlordRequestsView,
+  AdminPermissionView,
 } from './views/Admin'
 import { CssBaseline } from '@mui/material'
 import { I18nextProvider } from 'react-i18next'
@@ -143,6 +144,10 @@ const router = createBrowserRouter([
       {
         path: 'landlord-requests',
         element: <AdminLandlordRequestsView />,
+      },
+      {
+        path: 'permission',
+        element: <AdminPermissionView />,
       },
     ],
   },

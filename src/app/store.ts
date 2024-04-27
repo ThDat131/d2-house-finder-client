@@ -19,6 +19,7 @@ import {
   REHYDRATE,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import permissionReducer from './slice/permission.slice'
 
 const persistConfig = {
   key: 'root',
@@ -38,6 +39,7 @@ export const store = configureStore({
     user: userReducer,
     filter: filterReducer,
     landlordRequest: landlordRequestReducer,
+    permission: permissionReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
