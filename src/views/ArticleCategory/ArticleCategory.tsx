@@ -10,6 +10,7 @@ import PriceFilter from '../../components/PriceFilter'
 import AcreageFilter from '../../components/AcreageFilter'
 import { useParams } from 'react-router-dom'
 import Loading from '../../components/Loading'
+import PostItemSkeleton from '../../components/PostItemSkeleton'
 
 const ArticleCategory = (): JSX.Element => {
   const { name } = useParams()
@@ -50,10 +51,6 @@ const ArticleCategory = (): JSX.Element => {
     )
   }
 
-  if (articlesLoading) {
-    return <Loading />
-  }
-
   return (
     <UserLayout haveSearch={true}>
       <Grid
@@ -75,10 +72,17 @@ const ArticleCategory = (): JSX.Element => {
               </Stack>
             </Box>
             <Stack spacing={1} mb={3}>
-              {!articlesLoading &&
+              {articlesLoading ? (
+                <>
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                  <PostItemSkeleton />
+                </>
+              ) : (
                 articles.map(article => (
                   <PostItem key={article._id} data={article} />
-                ))}
+                ))
+              )}
             </Stack>
             <Pagination
               shape="rounded"
