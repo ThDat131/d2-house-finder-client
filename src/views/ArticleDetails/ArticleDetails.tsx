@@ -186,7 +186,7 @@ const ArticleDetails = (): JSX.Element => {
     return () => {
       promise.abort()
     }
-  }, [])
+  }, [id])
 
   const getExactAddress = (data: Article): string => {
     if (
@@ -302,7 +302,7 @@ const ArticleDetails = (): JSX.Element => {
                   </TableCell>
                   <TableCell>
                     <Typography color={'primary'} fontWeight={500}>
-                      {article?.createdBy.fullName}
+                      {article?.createdBy?.fullName}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -324,7 +324,7 @@ const ArticleDetails = (): JSX.Element => {
                   </TableCell>
                   <TableCell>
                     <Typography color={'primary'} fontWeight={500}>
-                      {article?.createdBy.phone ?? 0}
+                      {article?.createdBy?.phone ?? 0}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -384,7 +384,7 @@ const ArticleDetails = (): JSX.Element => {
                   <Grid item xs={12} key={x._id}>
                     <Comment
                       comment={x}
-                      showAction={authState.user._id === x.createdBy._id}
+                      showAction={authState.user._id === x.createdBy?._id}
                     />
                   </Grid>
                 ))}
@@ -418,11 +418,11 @@ const ArticleDetails = (): JSX.Element => {
                       boxShadow={2}
                       width={1}
                       height={1}
-                      src={article?.createdBy.avatar}
+                      src={article?.createdBy?.avatar}
                       borderRadius={'50%'}
                     ></Box>
                   </Box>
-                  <Typography>{article?.createdBy.fullName}</Typography>
+                  <Typography>{article?.createdBy?.fullName}</Typography>
                 </Box>
                 <Button
                   variant="contained"
@@ -430,7 +430,7 @@ const ArticleDetails = (): JSX.Element => {
                   endIcon={<PhoneIcon />}
                   fullWidth
                 >
-                  {article?.createdBy.phone ?? 0}
+                  {article?.createdBy?.phone ?? 0}
                 </Button>
                 <LoadingButton
                   variant="contained"
@@ -443,7 +443,7 @@ const ArticleDetails = (): JSX.Element => {
                   loading={followLoading}
                 >
                   {authState.user.followings?.find(
-                    x => x._id === article?.createdBy._id,
+                    x => x._id === article?.createdBy?._id,
                   )
                     ? t('articleDetails.unFollow')
                     : t('articleDetails.follow')}

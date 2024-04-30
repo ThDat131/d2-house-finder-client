@@ -15,6 +15,11 @@ import {
   editTempReplyComment,
 } from '../../../app/slice/article.slice.'
 import { Comment } from '../../../model/comment/comment'
+import { createNotification } from '../../../app/firebase/function'
+import { Notification } from '../../../model/notification/notification'
+import { v4 as uuidv4 } from 'uuid'
+import moment from 'moment'
+import { NotificationTypeEnum } from '../../../model/notification/notification--type'
 
 enum TypeInput {
   comment = 0,
@@ -72,6 +77,33 @@ const CommentInput: React.FC<CommentInputProps> = ({
             articleId: currentArticle?._id as string,
           }),
         )
+          .unwrap()
+          .then(res => {
+            if (res.statusCode === 201) {
+              const notification: Notification = {
+                id: uuidv4(),
+                actionUrl: `bai-dang/${currentArticle?._id}`,
+                content: t('articleDetails.userCommentedOnYourPost', {
+                  user: currentUser.fullName,
+                }),
+                createdAt: moment(new Date()).format('DD/MM/YYYY h:mm:ss'),
+                isRead: false,
+                sendFrom: {
+                  _id: currentUser._id,
+                  avatar: currentUser.avatar,
+                  fullName: currentUser.fullName,
+                },
+                sendTo: currentArticle?.createdBy?._id ?? '',
+                type: NotificationTypeEnum.POST_COMMENTED,
+              }
+              createNotification(
+                notification,
+                notification.sendFrom,
+                notification.sendTo,
+              )
+            }
+          })
+
         break
       case 1:
         tempComment = { ...previousComment }

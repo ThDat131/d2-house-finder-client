@@ -43,7 +43,10 @@ export const Comment: React.FC<CommentProps> = ({ comment, showAction }) => {
                 <Box
                   boxShadow={2}
                   component={'img'}
-                  src={comment.createdBy.avatar}
+                  src={
+                    comment?.createdBy?.avatar ??
+                    'https://phongtro123.com/images/default-user.png'
+                  }
                   width={1}
                   height={1}
                   borderRadius={'50%'}
@@ -59,7 +62,7 @@ export const Comment: React.FC<CommentProps> = ({ comment, showAction }) => {
                 display={'inline'}
               >
                 <Typography fontWeight={500}>
-                  {comment.createdBy.fullName}
+                  {comment.createdBy?.fullName ?? 'Unknown'}
                 </Typography>
                 <Typography>{comment.content}</Typography>
               </Box>
