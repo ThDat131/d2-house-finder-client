@@ -14,12 +14,15 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  IconButton,
+  ListItem,
+  Avatar,
 } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { signout } from '../app/slice/auth.slice'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { type RootState } from '../app/store'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectCategory } from '../app/slice/category.slice'
 import Logo from '../assets/image/logo/D2-logos_white.png'
@@ -32,6 +35,10 @@ import { Category } from '../model/category/category'
 import { selectProvince } from '../app/slice/province.slice'
 import { selectDistrict } from '../app/slice/district.slice'
 import { selectWard } from '../app/slice/ward.slice'
+import NotificationsIcon from '@mui/icons-material/Notifications'
+import { Notification } from '../model/notification/notification'
+import { getNotificationByUserId } from '../app/firebase/function'
+import moment from 'moment'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
@@ -39,6 +46,8 @@ export const Header = (): JSX.Element => {
   const { t } = useTranslation()
 
   const [showUserOpts, setShowUserOpts] = useState<boolean>(false)
+  const [showNotification, setShowNotification] = useState<boolean>(false)
+  const [notification, setNotification] = useState<Notification[]>([])
   const categoryState = useAppSelector((state: RootState) => state.category)
   const currentUser = useAppSelector((state: RootState) => state.auth.user)
 
@@ -46,6 +55,36 @@ export const Header = (): JSX.Element => {
     dispatch(signout())
     navigate('/dang-nhap')
   }
+
+  const parseDateString = (dateString: string) => {
+    const [datePart, timePart] = dateString.split(' ')
+    const [dayStr, monthStr, yearStr] = datePart.split('/')
+    const [hoursStr, minutesStr, secondsStr] = timePart.split(':')
+    const day = parseInt(dayStr, 10)
+    const month = parseInt(monthStr, 10)
+    const year = parseInt(yearStr, 10)
+    const hours = parseInt(hoursStr, 10)
+    const minutes = parseInt(minutesStr, 10)
+    const seconds = parseInt(secondsStr, 10)
+
+    return new Date(year, month - 1, day, hours, minutes, seconds)
+  }
+
+  useEffect(() => {
+    if (!showNotification) return
+
+    getNotificationByUserId(currentUser._id).then(res => {
+      const array = Object.keys(res).map(key => ({
+        ...res[key],
+      }))
+
+      array.forEach(x => (x.createdAt = parseDateString(x.createdAt)))
+
+      array.sort((a, b) => b.createdAt - a.createdAt)
+
+      setNotification(array)
+    })
+  }, [showNotification])
 
   const handleChangeCategory = (evt: SelectChangeEvent) => {
     const value = evt.target.value
@@ -72,6 +111,22 @@ export const Header = (): JSX.Element => {
     dispatch(selectProvince(null))
     dispatch(selectDistrict(null))
     dispatch(selectWard(null))
+  }
+
+  const handleShowNotification = () => {
+    setShowNotification(prev => !prev)
+
+    if (showUserOpts) {
+      setShowUserOpts(false)
+    }
+  }
+
+  const handleShowUserOpts = () => {
+    setShowUserOpts(prev => !prev)
+
+    if (showNotification) {
+      setShowNotification(false)
+    }
   }
 
   return (
@@ -137,20 +192,76 @@ export const Header = (): JSX.Element => {
                 alignItems={'center'}
                 gap={1}
                 position={'relative'}
-                onClick={() => {
-                  setShowUserOpts(prev => !prev)
-                }}
                 sx={{ cursor: 'pointer' }}
               >
-                <Typography>
-                  {t('header.hello', { name: currentUser.fullName })}
-                </Typography>
+                <IconButton
+                  onClick={() => {
+                    handleShowNotification()
+                  }}
+                >
+                  <NotificationsIcon
+                    fontSize="large"
+                    style={{ color: '#fff' }}
+                  />
+                </IconButton>
+                {showNotification && (
+                  <Box
+                    position={'absolute'}
+                    top={60}
+                    right={0}
+                    bgcolor={'#fff'}
+                    minWidth={300}
+                    borderRadius={2}
+                  >
+                    <Paper
+                      sx={{
+                        height: 1,
+                        borderRadius: 2,
+                        maxHeight: '80vh',
+                        overflowY: 'scroll',
+                      }}
+                    >
+                      <List sx={{ p: 2, borderRadius: 2, overflow: 'hidden' }}>
+                        <Typography sx={{ fontSize: 20, fontWeight: 'bold' }}>
+                          {t('header.notifications')}
+                        </Typography>
+                        {notification.map(x => (
+                          <ListItem
+                            key={x.id}
+                            sx={{ borderRadius: 2 }}
+                            onClick={() => {
+                              navigate(x.actionUrl)
+                            }}
+                          >
+                            <Stack direction={'row'} spacing={2} py={1}>
+                              <Avatar
+                                sx={{ width: 50, height: 50 }}
+                                src={x.sendFrom.avatar}
+                              />
+                              <Stack spacing={1}>
+                                <Typography>{x.content}</Typography>
+                                <Typography sx={{ fontSize: 12 }}>
+                                  {moment(x.createdAt)
+                                    .startOf('hour')
+                                    .fromNow()}
+                                </Typography>
+                              </Stack>
+                            </Stack>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Paper>
+                  </Box>
+                )}
                 <Box
                   borderRadius={'50%'}
                   width={50}
                   height={50}
                   component={'img'}
                   src={currentUser?.avatar}
+                  onClick={() => {
+                    handleShowUserOpts()
+                  }}
                 />
                 {showUserOpts && (
                   <Box
@@ -158,6 +269,8 @@ export const Header = (): JSX.Element => {
                     top={60}
                     right={0}
                     bgcolor={'#fff'}
+                    minWidth={180}
+                    borderRadius={2}
                   >
                     <Paper sx={{ height: 1 }}>
                       <List>

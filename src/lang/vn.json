@@ -177,7 +177,8 @@
     "reply": "Phản hồi",
     "submitYourComment": "Nhập bình luận...",
     "unFollow": "Hủy theo dõi",
-    "updatedAt": "Ngày cập nhật"
+    "updatedAt": "Ngày cập nhật",
+    "userCommentedOnYourPost": "{{user}} đã bình luận bài viết của bạn"
   },
   "chooseAddressModal": {
     "chooseProvince": "Chọn tỉnh thành",
@@ -231,6 +232,7 @@
       "quantity": "Số người ở",
       "streetAndHouseNumber": "Đường và số nhà",
       "title": "Tiêu đề",
+      "userHaveCreateNewArticle": "{{user}} đã đăng tin thuê mới",
       "vndPerMonth": "đồng/tháng",
       "ward": "Phường/Xã"
     },
@@ -317,6 +319,7 @@
     "manageArticles": "Quản lý tin đăng",
     "home": "Trang chủ",
     "millionDong": "{{price}} triệu",
+    "notifications": "Thông báo",
     "overMillionDong": "Trên {{price}} triệu",
     "over": "Trên {{acreage}}",
     "personalInformation": "Thông tin cá nhân",

@@ -49,6 +49,11 @@ import { createArticle } from '../../../app/slice/article.slice.'
 import { toast } from 'react-toastify'
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined'
 import { useNavigate } from 'react-router-dom'
+import { createNotification } from '../../../app/firebase/function'
+import { Notification } from '../../../model/notification/notification'
+import { v4 as uuidv4 } from 'uuid'
+import moment from 'moment'
+import { NotificationTypeEnum } from '../../../model/notification/notification--type'
 
 interface ImageType {
   blob: string
@@ -73,6 +78,7 @@ const CreateArticle = () => {
   )
   const wardLoading = useAppSelector((state: RootState) => state.wards.loading)
   const error = useAppSelector((state: RootState) => state.article.error)
+  const authState = useAppSelector((state: RootState) => state.auth)
 
   // const filesRef = useRef<string[]>([])
   const [districts, setDistricts] = useState<District[]>([])
@@ -206,18 +212,14 @@ const CreateArticle = () => {
 
   const handleDeleteFile = (index: number) => {
     const updatedImageUrls = [...imageUrls]
-    // const imagesUpload = [...formik.values.images]
 
     setUploadedImages(() =>
       uploadedImages.filter(item => item.blob !== updatedImageUrls[index]),
     )
 
     updatedImageUrls.splice(index, 1)
-    // imagesUpload.splice(index, 1)
 
     setImageUrls(updatedImageUrls)
-
-    // formik.setFieldValue('images', [imagesUpload])
   }
 
   const initialValues: ArticleCreatedModel = {
@@ -275,7 +277,35 @@ const CreateArticle = () => {
   const onSubmit = () => {
     dispatch(createArticle(formik.values))
       .unwrap()
-      .then(() => {
+      .then(res => {
+        authState.user.followers?.forEach(x => {
+          const notification: Notification = {
+            id: uuidv4(),
+            actionUrl: `bai-dang/${res?.data._id}`,
+            content: t(
+              'generalManagement.createNewArticle.userHaveCreateNewArticle',
+              {
+                user: authState.user.fullName,
+              },
+            ),
+            createdAt: moment(new Date()).format('DD/MM/YYYY h:mm:ss'),
+            isRead: false,
+            sendFrom: {
+              _id: authState.user._id,
+              avatar: authState.user.avatar,
+              fullName: authState.user.fullName,
+            },
+            sendTo: x._id,
+            type: NotificationTypeEnum.NEW_POST,
+          }
+
+          createNotification(
+            notification,
+            notification.sendFrom,
+            notification.sendTo,
+          )
+        })
+
         toast.success(t('generalManagement.createNewArticle.createSuccess'))
         dispatch(selectProvince(null))
         dispatch(selectDistrict(null))
