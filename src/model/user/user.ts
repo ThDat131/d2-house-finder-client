@@ -1,11 +1,12 @@
 import { FollowEntity } from '../follow/follow-entity'
+import { Role } from '../role/role'
 
 export interface User {
   _id: string
   email: string
   password?: string
   avatar: string
-  role: string
+  role: Role
   active: boolean
   fullName: string
   phone: string

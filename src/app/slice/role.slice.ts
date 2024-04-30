@@ -1,15 +1,11 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { HttpService } from '../../api/HttpService'
-import {
-  GetPermissionResponse,
-  Permission,
-  PermissionRequest,
-} from '../../model/permission/permission'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { CommonResponse } from '../../model/common/common-response'
+import { GetRoleResponse, Role, RoleRequest } from '../../model/role/role'
 
-interface PermissionStateProps {
-  permissions: Permission[]
+interface RoleStateProps {
+  roles: Role[]
   error: string
   loading: boolean
   pageSize: number
@@ -20,12 +16,11 @@ interface PermissionStateProps {
 
 interface Meta {
   current: number
-  pageSize?: number
 }
 
 const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
-const initialState: PermissionStateProps = {
-  permissions: [],
+const initialState: RoleStateProps = {
+  roles: [],
   error: '',
   loading: true,
   pageSize: PAGE_SIZE,
@@ -35,16 +30,16 @@ const initialState: PermissionStateProps = {
 }
 const { authHttpService } = new HttpService()
 
-export const getPermissions = createAsyncThunk(
-  'permission/getPermissions',
+export const getRoles = createAsyncThunk(
+  'role/getRoles',
   async (data: Meta, thunkAPI) => {
     try {
-      const response = await authHttpService.get<GetPermissionResponse>(
-        ApiPathEnum.Permission,
+      const response = await authHttpService.get<GetRoleResponse>(
+        ApiPathEnum.Role,
         {
           params: {
             current: data.current,
-            pageSize: data?.pageSize ?? PAGE_SIZE,
+            pageSize: PAGE_SIZE,
           },
           signal: thunkAPI.signal,
         },
@@ -57,12 +52,12 @@ export const getPermissions = createAsyncThunk(
   },
 )
 
-export const createPermission = createAsyncThunk(
-  'permission/createPermission',
-  async (data: PermissionRequest, thunkAPI) => {
+export const createRole = createAsyncThunk(
+  'role/createRole',
+  async (data: RoleRequest, thunkAPI) => {
     try {
-      const response = await authHttpService.post<CommonResponse<Permission>>(
-        ApiPathEnum.Permission,
+      const response = await authHttpService.post<CommonResponse<Role>>(
+        ApiPathEnum.Role,
         data,
         {
           signal: thunkAPI.signal,
@@ -80,12 +75,12 @@ export const createPermission = createAsyncThunk(
   },
 )
 
-export const updatePermission = createAsyncThunk(
-  'permission/updatePermission',
-  async (data: PermissionRequest, thunkAPI) => {
+export const updateRole = createAsyncThunk(
+  'role/updateRole',
+  async (data: RoleRequest, thunkAPI) => {
     try {
-      const response = await authHttpService.patch<CommonResponse<Permission>>(
-        `${ApiPathEnum.Permission}/${data._id}`,
+      const response = await authHttpService.patch<CommonResponse<Role>>(
+        `${ApiPathEnum.Role}/${data._id}`,
         data,
         {
           signal: thunkAPI.signal,
@@ -103,12 +98,12 @@ export const updatePermission = createAsyncThunk(
   },
 )
 
-export const deletePermission = createAsyncThunk(
-  'permission/deletePermission',
+export const deleteRole = createAsyncThunk(
+  'role/deleteRole',
   async (id: string, thunkAPI) => {
     try {
-      const response = await authHttpService.delete<CommonResponse<Permission>>(
-        `${ApiPathEnum.Permission}/${id}`,
+      const response = await authHttpService.delete<CommonResponse<Role>>(
+        `${ApiPathEnum.Role}/${id}`,
         {
           signal: thunkAPI.signal,
         },
@@ -125,69 +120,71 @@ export const deletePermission = createAsyncThunk(
   },
 )
 
-const permissionSlice = createSlice({
-  name: 'permission',
+const roleSlice = createSlice({
+  name: 'role',
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(getPermissions.pending, state => {
+    builder.addCase(getRoles.pending, state => {
       state.loading = true
     })
     builder.addCase(
-      getPermissions.fulfilled,
-      (state, action: PayloadAction<GetPermissionResponse>) => {
+      getRoles.fulfilled,
+      (state, action: PayloadAction<GetRoleResponse>) => {
         state.loading = false
         state.pageCurrent = action.payload.data.meta.current
         state.pageSize = action.payload.data.meta.pageSize
         state.totalPage = action.payload.data.meta.pages
         state.totalItem = action.payload.data.meta.total
-        state.permissions = action.payload.data.results
+        state.roles = action.payload.data.results
       },
     )
-    builder.addCase(createPermission.pending, state => {
+    builder.addCase(createRole.pending, state => {
       state.loading = true
     })
 
-    builder.addCase(createPermission.fulfilled, state => {
-      state.loading = false
-    })
-    builder.addCase(createPermission.rejected, (state, action) => {
-      state.loading = false
-      state.error = action.payload as string
-    })
-    builder.addCase(updatePermission.pending, state => {
-      state.loading = true
-    })
     builder.addCase(
-      updatePermission.fulfilled,
-      (state, action: PayloadAction<CommonResponse<Permission>>) => {
-        const permission = state.permissions
-        const idx = permission.findIndex(x => x._id === action.payload.data._id)
-
-        state.permissions[idx] = action.payload.data
+      createRole.fulfilled,
+      (state, action: PayloadAction<CommonResponse<Role>>) => {
+        state.roles.push(action.payload.data)
         state.loading = false
       },
     )
-    builder.addCase(updatePermission.rejected, (state, action) => {
+    builder.addCase(createRole.rejected, (state, action) => {
       state.loading = false
       state.error = action.payload as string
     })
-    builder.addCase(deletePermission.pending, state => {
+    builder.addCase(updateRole.pending, state => {
       state.loading = true
     })
-    builder.addCase(deletePermission.fulfilled, (state, action) => {
-      state.permissions = state.permissions.filter(
-        x => x._id !== action.payload,
-      )
+    builder.addCase(
+      updateRole.fulfilled,
+      (state, action: PayloadAction<CommonResponse<Role>>) => {
+        const permission = state.roles
+        const idx = permission.findIndex(x => x._id === action.payload.data._id)
+
+        state.roles[idx] = action.payload.data
+        state.loading = false
+      },
+    )
+    builder.addCase(updateRole.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.payload as string
+    })
+    builder.addCase(deleteRole.pending, state => {
+      state.loading = true
+    })
+    builder.addCase(deleteRole.fulfilled, (state, action) => {
+      state.roles = state.roles.filter(x => x._id !== action.payload)
       state.loading = false
     })
-    builder.addCase(deletePermission.rejected, (state, action) => {
+    builder.addCase(deleteRole.rejected, (state, action) => {
       state.loading = false
       state.error = action.payload as string
     })
   },
 })
 
-const permissionReducer = permissionSlice.reducer
+const roleReducer = roleSlice.reducer
 
-export default permissionReducer
+export default roleReducer

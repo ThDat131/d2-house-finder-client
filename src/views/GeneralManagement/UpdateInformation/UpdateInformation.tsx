@@ -46,7 +46,7 @@ const UpdateInformation = (): JSX.Element => {
     _id: auth._id,
     fullName: auth.fullName,
     phone: auth.phone,
-    role: 'USER',
+    role: auth.role._id,
     active: true,
     email: auth.email,
     avatar: auth.avatar,

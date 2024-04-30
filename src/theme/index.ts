@@ -68,13 +68,6 @@ const theme = responsiveFontSizes(
           },
         },
       },
-      MuiAccordionSummary: {
-        styleOverrides: {
-          root: {
-            padding: 0,
-          },
-        },
-      },
       MuiListItem: {
         styleOverrides: {
           root: {

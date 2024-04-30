@@ -24,6 +24,7 @@ import theme from '../../theme'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import VpnKeyIcon from '@mui/icons-material/VpnKey'
+import PeopleIcon from '@mui/icons-material/People'
 
 const AdminSideNavBar = (): JSX.Element => {
   const { t } = useTranslation()
@@ -75,6 +76,12 @@ const AdminSideNavBar = (): JSX.Element => {
       icon: <VpnKeyIcon />,
       url: '/admin/permission',
     },
+    {
+      id: 8,
+      title: t('admin.sideNav.role'),
+      icon: <PeopleIcon />,
+      url: '/admin/role',
+    },
   ]
 
   const requestsData = [
@@ -87,7 +94,7 @@ const AdminSideNavBar = (): JSX.Element => {
   ]
 
   const headingStyle: CSSProperties = {
-    paddingLeft: 10,
+    padding: 0,
   }
 
   const listStyle = {
@@ -206,7 +213,6 @@ const AdminSideNavBar = (): JSX.Element => {
                   expanded={x.id === expanded}
                 >
                   <AccordionSummary
-                    sx={{ paddingRight: 3 }}
                     expandIcon={<ExpandMoreIcon />}
                     onClick={() => {
                       x.id === selectedIndex
@@ -215,7 +221,10 @@ const AdminSideNavBar = (): JSX.Element => {
                       x.id === expanded ? setExpanded(-1) : setExpanded(x.id)
                     }}
                   >
-                    <ListItemButton selected={selectedIndex === x.id}>
+                    <ListItemButton
+                      selected={selectedIndex === x.id}
+                      sx={{ padding: 0 }}
+                    >
                       <ListItemIcon>{x.icon}</ListItemIcon>
                       <ListItemText primary={x.title} />
                     </ListItemButton>
@@ -261,7 +270,7 @@ const AdminSideNavBar = (): JSX.Element => {
           </List>
           <List sx={listStyle}>
             {managementDataV2.map(x => (
-              <ListItem key={x.id}>
+              <ListItem key={x.id} sx={{ mb: 1 }}>
                 <ListItemButton
                   className="parent"
                   selected={selectedIndex === x.id}
@@ -273,9 +282,7 @@ const AdminSideNavBar = (): JSX.Element => {
                     setExpanded(-1)
                   }}
                 >
-                  <ListItemIcon>
-                    <VpnKeyIcon />
-                  </ListItemIcon>
+                  <ListItemIcon>{x.icon}</ListItemIcon>
                   <ListItemText primary={x.title} />
                 </ListItemButton>
               </ListItem>
