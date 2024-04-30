@@ -22,7 +22,10 @@ const initialState: AuthProps = {
     _id: '',
     email: '',
     avatar: '',
-    role: '',
+    role: {
+      _id: '',
+      name: '',
+    },
     active: false,
     fullName: '',
     phone: '',

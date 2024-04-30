@@ -100,7 +100,10 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
               component={'img'}
               width={35}
               height={35}
-              src={data.createdBy.avatar}
+              src={
+                data.createdBy?.avatar ??
+                'https://phongtro123.com/images/default-user.png'
+              }
             />
             <Typography>{data.createdBy.fullName}</Typography>
           </Stack>

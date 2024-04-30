@@ -20,6 +20,7 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import permissionReducer from './slice/permission.slice'
+import roleReducer from './slice/role.slice'
 
 const persistConfig = {
   key: 'root',
@@ -40,6 +41,7 @@ export const store = configureStore({
     filter: filterReducer,
     landlordRequest: landlordRequestReducer,
     permission: permissionReducer,
+    role: roleReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

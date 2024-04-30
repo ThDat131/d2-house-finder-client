@@ -15,7 +15,7 @@ interface Data {
     pages: number
     total: number
   }
-  result: Permission[]
+  results: Permission[]
 }
 
 export interface GetPermissionResponse extends CommonResponse<Data> {}

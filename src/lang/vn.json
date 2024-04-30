@@ -134,6 +134,28 @@
       "update": "Cập nhật",
       "youCantLeaveThisEmpty": "Bạn không thể để trống trường này"
     },
+    "role": {
+      "action": "Thao tác",
+      "active": "Kích hoạt",
+      "areYouSureToDeleteThisRole": "Bạn có chắc chắn muốn xóa vai trò này?",
+      "createRoleSuccessfully": "Tạo vai trò thành công",
+      "createRole": "Tạo vai trò",
+      "create": "Tạo mới",
+      "deleteRoleSuccessfully": "Xóa vai trò thành công",
+      "deleteRole": "Xóa vai trò",
+      "delete": "Xóa",
+      "description": "Mô tả",
+      "errorHaveOccurPleaseTryAgain": "Có lỗi xảy ra, vui lòng thử lại",
+      "id": "ID",
+      "listOfRole": "Danh sách vai trò",
+      "name": "Tên vai trò",
+      "permission": "Quyền hạn",
+      "status": "Trạng thái",
+      "updateRoleSuccessfully": "Cập nhật vai trò thành công",
+      "updateRole": "Cập nhật vai trò",
+      "update": "Cập nhật",
+      "youCantLeaveThisEmpty": "Bạn không thể để trống trường này"
+    },
     "sideNav": {
       "application": "Ứng dụng",
       "category": "Danh mục",
@@ -145,6 +167,7 @@
       "permission": "Quyền hạn",
       "post": "Bài đăng",
       "requests": "Yêu cầu",
+      "role": "Vai trò",
       "statistic": "Thống kê",
       "user": "Người dùng"
     }
