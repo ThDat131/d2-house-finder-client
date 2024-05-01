@@ -176,7 +176,9 @@ export const Header = (): JSX.Element => {
             }}
             displayEmpty
           >
-            <MenuItem value={undefined}>{t('header.category')}</MenuItem>
+            <MenuItem value={undefined}>
+              <em>{t('header.category')}</em>
+            </MenuItem>
             {Array.isArray(categoryState.category) &&
               categoryState.category.map(c => (
                 <MenuItem key={c._id} value={c._id}>

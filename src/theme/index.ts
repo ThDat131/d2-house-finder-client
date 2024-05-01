@@ -103,8 +103,10 @@ const theme = responsiveFontSizes(
       },
       MuiSelect: {
         styleOverrides: {
-          root: {
-            minWidth: '135px',
+          select: {
+            '&:focus': {
+              backgroundColor: 'transparent',
+            },
           },
         },
       },
