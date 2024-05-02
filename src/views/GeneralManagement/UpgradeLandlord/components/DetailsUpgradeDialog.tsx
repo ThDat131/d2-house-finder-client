@@ -63,7 +63,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 value={request._id}
                 size="small"
                 fullWidth
-                InputProps={{ readOnly: true }}
+                InputProps={{ disabled: true }}
               />
             </Grid>
           </Grid>
@@ -105,7 +105,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 value={request.personalID}
                 size="small"
                 fullWidth
-                InputProps={{ readOnly: true }}
+                InputProps={{ disabled: true }}
               />
             </Grid>
           </Grid>
@@ -120,7 +120,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 name="dayOfBirth"
                 sx={{ width: 1 }}
                 value={moment(request.dayOfBirth)}
-                readOnly
+                disabled
               />
             </Grid>
             <Grid item textAlign={'right'} xs={2}>
@@ -154,7 +154,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 id="address"
                 name="address"
                 value={request.address}
-                InputProps={{ readOnly: true }}
+                InputProps={{ disabled: true }}
                 fullWidth
               />
             </Grid>
@@ -170,7 +170,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 id="nationality"
                 name="nationality"
                 value={request.nationality}
-                InputProps={{ readOnly: true }}
+                InputProps={{ disabled: true }}
                 fullWidth
               />
             </Grid>
@@ -186,7 +186,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 id="placeOfIssue"
                 name="placeOfIssue"
                 value={request.placeOfIssue}
-                InputProps={{ readOnly: true }}
+                InputProps={{ disabled: true }}
                 fullWidth
               />
             </Grid>
@@ -202,7 +202,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 name="dateOfIssue"
                 sx={{ width: 1 }}
                 value={moment(request.dateOfIssue)}
-                readOnly
+                disabled
               />
             </Grid>
           </Grid>
@@ -217,7 +217,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 id="feedBack"
                 name="feedBack"
                 value={request.feedBack}
-                InputProps={{ readOnly: true }}
+                InputProps={{ disabled: true }}
                 fullWidth
               />
             </Grid>
@@ -233,7 +233,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 id="createdAt"
                 name="createdAt"
                 value={moment(request.createdAt).format(DEFAULT_FORMAT_DATE)}
-                InputProps={{ readOnly: true }}
+                InputProps={{ disabled: true }}
                 fullWidth
               />
             </Grid>
@@ -249,7 +249,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
                 id="updatedAt"
                 name="updatedAt"
                 value={moment(request.updatedAt).format(DEFAULT_FORMAT_DATE)}
-                InputProps={{ readOnly: true }}
+                InputProps={{ disabled: true }}
                 fullWidth
               />
             </Grid>
