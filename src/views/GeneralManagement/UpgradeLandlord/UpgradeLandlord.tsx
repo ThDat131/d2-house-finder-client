@@ -7,6 +7,7 @@ import {
   Container,
   FormControlLabel,
   Grid,
+  Popper,
   Radio,
   RadioGroup,
   Stack,
@@ -42,6 +43,8 @@ enum TypeTabEnum {
   CREATE = 'CREATE',
   LIST = 'LIST',
 }
+
+const CustomPopper = (props: any) => <Popper {...props} style={{ height: 0 }} />
 
 const UpgradeLandlord = (): JSX.Element => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -241,7 +244,7 @@ const UpgradeLandlord = (): JSX.Element => {
   }, [paginationModel, isUpdated])
 
   return (
-    <Grid container height={1}>
+    <Grid container>
       <Grid item borderBottom={1} xs={12}>
         <Typography variant={'h3'} mb={2}>
           {t('generalManagement.upgradeLandlord.upgradeLandlord')}
@@ -307,6 +310,9 @@ const UpgradeLandlord = (): JSX.Element => {
                     </Grid>
                     <Grid item xs={5}>
                       <DatePicker
+                        slots={{
+                          popper: CustomPopper,
+                        }}
                         name="dayOfBirth"
                         sx={{ width: 1 }}
                         value={moment(formik.values.dayOfBirth)}
@@ -372,25 +378,20 @@ const UpgradeLandlord = (): JSX.Element => {
                   <Grid container item alignItems={'center'}>
                     <Grid item textAlign={'center'} xs={2}>
                       <Typography>
-                        {t('generalManagement.upgradeLandlord.nationality')}
+                        {t('generalManagement.upgradeLandlord.dateOfIssue')}
                       </Typography>
                     </Grid>
                     <Grid item xs={10}>
-                      <TextField
-                        id="nationality"
-                        name="nationality"
-                        value={formik.values.nationality}
-                        onChange={formik.handleChange}
-                        error={
-                          formik.touched.nationality &&
-                          Boolean(formik.errors.nationality)
-                        }
-                        helperText={
-                          formik.touched.nationality &&
-                          formik.errors.nationality
-                        }
-                        size="small"
-                        fullWidth
+                      <DatePicker
+                        slots={{
+                          popper: CustomPopper,
+                        }}
+                        name="dateOfIssue"
+                        sx={{ width: 1 }}
+                        value={moment(formik.values.dateOfIssue)}
+                        onChange={value => {
+                          formik.setFieldValue('dateOfIssue', value?.toDate())
+                        }}
                         disabled={!canCreate}
                       />
                     </Grid>
@@ -424,17 +425,25 @@ const UpgradeLandlord = (): JSX.Element => {
                   <Grid container item alignItems={'center'}>
                     <Grid item textAlign={'center'} xs={2}>
                       <Typography>
-                        {t('generalManagement.upgradeLandlord.dateOfIssue')}
+                        {t('generalManagement.upgradeLandlord.nationality')}
                       </Typography>
                     </Grid>
                     <Grid item xs={10}>
-                      <DatePicker
-                        name="dateOfIssue"
-                        sx={{ width: 1 }}
-                        value={moment(formik.values.dateOfIssue)}
-                        onChange={value => {
-                          formik.setFieldValue('dateOfIssue', value?.toDate())
-                        }}
+                      <TextField
+                        id="nationality"
+                        name="nationality"
+                        value={formik.values.nationality}
+                        onChange={formik.handleChange}
+                        error={
+                          formik.touched.nationality &&
+                          Boolean(formik.errors.nationality)
+                        }
+                        helperText={
+                          formik.touched.nationality &&
+                          formik.errors.nationality
+                        }
+                        size="small"
+                        fullWidth
                         disabled={!canCreate}
                       />
                     </Grid>
