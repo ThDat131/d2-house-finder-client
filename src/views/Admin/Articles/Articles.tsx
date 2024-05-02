@@ -108,7 +108,7 @@ const Articles = () => {
           </Stack>
         )
       },
-      flex: 2,
+      width: 230,
     },
   ]
 

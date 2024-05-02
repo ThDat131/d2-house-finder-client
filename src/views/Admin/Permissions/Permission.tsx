@@ -94,7 +94,7 @@ const Permissions = () => {
           </Stack>
         )
       },
-      flex: 2,
+      width: 230,
     },
   ]
 
