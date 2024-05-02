@@ -47,6 +47,14 @@ const Permissions = () => {
     setOpenDelete(true)
   }
 
+  const getColor = (method: string) => {
+    if (method === 'GET') return '#61affe'
+    if (method === 'POST') return '#49cc90'
+    if (method === 'PATCH') return '#50e3c2'
+    if (method === 'PUT') return '#fca130'
+    if (method === 'DELETE') return '#f93e3e'
+  }
+
   const columns: GridColDef[] = [
     {
       field: '_id',
@@ -61,6 +69,11 @@ const Permissions = () => {
     {
       field: 'method',
       headerName: t('admin.permission.method'),
+      renderCell: params => (
+        <Typography color={getColor(params.value)} fontWeight={'bold'}>
+          {params.value}
+        </Typography>
+      ),
       flex: 1,
     },
     {
