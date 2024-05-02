@@ -37,6 +37,7 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
       onClose={() => {
         setOpen(false)
       }}
+      disableScrollLock
     >
       <DialogTitle
         textAlign={'center'}

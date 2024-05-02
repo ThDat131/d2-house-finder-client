@@ -223,6 +223,7 @@ const ChooseAddressModal: React.FC<ChooseAddressModalProps> = ({
       onClose={() => {
         setOpen(false)
       }}
+      disableScrollLock
     >
       <DialogTitle
         textAlign={'center'}

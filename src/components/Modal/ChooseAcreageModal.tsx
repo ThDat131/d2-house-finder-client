@@ -42,6 +42,7 @@ const ChooseAcreageModal: React.FC<ChooseAcreageModalProps> = ({
       onClose={() => {
         setOpen(false)
       }}
+      disableScrollLock
     >
       <DialogTitle
         textAlign={'center'}
