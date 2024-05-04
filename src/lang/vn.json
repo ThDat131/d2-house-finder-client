@@ -89,7 +89,7 @@
       "cancel": "Hủy bỏ",
       "createACategory": "Tạo danh mục",
       "createSuccess": "Tạo danh mục thành công!",
-      "create": "Tạo",
+      "create": "Tạo mới",
       "deleteCategory": "Xóa danh mục",
       "deleteSuccess": "Xóa danh mục thành công",
       "delete": "Xóa",
@@ -335,7 +335,7 @@
   },
   "header": {
     "all": "Toàn quốc",
-    "category": "Danh mục",
+    "category": "--Danh mục--",
     "chooseAcreage": "Chọn diện tích",
     "choosePrice": "Chọn giá",
     "hello": "Xin chào, {{name}}!",

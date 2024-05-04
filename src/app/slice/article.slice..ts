@@ -85,9 +85,9 @@ export const getArticles = createAsyncThunk(
           params: {
             current: data.current,
             pageSize: PAGE_SIZE,
-            populate: 'createdBy',
+            populate: 'createdBy,categoryId',
             fields:
-              'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone',
+              'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone,categoryId.name,categoryId._id',
           },
           signal: thunkAPI.signal,
         },

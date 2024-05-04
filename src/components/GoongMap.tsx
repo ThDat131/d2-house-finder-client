@@ -101,9 +101,9 @@ const GoongMap: React.FC<GoongMapProps> = ({
         markers.map(marker => {
           return (
             <Marker
-              key={marker._id}
-              latitude={marker.location.coordinates[1]}
-              longitude={marker.location.coordinates[0]}
+              key={marker?._id ?? 0}
+              latitude={marker?.location?.coordinates[1] ?? 0}
+              longitude={marker?.location?.coordinates[0] ?? 0}
             >
               <LocationOnIcon
                 sx={{ color: '#ff0000', fontSize: 50 }}

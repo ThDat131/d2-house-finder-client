@@ -91,7 +91,7 @@ const LandlordRequests = () => {
           </Stack>
         )
       },
-      flex: 1,
+      width: 230,
     },
   ]
 

@@ -7,6 +7,7 @@ import {
   Box,
   Grid,
   Paper,
+  Popper,
   TextField,
   Typography,
 } from '@mui/material'
@@ -117,7 +118,7 @@ const FindHouseWithLocation = () => {
 
   return (
     <UserLayout fluid={true} haveSearch={false}>
-      <Box position={'relative'} height={1}>
+      <Box position={'relative'} height={1} overflow={'hidden'}>
         <Box
           position={'absolute'}
           zIndex={1}
@@ -130,13 +131,15 @@ const FindHouseWithLocation = () => {
         >
           <Paper>
             <Autocomplete
+              PopperComponent={({ style, ...props }) => (
+                <Popper {...props} style={{ ...style, height: 0 }} />
+              )}
               options={addresses}
               autoComplete
               includeInputInList
               filterSelectedOptions
               value={value}
               renderInput={params => {
-                console.log(params)
                 return (
                   <TextField
                     {...params}

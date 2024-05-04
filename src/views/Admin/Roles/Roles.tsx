@@ -92,7 +92,7 @@ const Roles = () => {
           </Stack>
         )
       },
-      flex: 2,
+      width: 230,
     },
   ]
 

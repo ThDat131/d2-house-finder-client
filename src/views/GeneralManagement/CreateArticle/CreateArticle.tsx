@@ -54,6 +54,7 @@ import { Notification } from '../../../model/notification/notification'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import { NotificationTypeEnum } from '../../../model/notification/notification--type'
+import './CreateArticle.css'
 
 interface ImageType {
   blob: string
@@ -99,12 +100,18 @@ const CreateArticle = () => {
   })
 
   useEffect(() => {
-    if (provinces?.length > 0 && categories?.length > 0) return
-    const provincePromise = dispatch(getAllProvinces())
+    if (categories?.length > 0) return
     const categoryPromise = dispatch(getCategories())
     return () => {
-      provincePromise.abort()
       categoryPromise.abort()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (provinces?.length > 0) return
+    const provincePromise = dispatch(getAllProvinces())
+    return () => {
+      provincePromise.abort()
     }
   }, [])
 
@@ -602,7 +609,7 @@ const CreateArticle = () => {
                       }}
                       editorStyle={{
                         height: '200px',
-                        border: '0.2px solid #f3f3f3',
+                        border: '1px solid #e2e2e2',
                         padding: '10px',
                       }}
                     />

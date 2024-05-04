@@ -42,6 +42,7 @@ const ChoosePriceModal: React.FC<ChoosePriceModalProps> = ({
       onClose={() => {
         setOpen(false)
       }}
+      disableScrollLock
     >
       <DialogTitle
         textAlign={'center'}

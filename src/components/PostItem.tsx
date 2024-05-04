@@ -30,8 +30,16 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
         <Box height={240}>
           <Box
             style={{ objectFit: 'cover', objectPosition: 'center' }}
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null
+              currentTarget.src =
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6C7KefXhbUwl5NEW8iFCGfowi0GlBVYFDhjR06w7wcQ&s'
+            }}
             component={'img'}
-            src={data.images[0]}
+            src={
+              data.images[0] ??
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6C7KefXhbUwl5NEW8iFCGfowi0GlBVYFDhjR06w7wcQ&s'
+            }
             width={1}
             height={1}
             borderRadius={2}

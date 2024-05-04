@@ -5,13 +5,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   FormControlLabel,
   FormGroup,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
   Switch,
   TextField,
@@ -23,16 +19,11 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as Yup from 'yup'
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
-import {
-  createPermission,
-  updatePermission,
-} from '../../../../app/slice/permission.slice'
 import { ActionType } from '../../../../common/common-enum'
 import { Permission } from '../../../../model/permission/permission'
 import { toast } from 'react-toastify'
 import { RootState } from '../../../../app/store'
 import { Role } from '../../../../model/role/role'
-import CustomAccordion from '../../../../components/CustomAccordion'
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp'
 import MuiAccordionSummary, {
   AccordionSummaryProps,
@@ -145,6 +136,32 @@ const CreateUpdateDialog: React.FC<CreateUpdateDialogProps> = ({
     (module: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setSelectedModule(newExpanded ? module : false)
     }
+
+  const handleSelectMultiPermission = (x: string) => {
+    const permission = modules[x].map((m: any) => m._id)
+
+    const currentPermission = [...formik.values.permissions]
+
+    const checkAll =
+      currentPermission.length > 0 &&
+      permission.every((p: string) => currentPermission.includes(p))
+
+    if (!checkAll) {
+      const data: string[] = []
+      permission.forEach((p: string) => {
+        if (!currentPermission.includes(p)) {
+          data.push(p)
+        }
+      })
+
+      formik.setFieldValue('permissions', currentPermission.concat(data))
+    } else {
+      formik.setFieldValue(
+        'permissions',
+        currentPermission.filter(p => !permission.includes(p)),
+      )
+    }
+  }
 
   const PermissionList = (modules: any, key: string) => {
     if (!modules) return
@@ -280,7 +297,27 @@ const CreateUpdateDialog: React.FC<CreateUpdateDialogProps> = ({
                         onChange={handleChangeModule(x)}
                       >
                         <AccordionSummary>
-                          <Typography>{x}</Typography>
+                          <Stack
+                            direction={'row'}
+                            alignItems={'center'}
+                            justifyContent={'space-between'}
+                            width={1}
+                          >
+                            <Typography>{x}</Typography>
+                            <Switch
+                              onClick={evt => {
+                                evt.stopPropagation()
+                              }}
+                              checked={modules[x].every((p: Permission) =>
+                                formik.values.permissions.includes(
+                                  p._id as string,
+                                ),
+                              )}
+                              onChange={() => {
+                                handleSelectMultiPermission(x)
+                              }}
+                            />
+                          </Stack>
                         </AccordionSummary>
                         <AccordionDetails>
                           {PermissionList(modules, x)}

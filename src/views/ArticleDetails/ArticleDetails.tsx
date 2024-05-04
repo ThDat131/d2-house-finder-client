@@ -164,28 +164,26 @@ const ArticleDetails = (): JSX.Element => {
   useEffect(() => {
     const promise = dispatch(getArticle(id as string))
 
-    promise.then(res => {
-      if (res.payload) {
-        const result = res.payload as any
-        const articleFromResult = result.data.article as Article
-        const longitude = articleFromResult.location.coordinates[0]
-        const latitude = articleFromResult.location.coordinates[1]
+    promise
+      .then(res => {
+        if (res.payload) {
+          const result = res.payload as any
+          const articleFromResult = result.data.article as Article
+          const longitude = articleFromResult.location.coordinates[0]
+          const latitude = articleFromResult.location.coordinates[1]
 
-        setArticle(articleFromResult)
-        setViewportData(prev => ({ ...prev, latitude, longitude }))
-        getNearestArticle(
-          articleFromResult._id,
-          articleFromResult.address.wardCode,
-          articleFromResult.categoryId._id as string,
-        )
-
+          setArticle(articleFromResult)
+          setViewportData(prev => ({ ...prev, latitude, longitude }))
+          getNearestArticle(
+            articleFromResult._id,
+            articleFromResult.address.wardCode,
+            (articleFromResult.categoryId._id as string) ?? '',
+          )
+        }
+      })
+      .finally(() => {
         setLoadingPage(false)
-      }
-    })
-
-    return () => {
-      promise.abort()
-    }
+      })
   }, [id])
 
   const getExactAddress = (data: Article): string => {
@@ -292,7 +290,7 @@ const ArticleDetails = (): JSX.Element => {
 
                   <TableCell>
                     <Typography color={'primary'} fontWeight={500}>
-                      {article?.categoryId.name}
+                      {article?.categoryId?.name}
                     </Typography>
                   </TableCell>
                   <TableCell variant="head">
@@ -406,8 +404,9 @@ const ArticleDetails = (): JSX.Element => {
           <Grid item xs={3}>
             <Paper elevation={5}>
               <Stack p={2} spacing={2} alignItems={'center'}>
-                <Box
-                  sx={{ cursor: 'pointer' }}
+                <Stack
+                  spacing={2}
+                  sx={{ cursor: 'pointer', alignItems: 'center' }}
                   onClick={() => {
                     navigate(`/trang-ca-nhan/${article?.createdBy._id}`)
                   }}
@@ -420,10 +419,10 @@ const ArticleDetails = (): JSX.Element => {
                       height={1}
                       src={article?.createdBy?.avatar}
                       borderRadius={'50%'}
-                    ></Box>
+                    />
                   </Box>
                   <Typography>{article?.createdBy?.fullName}</Typography>
-                </Box>
+                </Stack>
                 <Button
                   variant="contained"
                   size="large"

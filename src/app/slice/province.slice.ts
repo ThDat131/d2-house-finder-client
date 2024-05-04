@@ -10,7 +10,7 @@ import { ApiPathEnum } from '../../api/ApiPathEnum'
 const { httpAddressService } = new HttpService()
 const initialState = {
   data: [] as Province[],
-  loading: true,
+  loading: false,
   error: '',
   selected: null as Province | null,
 }

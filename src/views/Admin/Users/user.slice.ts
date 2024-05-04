@@ -40,6 +40,8 @@ export const getUsers = createAsyncThunk(
           params: {
             current: data.current,
             pageSize: PAGE_SIZE,
+            populate: 'role',
+            fields: 'role._id,role.name',
           },
           signal: thunkAPI.signal,
         },
