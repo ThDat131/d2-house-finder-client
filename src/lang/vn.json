@@ -206,19 +206,19 @@
   "chooseAddressModal": {
     "chooseProvince": "Chọn tỉnh thành",
     "nationWide": "Toàn quốc",
-    "submit": "Xác nhận"
+    "submit": "Áp dụng"
   },
   "choosePriceModal": {
     "choosePrice": "Chọn giá bất động sản",
     "millionDong": "{{price}} triệu",
-    "confirm": "Xác nhận"
+    "confirm": "Áp dụng"
   },
   "chooseCategoryModal": {
     "chooseCategory": "Chọn loại bất động sản"
   },
   "chooseAcreageModal": {
     "chooseAcreage": "Chọn diện tích bất động sản",
-    "confirm": "Xác nhận"
+    "confirm": "Áp dụng"
   },
   "confirmDialog": {
     "ok": "Đồng ý",

@@ -47,7 +47,7 @@ const AcreageFilter = () => {
         >
           <KeyboardArrowRightIcon />
           <Typography sx={isSelected([0, 20]) ? SelectedStyle : null}>
-            {t('acreageFilter.overAcreage', { acreage: 20 })} m<sup>2</sup>
+            {t('acreageFilter.underAcreage', { acreage: 20 })} m<sup>2</sup>
           </Typography>
         </CustomListItem>
         <CustomListItem
