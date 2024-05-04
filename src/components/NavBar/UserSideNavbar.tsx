@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 const UserSideNavbar = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const user = useAppSelector((state: RootState) => state.auth.user)
+  const user = useAppSelector((state: RootState) => state.auth.auth.user)
   const [selectedIndex, setSelectedIndex] = useState(1)
 
   const handleListItemClick = (index: number) => {

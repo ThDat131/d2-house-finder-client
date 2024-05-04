@@ -73,7 +73,7 @@ const initialState: ArticleStateProps = {
   error: '',
   loading: false,
 }
-const { authHttpService, httpService } = new HttpService()
+const { httpService } = new HttpService()
 
 export const getArticles = createAsyncThunk(
   'article/getArticles',
@@ -120,7 +120,7 @@ export const createArticle = createAsyncThunk(
   'article/createArticle',
   async (article: ArticleCreatedModel, thunkAPI) => {
     try {
-      const response = await authHttpService.post<
+      const response = await httpService.post<
         CommonResponse<Article> | ErrorResponse
       >(ApiPathEnum.Article, article, {
         signal: thunkAPI.signal,
@@ -142,7 +142,7 @@ export const updateArticle = createAsyncThunk(
   'article/updateArticle',
   async (article: ArticleCreatedModel, thunkAPI) => {
     try {
-      const response = await authHttpService.patch<
+      const response = await httpService.patch<
         CommonResponse<Article> | ErrorResponse
       >(`${ApiPathEnum.Article}/${article._id}`, article, {
         signal: thunkAPI.signal,
@@ -164,7 +164,7 @@ export const createComment = createAsyncThunk(
   'comment/createComment',
   async (data: any, thunkAPI) => {
     try {
-      const response = await authHttpService.post<CommonResponse<Comment>>(
+      const response = await httpService.post<CommonResponse<Comment>>(
         ApiPathEnum.Comments,
         data,
         {
@@ -183,7 +183,7 @@ export const editComment = createAsyncThunk(
   'comment/editComment',
   async (data: EditCommentProps, thunkAPI) => {
     try {
-      const response = await authHttpService.patch<CommonResponse<Comment>>(
+      const response = await httpService.patch<CommonResponse<Comment>>(
         `${ApiPathEnum.Comments}/${data.id}`,
         data.data,
         {
@@ -202,7 +202,7 @@ export const createReplyComment = createAsyncThunk(
   'comment/createReplyComment',
   async (data: CreateCommentReplyProps, thunkAPI) => {
     try {
-      const response = await authHttpService.patch(
+      const response = await httpService.patch(
         `${ApiPathEnum.Comments}/${data.id}/reply`,
         data.data,
         {
@@ -221,7 +221,7 @@ export const editReplyComment = createAsyncThunk(
   'comment/editReplyComment',
   async (data: EditCommentReplyProps, thunkAPI) => {
     try {
-      const response = await authHttpService.put(
+      const response = await httpService.put(
         `${ApiPathEnum.Comments}/${data.id}/reply`,
         data.data,
         {

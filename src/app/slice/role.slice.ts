@@ -28,13 +28,13 @@ const initialState: RoleStateProps = {
   totalPage: 0,
   totalItem: 0,
 }
-const { authHttpService } = new HttpService()
+const { httpService } = new HttpService()
 
 export const getRoles = createAsyncThunk(
   'role/getRoles',
   async (data: Meta, thunkAPI) => {
     try {
-      const response = await authHttpService.get<GetRoleResponse>(
+      const response = await httpService.get<GetRoleResponse>(
         ApiPathEnum.Role,
         {
           params: {
@@ -44,6 +44,10 @@ export const getRoles = createAsyncThunk(
           signal: thunkAPI.signal,
         },
       )
+
+      if (response.status !== 200) {
+        throw new Error(response.data.message)
+      }
 
       return response.data
     } catch (error) {
@@ -56,7 +60,7 @@ export const createRole = createAsyncThunk(
   'role/createRole',
   async (data: RoleRequest, thunkAPI) => {
     try {
-      const response = await authHttpService.post<CommonResponse<Role>>(
+      const response = await httpService.post<CommonResponse<Role>>(
         ApiPathEnum.Role,
         data,
         {
@@ -79,7 +83,7 @@ export const updateRole = createAsyncThunk(
   'role/updateRole',
   async (data: RoleRequest, thunkAPI) => {
     try {
-      const response = await authHttpService.patch<CommonResponse<Role>>(
+      const response = await httpService.patch<CommonResponse<Role>>(
         `${ApiPathEnum.Role}/${data._id}`,
         data,
         {
@@ -102,7 +106,7 @@ export const deleteRole = createAsyncThunk(
   'role/deleteRole',
   async (id: string, thunkAPI) => {
     try {
-      const response = await authHttpService.delete<CommonResponse<Role>>(
+      const response = await httpService.delete<CommonResponse<Role>>(
         `${ApiPathEnum.Role}/${id}`,
         {
           signal: thunkAPI.signal,

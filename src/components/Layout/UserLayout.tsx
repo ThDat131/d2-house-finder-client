@@ -6,8 +6,9 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
 import { useEffect, useRef } from 'react'
 import { getCategories } from '../../app/slice/category.slice'
-import { getCurrentUser } from '../../app/slice/auth.slice'
+import { getCurrentUser, signout } from '../../app/slice/auth.slice'
 import Loading from '../Loading'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
   children: React.ReactNode
@@ -21,8 +22,12 @@ export const UserLayout: React.FC<Props> = ({
   fluid,
 }): JSX.Element => {
   const categoryState = useAppSelector((state: RootState) => state.category)
+  const isRefreshToken = useAppSelector(
+    (state: RootState) => state.auth.isRefreshToken,
+  )
   const currentUserRef = useRef(false)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,6 +52,13 @@ export const UserLayout: React.FC<Props> = ({
       currentUserRef.current = true
     }
   }, [])
+
+  useEffect(() => {
+    if (isRefreshToken) {
+      dispatch(signout())
+      navigate('/dang-nhap')
+    }
+  }, [isRefreshToken])
 
   if (categoryState.loading) {
     return <Loading />

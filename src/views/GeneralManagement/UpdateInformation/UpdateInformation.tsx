@@ -32,8 +32,8 @@ interface ImageType {
 const UpdateInformation = (): JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { authHttpService, httpService } = new HttpService()
-  const auth = useAppSelector((state: RootState) => state.auth.user)
+  const { httpService } = new HttpService()
+  const auth = useAppSelector((state: RootState) => state.auth.auth.user)
   const navigate = useNavigate()
 
   const [avatar, setAvatar] = useState<ImageType>({
@@ -63,7 +63,7 @@ const UpdateInformation = (): JSX.Element => {
   const onSubmit = () => {
     setLoadingSubmit(true)
 
-    authHttpService
+    httpService
       .patch(ApiPathEnum.Users, formik.values)
       .then(res => {
         if (res.status === 200) {
@@ -99,7 +99,7 @@ const UpdateInformation = (): JSX.Element => {
 
         formData.append('file', file)
 
-        authHttpService
+        httpService
           .post<CommonResponse<any>>(ApiPathEnum.UploadSingleFile, formData)
           .then(res => {
             if (res.status === 201) {

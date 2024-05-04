@@ -47,7 +47,7 @@ const ArticleDetails = (): JSX.Element => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { httpService, authHttpService } = new HttpService()
+  const { httpService } = new HttpService()
 
   const [viewportData, setViewportData] = useState<ViewPort>({
     width: '100%',
@@ -101,12 +101,12 @@ const ArticleDetails = (): JSX.Element => {
   }
 
   const handleFollow = () => {
-    if (article?.createdBy?._id === authState.user._id) {
+    if (article?.createdBy?._id === authState.auth.user._id) {
       toast.warning(t('profile.canNotFollowYourSelf'))
       return
     }
 
-    const isFollow = authState.user.followings?.some(
+    const isFollow = authState.auth.user.followings?.some(
       x => x._id === article?.createdBy._id,
     )
 
@@ -122,7 +122,7 @@ const ArticleDetails = (): JSX.Element => {
   const follow = () => {
     setFollowLoading(true)
 
-    authHttpService
+    httpService
       .post(ApiPathEnum.Follow, {
         follower_id: article?.createdBy._id,
       })
@@ -143,7 +143,7 @@ const ArticleDetails = (): JSX.Element => {
   const unFollow = () => {
     setFollowLoading(true)
 
-    authHttpService
+    httpService
       .put(ApiPathEnum.UnFollow, {
         follower_id: article?.createdBy._id,
       })
@@ -382,7 +382,7 @@ const ArticleDetails = (): JSX.Element => {
                   <Grid item xs={12} key={x._id}>
                     <Comment
                       comment={x}
-                      showAction={authState.user._id === x.createdBy?._id}
+                      showAction={authState.auth.user._id === x.createdBy?._id}
                     />
                   </Grid>
                 ))}
@@ -441,7 +441,7 @@ const ArticleDetails = (): JSX.Element => {
                   }}
                   loading={followLoading}
                 >
-                  {authState.user.followings?.find(
+                  {authState.auth.user.followings?.find(
                     x => x._id === article?.createdBy?._id,
                   )
                     ? t('articleDetails.unFollow')

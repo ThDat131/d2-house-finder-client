@@ -46,7 +46,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 
-  const currentUser = useAppSelector((state: RootState) => state.auth.user)
+  const currentUser = useAppSelector((state: RootState) => state.auth.auth.user)
   const currentArticle = useAppSelector(
     (state: RootState) => state.article.currentArticle,
   )

@@ -34,13 +34,13 @@ const initialState: LandlordRequestsProps = {
   loading: false,
 }
 
-const { authHttpService } = new HttpService()
+const { httpService } = new HttpService()
 
 export const getLandlordRequests = createAsyncThunk(
   'landlordRequests/getLandlordRequests',
   async (data: Meta, thunkAPI) => {
     try {
-      const response = await authHttpService.get<
+      const response = await httpService.get<
         CommonResponse<UpgradeLandlordRequestResponse>
       >(ApiPathEnum.LandlordRequest, {
         params: {
@@ -62,7 +62,7 @@ export const updateLandlordRequest = createAsyncThunk(
   'landlordRequests/updateLandlordRequest',
   async (data: UpgradeLandlordRequestUpdateModel, thunkAPI) => {
     try {
-      const response = await authHttpService.patch<
+      const response = await httpService.patch<
         CommonResponse<UpgradeLandlordRequest>
       >(ApiPathEnum.LandlordRequest, data, {
         signal: thunkAPI.signal,

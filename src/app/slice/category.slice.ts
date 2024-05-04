@@ -33,7 +33,7 @@ const initialState: CategoryStateProps = {
   totalPage: 0,
   totalCategories: 0,
 }
-const { authHttpService, httpService } = new HttpService()
+const { httpService } = new HttpService()
 
 export const getCategories = createAsyncThunk(
   'category/getCategories',
@@ -61,7 +61,7 @@ export const createCategory = createAsyncThunk(
   'category/createCategory',
   async (category: CreateCategoryModel, thunkAPI) => {
     try {
-      const response = await authHttpService.post<
+      const response = await httpService.post<
         CommonResponse<Category> | ErrorResponse
       >(ApiPathEnum.Categories, category, {
         signal: thunkAPI.signal,
@@ -83,7 +83,7 @@ export const updateCategory = createAsyncThunk(
   'category/updateCategory',
   async (category: Category, thunkAPI) => {
     try {
-      const response = await authHttpService.patch<
+      const response = await httpService.patch<
         CommonResponse<Category> | ErrorResponse
       >(`${ApiPathEnum.Categories}/${category._id}`, category, {
         signal: thunkAPI.signal,
@@ -105,7 +105,7 @@ export const deleteCategory = createAsyncThunk(
   'category/deleteCategory',
   async (category: Category, thunkAPI) => {
     try {
-      const response = await authHttpService.delete<
+      const response = await httpService.delete<
         CommonResponse<Category> | ErrorResponse
       >(`${ApiPathEnum.Categories}/${category._id}`, {
         signal: thunkAPI.signal,

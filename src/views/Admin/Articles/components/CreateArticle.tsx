@@ -67,7 +67,7 @@ interface CreateArticleProps {
 }
 
 const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
-  const { authHttpService } = new HttpService()
+  const { httpService } = new HttpService()
   const { t } = useTranslation()
   const error = useAppSelector((state: RootState) => state.article.error)
   const provinceState = useAppSelector((state: RootState) => state.provinces)
@@ -227,7 +227,7 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
         const formData = new FormData()
         formData.append('file', file)
 
-        authHttpService
+        httpService
           .post<CommonResponse<any>>(ApiPathEnum.UploadSingleFile, formData)
           .then(res => {
             if (res.status === 201) {
