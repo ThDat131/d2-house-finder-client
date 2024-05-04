@@ -33,13 +33,13 @@ const initialState: PermissionStateProps = {
   totalPage: 0,
   totalItem: 0,
 }
-const { authHttpService } = new HttpService()
+const { httpService } = new HttpService()
 
 export const getPermissions = createAsyncThunk(
   'permission/getPermissions',
   async (data: Meta, thunkAPI) => {
     try {
-      const response = await authHttpService.get<GetPermissionResponse>(
+      const response = await httpService.get<GetPermissionResponse>(
         ApiPathEnum.Permission,
         {
           params: {
@@ -61,7 +61,7 @@ export const createPermission = createAsyncThunk(
   'permission/createPermission',
   async (data: PermissionRequest, thunkAPI) => {
     try {
-      const response = await authHttpService.post<CommonResponse<Permission>>(
+      const response = await httpService.post<CommonResponse<Permission>>(
         ApiPathEnum.Permission,
         data,
         {
@@ -84,7 +84,7 @@ export const updatePermission = createAsyncThunk(
   'permission/updatePermission',
   async (data: PermissionRequest, thunkAPI) => {
     try {
-      const response = await authHttpService.patch<CommonResponse<Permission>>(
+      const response = await httpService.patch<CommonResponse<Permission>>(
         `${ApiPathEnum.Permission}/${data._id}`,
         data,
         {
@@ -107,7 +107,7 @@ export const deletePermission = createAsyncThunk(
   'permission/deletePermission',
   async (id: string, thunkAPI) => {
     try {
-      const response = await authHttpService.delete<CommonResponse<Permission>>(
+      const response = await httpService.delete<CommonResponse<Permission>>(
         `${ApiPathEnum.Permission}/${id}`,
         {
           signal: thunkAPI.signal,

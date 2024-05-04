@@ -34,7 +34,7 @@ const Signin = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const { t } = useTranslation()
-  const currentUser = useAppSelector((state: RootState) => state.auth.user)
+  const currentUser = useAppSelector((state: RootState) => state.auth.auth.user)
 
   useEffect(() => {
     if (currentUser._id !== '') {

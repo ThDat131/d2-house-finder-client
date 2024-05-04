@@ -15,7 +15,7 @@ const ManageArticles = (): JSX.Element => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
   const { t } = useTranslation()
   const { httpService } = new HttpService()
-  const user = useAppSelector((state: RootState) => state.auth.user)
+  const user = useAppSelector((state: RootState) => state.auth.auth.user)
   const [articles, setArticles] = useState<Article[]>([])
   const [total, setTotal] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(false)

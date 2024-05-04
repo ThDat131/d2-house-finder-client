@@ -17,7 +17,7 @@ export const Comment: React.FC<CommentProps> = ({ comment, showAction }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isReply, setIsReply] = useState<boolean>(false)
 
-  const currentUser = useAppSelector((state: RootState) => state.auth.user)
+  const currentUser = useAppSelector((state: RootState) => state.auth.auth.user)
 
   const handleOpenEdit = () => {
     setIsEdit(!isEdit)

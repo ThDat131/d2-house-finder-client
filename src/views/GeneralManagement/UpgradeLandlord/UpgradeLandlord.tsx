@@ -49,7 +49,7 @@ const CustomPopper = (props: any) => <Popper {...props} style={{ height: 0 }} />
 const UpgradeLandlord = (): JSX.Element => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
   const { t } = useTranslation()
-  const { authHttpService } = new HttpService()
+  const { httpService } = new HttpService()
   const auth = useAppSelector((state: RootState) => state.auth)
   const requestsRef = useRef(false)
 
@@ -185,7 +185,7 @@ const UpgradeLandlord = (): JSX.Element => {
   const handleCreateLandlordRequest = (model: UpgradeLandlordRequest) => {
     setLoadingSubmit(true)
 
-    authHttpService
+    httpService
       .post(ApiPathEnum.LandlordRequest, model)
       .then(res => {
         if (res.status === 201) {
@@ -204,12 +204,12 @@ const UpgradeLandlord = (): JSX.Element => {
   const fetchLandlordRequest = () => {
     setFetchRequestsLoading(true)
 
-    authHttpService
+    httpService
       .get<CommonResponse<UpgradeLandlordRequestResponse>>(
         ApiPathEnum.LandlordRequest,
         {
           params: {
-            createdBy: auth.user._id,
+            createdBy: auth.auth.user._id,
             pageSize: paginationModel.pageSize,
             current: paginationModel.page + 1,
           },

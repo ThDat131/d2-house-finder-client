@@ -49,7 +49,7 @@ export const Header = (): JSX.Element => {
   const [showNotification, setShowNotification] = useState<boolean>(false)
   const [notification, setNotification] = useState<Notification[]>([])
   const categoryState = useAppSelector((state: RootState) => state.category)
-  const currentUser = useAppSelector((state: RootState) => state.auth.user)
+  const currentUser = useAppSelector((state: RootState) => state.auth.auth.user)
 
   const handleSignout = () => {
     dispatch(signout())

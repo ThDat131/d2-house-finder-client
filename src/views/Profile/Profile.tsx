@@ -20,7 +20,7 @@ import { FollowEntity } from '../../model/follow/follow-entity'
 
 export const Profile = () => {
   const { t } = useTranslation()
-  const { httpService, authHttpService } = new HttpService()
+  const { httpService } = new HttpService()
   const [user, setUser] = useState<User>()
   const [articles, setArticles] = useState<Article[]>([])
   const { id } = useParams()
@@ -43,12 +43,14 @@ export const Profile = () => {
   }
 
   const handleFollow = () => {
-    if (user?._id === authState.user._id) {
+    if (user?._id === authState.auth.user._id) {
       toast.warning(t('profile.canNotFollowYourSelf'))
       return
     }
 
-    const isFollow = authState.user.followings?.some(x => x._id === user?._id)
+    const isFollow = authState.auth.user.followings?.some(
+      x => x._id === user?._id,
+    )
 
     if (isFollow) {
       unFollow()
@@ -60,7 +62,7 @@ export const Profile = () => {
   const follow = () => {
     setFollowLoading(true)
 
-    authHttpService
+    httpService
       .post(ApiPathEnum.Follow, {
         follower_id: user?._id,
       })
@@ -74,9 +76,9 @@ export const Profile = () => {
         )
 
         addFollowForUser({
-          _id: authState.user._id,
-          fullName: authState.user.fullName,
-          avatar: authState.user.avatar,
+          _id: authState.auth.user._id,
+          fullName: authState.auth.user.fullName,
+          avatar: authState.auth.user.avatar,
         })
       })
       .finally(() => {
@@ -87,7 +89,7 @@ export const Profile = () => {
   const unFollow = () => {
     setFollowLoading(true)
 
-    authHttpService
+    httpService
       .put(ApiPathEnum.UnFollow, {
         follower_id: user?._id,
       })
@@ -101,9 +103,9 @@ export const Profile = () => {
         )
 
         removeFollowForUser({
-          _id: authState.user._id,
-          fullName: authState.user.fullName,
-          avatar: authState.user.avatar,
+          _id: authState.auth.user._id,
+          fullName: authState.auth.user.fullName,
+          avatar: authState.auth.user.avatar,
         })
       })
       .finally(() => {
@@ -232,7 +234,7 @@ export const Profile = () => {
                   onClick={handleFollow}
                   loading={followLoading}
                 >
-                  {user?.followers?.find(x => authState.user._id === x._id)
+                  {user?.followers?.find(x => authState.auth.user._id === x._id)
                     ? t('profile.unFollow')
                     : t('profile.follow')}
                 </LoadingButton>

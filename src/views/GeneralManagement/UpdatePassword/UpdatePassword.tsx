@@ -15,7 +15,7 @@ import { RootState } from '../../../app/store'
 
 const UpdatePassword = (): JSX.Element => {
   const { t } = useTranslation()
-  const auth = useAppSelector((state: RootState) => state.auth.user)
+  const auth = useAppSelector((state: RootState) => state.auth.auth.user)
 
   const initialValues = {
     oldPassword: '',

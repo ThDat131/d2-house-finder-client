@@ -62,7 +62,7 @@ interface ImageType {
 }
 
 const CreateArticle = () => {
-  const { authHttpService, httpGoongService } = new HttpService()
+  const { httpService, httpGoongService } = new HttpService()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -200,7 +200,7 @@ const CreateArticle = () => {
         const formData = new FormData()
         formData.append('file', file)
 
-        authHttpService
+        httpService
           .post<CommonResponse<any>>(ApiPathEnum.UploadSingleFile, formData)
           .then(res => {
             if (res.status === 201) {
@@ -285,22 +285,22 @@ const CreateArticle = () => {
     dispatch(createArticle(formik.values))
       .unwrap()
       .then(res => {
-        authState.user.followers?.forEach(x => {
+        authState.auth.user.followers?.forEach(x => {
           const notification: Notification = {
             id: uuidv4(),
             actionUrl: `bai-dang/${res?.data._id}`,
             content: t(
               'generalManagement.createNewArticle.userHaveCreateNewArticle',
               {
-                user: authState.user.fullName,
+                user: authState.auth.user.fullName,
               },
             ),
             createdAt: moment(new Date()).format('DD/MM/YYYY h:mm:ss'),
             isRead: false,
             sendFrom: {
-              _id: authState.user._id,
-              avatar: authState.user.avatar,
-              fullName: authState.user.fullName,
+              _id: authState.auth.user._id,
+              avatar: authState.auth.user.avatar,
+              fullName: authState.auth.user.fullName,
             },
             sendTo: x._id,
             type: NotificationTypeEnum.NEW_POST,

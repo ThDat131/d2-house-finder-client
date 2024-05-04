@@ -28,13 +28,13 @@ const initialState: UserStateProps = {
   loading: false,
   error: '',
 }
-const { authHttpService } = new HttpService()
+const { httpService } = new HttpService()
 
 export const getUsers = createAsyncThunk(
   'user/getUsers',
   async (data: Meta, thunkAPI) => {
     try {
-      const response = await authHttpService.get<GetUsersResponse>(
+      const response = await httpService.get<GetUsersResponse>(
         ApiPathEnum.Users,
         {
           params: {
@@ -58,7 +58,7 @@ export const createUser = createAsyncThunk(
   'user/createUser',
   async (user: User, thunkAPI) => {
     try {
-      const response = await authHttpService.post<GetUsersResponse>(
+      const response = await httpService.post<GetUsersResponse>(
         ApiPathEnum.Users,
         user,
         {
@@ -77,7 +77,7 @@ export const deleteUser = createAsyncThunk(
   'user/deleteUser',
   async (user: User, thunkAPI) => {
     try {
-      const response = await authHttpService.delete(
+      const response = await httpService.delete(
         `${ApiPathEnum.Users}/${user._id}`,
         {
           signal: thunkAPI.signal,

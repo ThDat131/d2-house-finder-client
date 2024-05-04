@@ -32,7 +32,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { authHttpService } = new HttpService()
+  const { httpService } = new HttpService()
   const [avatar, setAvatar] = useState({
     blob: '',
     url: '',
@@ -90,7 +90,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
   }
 
   const handleCreateUser = () => {
-    authHttpService
+    httpService
       .post(ApiPathEnum.Users, formik.values)
       .then(res => {
         if (res.status === 201) {
@@ -106,7 +106,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
   }
 
   const handleUpdateUser = () => {
-    authHttpService
+    httpService
       .patch(ApiPathEnum.Users, formik.values)
       .then(res => {
         if (res.status === 200) {
@@ -137,7 +137,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
         setAvatar(prev => ({ ...prev, blob: blobUrl }))
         formData.append('file', file)
 
-        authHttpService
+        httpService
           .post<CommonResponse<any>>(ApiPathEnum.UploadSingleFile, formData)
           .then(res => {
             if (res.status === 201) {
