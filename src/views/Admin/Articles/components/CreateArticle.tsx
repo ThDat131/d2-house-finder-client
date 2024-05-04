@@ -92,7 +92,7 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
     title: type === ActionType.CREATE ? '' : article?.title ?? '',
     description: type === ActionType.CREATE ? '' : article?.description ?? '',
     categoryId:
-      type === ActionType.CREATE ? '' : (article?.categoryId as string) ?? '',
+      type === ActionType.CREATE ? '' : article?.categoryId?._id ?? '',
     price: type === ActionType.CREATE ? 0 : article?.price ?? 0,
     acreage: type === ActionType.CREATE ? 0 : article?.acreage ?? 0,
     streetAddress:

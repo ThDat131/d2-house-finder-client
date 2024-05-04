@@ -59,6 +59,7 @@ const Users = () => {
     {
       field: 'role',
       headerName: t('admin.user.role'),
+      valueFormatter: params => params.value.name,
       flex: 1,
     },
     {
