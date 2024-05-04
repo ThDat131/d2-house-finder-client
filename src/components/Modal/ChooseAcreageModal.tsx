@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Slider,
+  Stack,
   Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -32,6 +34,14 @@ const ChooseAcreageModal: React.FC<ChooseAcreageModalProps> = ({
   const handleChangeAcreage = (event: Event, newValue: number | number[]) => {
     setAcreage(newValue as number[])
   }
+
+  const isSelected = (value: number[]) => {
+    return value[0] === acreage[0] && value[1] === acreage[1]
+  }
+
+  useEffect(() => {
+    setAcreage(acreageFilter)
+  }, [acreageFilter])
 
   return (
     <Dialog
@@ -66,6 +76,76 @@ const ChooseAcreageModal: React.FC<ChooseAcreageModalProps> = ({
           max={90}
           min={0}
         />
+        <Stack
+          direction={'row'}
+          spacing={2}
+          flexWrap={'wrap'}
+          useFlexGap
+          mt={2}
+        >
+          <Chip
+            color="primary"
+            variant={isSelected([0, 20]) ? 'filled' : 'outlined'}
+            label={`${t('acreageFilter.underAcreage', { acreage: 20 })}m²`}
+            onClick={() => {
+              setAcreage([0, 20])
+            }}
+          />
+          <Chip
+            color="primary"
+            variant={isSelected([20, 30]) ? 'filled' : 'outlined'}
+            label={`${t('acreageFilter.fromAcreageToAcreage', {
+              from: 20,
+              to: 30,
+            })}m²`}
+            onClick={() => {
+              setAcreage([20, 30])
+            }}
+          />
+          <Chip
+            color="primary"
+            variant={isSelected([30, 50]) ? 'filled' : 'outlined'}
+            label={`${t('acreageFilter.fromAcreageToAcreage', {
+              from: 30,
+              to: 50,
+            })}m²`}
+            onClick={() => {
+              setAcreage([30, 50])
+            }}
+          />
+          <Chip
+            color="primary"
+            variant={isSelected([50, 70]) ? 'filled' : 'outlined'}
+            label={`${t('acreageFilter.fromAcreageToAcreage', {
+              from: 50,
+              to: 70,
+            })}m²`}
+            onClick={() => {
+              setAcreage([50, 70])
+            }}
+          />
+          <Chip
+            color="primary"
+            variant={isSelected([70, 90]) ? 'filled' : 'outlined'}
+            label={`${t('acreageFilter.fromAcreageToAcreage', {
+              from: 70,
+              to: 90,
+            })}m²`}
+            onClick={() => {
+              setAcreage([70, 90])
+            }}
+          />
+          <Chip
+            color="primary"
+            variant={isSelected([90, 0]) ? 'filled' : 'outlined'}
+            label={`${t('acreageFilter.overAcreage', {
+              acreage: 90,
+            })}m²`}
+            onClick={() => {
+              setAcreage([90, 0])
+            }}
+          />
+        </Stack>
       </DialogContent>
       <DialogActions>
         <Button
