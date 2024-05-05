@@ -214,7 +214,8 @@
     "confirm": "Áp dụng"
   },
   "chooseCategoryModal": {
-    "chooseCategory": "Chọn loại bất động sản"
+    "chooseCategory": "Chọn loại bất động sản",
+    "selectedAll": "Chọn tất cả"
   },
   "chooseAcreageModal": {
     "chooseAcreage": "Chọn diện tích bất động sản",
@@ -335,7 +336,7 @@
   },
   "header": {
     "all": "Toàn quốc",
-    "category": "--Danh mục--",
+    "category": "Danh mục",
     "chooseAcreage": "Chọn diện tích",
     "choosePrice": "Chọn giá",
     "hello": "Xin chào, {{name}}!",
