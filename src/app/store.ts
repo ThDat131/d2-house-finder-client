@@ -28,11 +28,12 @@ const persistConfig = {
 }
 
 const authPersistedReducer = persistReducer(persistConfig, authReducer)
+const categoryPersistedReducer = persistReducer(persistConfig, categoryReducer)
 
 export const store = configureStore({
   reducer: {
     article: articleReducer,
-    category: categoryReducer,
+    category: categoryPersistedReducer,
     provinces: provinceReducer,
     districts: districtReducer,
     wards: wardReducer,

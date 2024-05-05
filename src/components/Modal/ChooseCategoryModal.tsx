@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { type RootState } from '../../app/store'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAppDispatch } from '../../app/hooks'
 import { selectCategory } from '../../app/slice/category.slice'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +26,9 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
 }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const categories = useSelector((state: RootState) => state.category.category)
+  const categoryState = useSelector((state: RootState) => state.category)
+
+  useEffect(() => {}, [categoryState])
 
   return (
     <Dialog
@@ -49,12 +51,19 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
       </DialogTitle>
       <DialogContent>
         <FormControl fullWidth>
-          <RadioGroup
-            defaultValue={
-              categories?.[0] !== undefined ? categories[0].name : ''
-            }
-          >
-            {categories.map(c => (
+          <RadioGroup value={categoryState.selected?.name}>
+            <Box sx={{ borderBottom: 1, borderColor: 'grey.500', py: 1 }}>
+              <FormControlLabel
+                onClick={() => {
+                  setOpen(false)
+                  dispatch(selectCategory(null))
+                }}
+                control={<Radio />}
+                label={t('chooseCategoryModal.selectedAll')}
+                sx={{ width: 1 }}
+              />
+            </Box>
+            {categoryState.category.map(c => (
               <Box
                 key={c._id}
                 sx={{ borderBottom: 1, borderColor: 'grey.500', py: 1 }}

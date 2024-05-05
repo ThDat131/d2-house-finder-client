@@ -17,6 +17,8 @@ import {
   IconButton,
   ListItem,
   Avatar,
+  FormControl,
+  InputLabel,
 } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { signout } from '../app/slice/auth.slice'
@@ -95,6 +97,11 @@ export const Header = (): JSX.Element => {
       ),
     )
 
+    if (value === undefined) {
+      navigate('/')
+      return
+    }
+
     const filterString = `?categoryId=${value}`
     handleClearFilter({ category: false })
     dispatch(setFilterQuery(filterString))
@@ -159,34 +166,53 @@ export const Header = (): JSX.Element => {
               sx={{ color: '#fff' }}
             />
           </Tabs>
-          <Select
-            disableUnderline={true}
-            variant="standard"
-            value={categoryState.selected?._id}
-            sx={{
-              color: '#fff',
-              '.MuiSvgIcon-root ': {
-                fill: '#fff',
-              },
-            }}
-            onChange={evt => {
-              if (evt.target.value === undefined) return
-
-              handleChangeCategory(evt)
-            }}
-            displayEmpty
-          >
-            <MenuItem value={undefined}>
-              <em>{t('header.category')}</em>
-            </MenuItem>
-            {Array.isArray(categoryState.category) &&
-              categoryState.category.map(c => (
-                <MenuItem key={c._id} value={c._id}>
-                  {c.name}
-                </MenuItem>
-              ))}
-          </Select>
-
+          <FormControl>
+            <InputLabel
+              shrink={false}
+              id="category-select"
+              style={{ color: '#fff', textTransform: 'uppercase' }}
+            >
+              {!categoryState.selected?._id && t('header.category')}
+            </InputLabel>
+            <Select
+              labelId="category-select"
+              disableUnderline={true}
+              value={categoryState.selected?._id}
+              sx={{
+                color: '#fff',
+                '.MuiSvgIcon-root ': {
+                  fill: '#fff',
+                },
+                minWidth: 130,
+                '.MuiOutlinedInput-notchedOutline': { borderStyle: 'none' },
+                textTransform: 'uppercase',
+              }}
+              onChange={evt => {
+                handleChangeCategory(evt)
+              }}
+            >
+              <MenuItem
+                value={undefined}
+                sx={{
+                  textTransform: 'uppercase',
+                }}
+              >
+                <em>--{t('header.category')}--</em>
+              </MenuItem>
+              {Array.isArray(categoryState.category) &&
+                categoryState.category.map(c => (
+                  <MenuItem
+                    key={c._id}
+                    value={c._id}
+                    sx={{
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {c.name}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
           {currentUser?._id !== '' ? (
             <Box sx={{ marginLeft: 'auto' }}>
               <Stack
