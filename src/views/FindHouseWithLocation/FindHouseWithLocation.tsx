@@ -18,6 +18,7 @@ import UserLayout from '../../components/Layout/UserLayout'
 import { CommonResponse } from '../../model/common/common-response'
 import { Article } from '../../model/article/article'
 import { FlyToInterpolator } from '@goongmaps/goong-map-react'
+import { useTranslation } from 'react-i18next'
 
 interface MainTextMatchedSubstrings {
   offset: number
@@ -37,6 +38,7 @@ interface PlaceType {
 }
 
 const FindHouseWithLocation = () => {
+  const { t } = useTranslation()
   const { httpGoongService, httpService } = new HttpService()
   const [search, setSearch] = useState<string>('')
   const [addresses, setAddresses] = useState<any[]>([])
@@ -143,7 +145,7 @@ const FindHouseWithLocation = () => {
                 return (
                   <TextField
                     {...params}
-                    label="Nhập địa điểm"
+                    label={t('findHouseWithLocation.enterYourLocation')}
                     fullWidth
                     variant="filled"
                   />

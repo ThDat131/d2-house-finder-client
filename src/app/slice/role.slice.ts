@@ -16,6 +16,7 @@ interface RoleStateProps {
 
 interface Meta {
   current: number
+  pageSize?: number
 }
 
 const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
@@ -39,7 +40,7 @@ export const getRoles = createAsyncThunk(
         {
           params: {
             current: data.current,
-            pageSize: PAGE_SIZE,
+            pageSize: data.pageSize ?? PAGE_SIZE,
           },
           signal: thunkAPI.signal,
         },

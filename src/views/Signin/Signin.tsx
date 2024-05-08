@@ -64,10 +64,10 @@ const Signin = (): JSX.Element => {
       .unwrap()
       .then(res => {
         setLoading(false)
-        navigate('/')
+        res.data.user.role.name === 'ADMIN' ? navigate('/admin') : navigate('/')
       })
       .catch(res => {
-        if (res.response.status === 403) {
+        if (res?.response?.status === 403) {
           toast.warn(t('signin.accountInactive'))
 
           localStorage.setItem('verify', res.config.data)

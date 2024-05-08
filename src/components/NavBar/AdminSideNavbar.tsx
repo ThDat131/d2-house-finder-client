@@ -2,16 +2,19 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Avatar,
   Drawer,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Stack,
+  Switch,
   Typography,
+  styled,
 } from '@mui/material'
-import { type CSSProperties, useState } from 'react'
-import LegendToggleIcon from '@mui/icons-material/LegendToggle'
+import { type CSSProperties, useState, useEffect } from 'react'
 import InsightsIcon from '@mui/icons-material/Insights'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import FeedIcon from '@mui/icons-material/Feed'
@@ -25,28 +28,39 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import VpnKeyIcon from '@mui/icons-material/VpnKey'
 import PeopleIcon from '@mui/icons-material/People'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { RootState } from '../../app/store'
+import LogoutIcon from '@mui/icons-material/Logout'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import { signout } from '../../app/slice/auth.slice'
 
 const AdminSideNavBar = (): JSX.Element => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const dispatch = useAppDispatch()
+
   const [selectedIndex, setSelectedIndex] = useState(1)
   const [selectedChildUrl, setSelectedChildUrl] = useState<string>('')
   const [open, setOpen] = useState<boolean>(true)
   const [expanded, setExpanded] = useState(-1)
+  const [language, setLanguage] = useState<string>(
+    localStorage.getItem('lang') ?? '',
+  )
 
+  const user = useAppSelector((state: RootState) => state.auth.auth.user)
   const navigate = useNavigate()
   const overviewData = [
     {
       id: 1,
-      title: t('admin.sideNav.application'),
-      icon: <LegendToggleIcon />,
-      url: '/admin',
-    },
-    {
-      id: 2,
       title: t('admin.sideNav.statistic'),
       icon: <InsightsIcon />,
-      url: '/admin/statistic',
+      url: '/admin',
     },
+    // {
+    //   id: 2,
+    //   title: t('admin.sideNav.statistic'),
+    //   icon: <InsightsIcon />,
+    //   url: '/admin/statistic',
+    // },
   ]
   const managementData = [
     {
@@ -155,6 +169,52 @@ const AdminSideNavBar = (): JSX.Element => {
       setOpen(state)
     }
 
+  const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+    width: 62,
+    height: 34,
+    padding: 7,
+    '& .MuiSwitch-switchBase': {
+      margin: 1,
+      padding: 0,
+      transform: 'translateX(6px)',
+      '&.Mui-checked': {
+        color: '#fff',
+        transform: 'translateX(22px)',
+        '& .MuiSwitch-thumb:before': {
+          backgroundImage:
+            'url("https://cdn-icons-png.flaticon.com/512/14539/14539032.png")',
+          backgroundSize: '30px 30px',
+        },
+        '& + .MuiSwitch-track': {
+          opacity: 1,
+          backgroundColor: '#aab4be',
+        },
+      },
+    },
+    '& .MuiSwitch-thumb': {
+      width: 32,
+      height: 32,
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        left: 0,
+        top: 0,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundImage:
+          'url("https://cdn-icons-png.flaticon.com/512/197/197473.png")',
+        backgroundSize: '30px 30px',
+      },
+    },
+    '& .MuiSwitch-track': {
+      opacity: 1,
+      backgroundColor: '#aab4be',
+      borderRadius: 20 / 2,
+    },
+  }))
+
   return (
     <Drawer
       anchor="left"
@@ -163,6 +223,33 @@ const AdminSideNavBar = (): JSX.Element => {
       open={open}
       PaperProps={{ sx: { minWidth: 200, position: 'absolute', right: 0 } }}
     >
+      <Stack
+        p={2}
+        direction={'row'}
+        gap={1}
+        mb={2}
+        alignItems={'center'}
+        justifyContent={'center'}
+      >
+        <Avatar src={user.avatar} sx={{ boxShadow: 1 }} />
+        <Stack spacing={1}>
+          <Typography fontWeight={'bold'}>{user.fullName}</Typography>
+        </Stack>
+        <MaterialUISwitch
+          checked={language === 'en'}
+          onChange={(evt, value) => {
+            if (language === 'en') {
+              i18n.changeLanguage('vn')
+              setLanguage('vn')
+              localStorage.setItem('lang', 'vn')
+            } else {
+              i18n.changeLanguage('en')
+              setLanguage('en')
+              localStorage.setItem('lang', 'en')
+            }
+          }}
+        />
+      </Stack>
       <Accordion
         disableGutters
         defaultExpanded
@@ -315,6 +402,42 @@ const AdminSideNavBar = (): JSX.Element => {
                 </ListItemButton>
               </ListItem>
             ))}
+          </List>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion disableGutters defaultExpanded elevation={0}>
+        <AccordionSummary>
+          <Typography style={headingStyle} variant={'h4'}>
+            {t('admin.sideNav.action')}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <List sx={listStyle}>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  navigate('/')
+                }}
+              >
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>
+                <ListItemText primary={t('admin.sideNav.goToMain')} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  dispatch(signout())
+                  navigate('/dang-nhap')
+                }}
+              >
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary={t('admin.sideNav.signOut')} />
+              </ListItemButton>
+            </ListItem>
           </List>
         </AccordionDetails>
       </Accordion>

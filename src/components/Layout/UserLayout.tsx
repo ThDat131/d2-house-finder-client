@@ -30,6 +30,7 @@ export const UserLayout: React.FC<Props> = ({
   const navigate = useNavigate()
 
   useEffect(() => {
+    localStorage.setItem('lang', 'vn')
     const fetchData = async () => {
       let categoryPromise
       let currentUserPromise

@@ -36,3 +36,22 @@ export const getProvinceAndDistrict = (data: Article): string => {
   if (data.address.provinceName) return data.address.provinceName
   return ''
 }
+
+export function getRandomColor() {
+  const r = Math.floor(Math.random() * 256)
+  const g = Math.floor(Math.random() * 256)
+  const b = Math.floor(Math.random() * 256)
+
+  const color = 'rgb(' + r + ', ' + g + ', ' + b + ')'
+  return color
+}
+
+export function createRandomColorArray(n: number) {
+  const colorArray = []
+
+  for (let i = 0; i < n; i++) {
+    colorArray.push(getRandomColor())
+  }
+
+  return colorArray
+}

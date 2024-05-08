@@ -55,6 +55,8 @@ export const signinAPI = createAsyncThunk(
         },
       )
 
+      if (response.status === 401) throw new Error(response.data.message)
+
       return response.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error)

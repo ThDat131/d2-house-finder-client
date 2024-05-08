@@ -128,7 +128,7 @@ const router = createBrowserRouter([
       },
       {
         path: '',
-        element: <AdminApplicationView />,
+        element: <AdminAnalyticsView />,
       },
       {
         path: 'article',
