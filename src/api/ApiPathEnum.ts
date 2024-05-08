@@ -22,6 +22,7 @@ export const ApiPathEnum = {
   UnFollow: `${prefix}${version}/unFollow`,
   Permission: `${prefix}${version}/permissions`,
   Role: `${prefix}${version}/roles`,
+  Statistical: `${prefix}${version}/statistical`,
   // GoongMap
   AutoComplete: 'Place/AutoComplete',
   Detail: 'Place/Detail',

@@ -1,5 +1,13 @@
 {
   "admin": {
+    "analytic": {
+      "totalArticles": "Tổng số bài đăng",
+      "totalLandlordRequest": "Tổng số yêu cầu nâng cấp chủ trọ",
+      "totalUsers": "Tổng số người dùng",
+      "totalVerification": "Tổng số yêu cầu xác thực bài đăng",
+      "userStatistic": "Thống kê người dùng",
+      "articleStatistic": "Thống kê bài viết"
+    },
     "article": {
       "acreage": "Diện tích",
       "action": "Thao tác",
@@ -158,8 +166,10 @@
     },
     "sideNav": {
       "application": "Ứng dụng",
+      "action": "Thao tác",
       "category": "Danh mục",
       "create": "Tạo mới",
+      "goToMain": "Về trang chủ",
       "landlordRequest": "Yêu cầu nâng cấp chủ trọ",
       "list": "Danh sách",
       "manage": "Quản lý",
@@ -168,6 +178,7 @@
       "post": "Bài đăng",
       "requests": "Yêu cầu",
       "role": "Vai trò",
+      "signOut": "Đăng xuất",
       "statistic": "Thống kê",
       "user": "Người dùng"
     }
@@ -224,6 +235,9 @@
   "confirmDialog": {
     "ok": "Đồng ý",
     "cancel": "Hủy bỏ"
+  },
+  "findHouseWithLocation": {
+    "enterYourLocation": "Nhập địa điểm của bạn"
   },
   "generalManagement": {
     "createNewArticle": {

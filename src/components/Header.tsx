@@ -19,6 +19,8 @@ import {
   Avatar,
   FormControl,
   InputLabel,
+  styled,
+  Switch,
 } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { signout } from '../app/slice/auth.slice'
@@ -45,11 +47,14 @@ import moment from 'moment'
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const [showUserOpts, setShowUserOpts] = useState<boolean>(false)
   const [showNotification, setShowNotification] = useState<boolean>(false)
   const [notification, setNotification] = useState<Notification[]>([])
+  const [language, setLanguage] = useState<string>(
+    localStorage.getItem('lang') ?? '',
+  )
   const categoryState = useAppSelector((state: RootState) => state.category)
   const currentUser = useAppSelector((state: RootState) => state.auth.auth.user)
 
@@ -136,6 +141,52 @@ export const Header = (): JSX.Element => {
     }
   }
 
+  const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+    width: 62,
+    height: 34,
+    padding: 7,
+    '& .MuiSwitch-switchBase': {
+      margin: 1,
+      padding: 0,
+      transform: 'translateX(6px)',
+      '&.Mui-checked': {
+        color: '#fff',
+        transform: 'translateX(22px)',
+        '& .MuiSwitch-thumb:before': {
+          backgroundImage:
+            'url("https://cdn-icons-png.flaticon.com/512/14539/14539032.png")',
+          backgroundSize: '30px 30px',
+        },
+        '& + .MuiSwitch-track': {
+          opacity: 1,
+          backgroundColor: '#aab4be',
+        },
+      },
+    },
+    '& .MuiSwitch-thumb': {
+      width: 32,
+      height: 32,
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        left: 0,
+        top: 0,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundImage:
+          'url("https://cdn-icons-png.flaticon.com/512/197/197473.png")',
+        backgroundSize: '30px 30px',
+      },
+    },
+    '& .MuiSwitch-track': {
+      opacity: 1,
+      backgroundColor: '#aab4be',
+      borderRadius: 20 / 2,
+    },
+  }))
+
   return (
     <AppBar position="sticky">
       <Container>
@@ -165,6 +216,15 @@ export const Header = (): JSX.Element => {
               value={'smartSearch'}
               sx={{ color: '#fff' }}
             />
+            {currentUser.role.name === 'ADMIN' && (
+              <Tab
+                component={Link}
+                to={'/admin'}
+                label={'ADMIN'}
+                value={'admin'}
+                sx={{ color: '#fff' }}
+              />
+            )}
           </Tabs>
           <FormControl>
             <InputLabel
@@ -352,6 +412,22 @@ export const Header = (): JSX.Element => {
               </Button>
             </Box>
           )}
+          <Box>
+            <MaterialUISwitch
+              checked={language === 'en'}
+              onChange={(evt, value) => {
+                if (language === 'en') {
+                  i18n.changeLanguage('vn')
+                  setLanguage('vn')
+                  localStorage.setItem('lang', 'vn')
+                } else {
+                  i18n.changeLanguage('en')
+                  setLanguage('en')
+                  localStorage.setItem('lang', 'en')
+                }
+              }}
+            />
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

@@ -2,9 +2,14 @@ import {
   Box,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
   Grid,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   TextField,
   Typography,
 } from '@mui/material'
@@ -22,6 +27,9 @@ import { EmailRegex, PhoneRegex } from '../../../../common/common-regex'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ActionType } from '../../../../common/common-enum'
 import { User } from '../../../../model/user/user'
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks'
+import { RootState } from '../../../../app/store'
+import { getRoles } from '../../../../app/slice/role.slice'
 
 interface CreateUserProps {
   type: ActionType
@@ -31,6 +39,8 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useAppDispatch()
+  const roleState = useAppSelector((state: RootState) => state.role)
 
   const { httpService } = new HttpService()
   const [avatar, setAvatar] = useState({
@@ -156,6 +166,8 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
     if (type === ActionType.UPDATE) {
       setUser(location.state)
     }
+
+    dispatch(getRoles({ current: 1, pageSize: 999 }))
   }, [])
 
   return (
@@ -305,16 +317,29 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
                 </Grid>
               )}
               <Grid item xs={6}>
-                <TextField
-                  autoComplete="false"
-                  id="role"
-                  name="role"
-                  value={formik.values.role}
-                  onChange={formik.handleChange}
-                  error={formik.touched.role && Boolean(formik.errors.role)}
-                  helperText={formik.touched.role && formik.errors.role}
-                  label={t('admin.user.role')}
-                />
+                <FormControl fullWidth>
+                  <InputLabel id="select-role">
+                    {t('admin.user.role')}
+                  </InputLabel>
+                  <Select
+                    labelId="select-role"
+                    fullWidth
+                    name="role"
+                    value={formik.values.role}
+                    onChange={formik.handleChange}
+                    error={formik.touched.role && Boolean(formik.errors.role)}
+                    label={t('admin.user.role')}
+                  >
+                    {roleState.roles.map(x => (
+                      <MenuItem key={x._id} value={x._id}>
+                        {x.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText error>
+                    {formik.touched.role && formik.errors.role}
+                  </FormHelperText>
+                </FormControl>
               </Grid>
               <Grid item xs={6} display={'flex'} alignItems={'center'}>
                 <FormControlLabel
