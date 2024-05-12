@@ -87,7 +87,7 @@ const Signin = (): JSX.Element => {
           res.data.user.role.name === 'ADMIN'
             ? navigate('/admin')
             : navigate('/')
-          localStorage.set('access_token', res.data.access_token)
+          localStorage.setItem('access_token', res.data.access_token)
         } else {
           setError(res.message)
         }

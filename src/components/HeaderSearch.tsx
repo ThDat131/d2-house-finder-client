@@ -132,7 +132,9 @@ const HeaderSearch = () => {
   }
 
   const handleShowSelectedCategory = (): string => {
-    return categorySelected ? categorySelected.name : t('header.category')
+    return categorySelected
+      ? categorySelected?.name ?? ''
+      : t('header.category')
   }
 
   const handleShowPriceFilter = (): string => {
