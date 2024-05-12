@@ -51,7 +51,7 @@ const DetailUpdateVerifyArticleRequest = () => {
   useEffect(() => {
     setLoading(true)
     httpService
-      .get(`${ApiPathEnum.Article}/${location.state.articleId}`)
+      .get(`${ApiPathEnum.Article}/${location.state.articleId._id}`)
       .then(res => {
         setArticle(res.data.data.article)
       })

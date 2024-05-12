@@ -46,8 +46,8 @@ export const getVerifyArticleRequests = createAsyncThunk(
       >(ApiPathEnum.VerifyArticle, {
         params: {
           current: data.current,
-          populate: 'createdBy',
-          fields: 'createdBy.fullName,createdBy.email',
+          populate: 'createdBy,articleId',
+          fields: 'createdBy.fullName,createdBy.email,articleId.title',
         },
         signal: thunkAPI.signal,
       })

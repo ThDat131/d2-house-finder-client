@@ -50,7 +50,7 @@ const UserChartCard = ({ loading, data }: { loading: boolean; data: any }) => {
   }, [data])
 
   return (
-    <Card>
+    <Card sx={{ height: 1 }}>
       <CardHeader title={t('admin.analytic.userStatistic')} />
       <CardContent>
         <Stack alignItems={'center'} height={300}>

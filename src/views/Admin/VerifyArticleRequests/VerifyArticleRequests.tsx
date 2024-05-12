@@ -51,6 +51,12 @@ const VerifyArticleRequest = () => {
       flex: 1,
     },
     {
+      field: 'articleId.title',
+      headerName: t('generalManagement.verifyArticle.articleTitle'),
+      renderCell: params => params.row.articleId?.title ?? '',
+      flex: 1,
+    },
+    {
       field: 'status',
       headerName: t('generalManagement.upgradeLandlord.status'),
       renderCell: params => {
