@@ -34,10 +34,12 @@ const Signin = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const { t } = useTranslation()
-  const currentUser = useAppSelector((state: RootState) => state.auth.auth.user)
+  const currentUser = useAppSelector(
+    (state: RootState) => state?.auth?.auth?.user,
+  )
 
   useEffect(() => {
-    if (currentUser._id !== '') {
+    if (currentUser && currentUser._id !== '') {
       navigate('/')
     } else {
       dispatch(getCurrentUser())
@@ -63,23 +65,32 @@ const Signin = (): JSX.Element => {
     dispatch(signinAPI(formik.values))
       .unwrap()
       .then(res => {
-        setLoading(false)
-        res.data.user.role.name === 'ADMIN' ? navigate('/admin') : navigate('/')
-      })
-      .catch(res => {
-        if (res?.response?.status === 403) {
+        if (res === null) {
           toast.warn(t('signin.accountInactive'))
 
-          localStorage.setItem('verify', res.config.data)
+          localStorage.setItem(
+            'verify',
+            JSON.stringify({
+              email: formik.values.email,
+            }),
+          )
 
           httpService.post(ApiPathEnum.SendCode, {
             email: formik.values.email,
           })
 
           navigate('/xac-nhan')
+          return
         }
-        setError(true)
         setLoading(false)
+        if (res?.statusCode === 200) {
+          res.data.user.role.name === 'ADMIN'
+            ? navigate('/admin')
+            : navigate('/')
+          localStorage.set('access_token', res.data.access_token)
+        } else {
+          setError(res.message)
+        }
       })
   }
 

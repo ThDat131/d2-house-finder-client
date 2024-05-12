@@ -9,3 +9,5 @@ export { default as AdminArticleCreateView } from './Articles/components/CreateA
 export { default as AdminLandlordRequestsView } from './LandlordRequests/LandlordRequests'
 export { default as AdminPermissionView } from './Permissions/Permission'
 export { default as AdminRoleView } from './Roles/Roles'
+export { default as AdminVerifyArticleRequestsView } from './VerifyArticleRequests/VerifyArticleRequests'
+export { default as AdminDetailUpdateVerifyArticleRequestView } from './VerifyArticleRequests/components/DetailUpdateVerifyArticleRequest'

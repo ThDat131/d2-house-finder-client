@@ -12,3 +12,5 @@ export { default as UpdatePassword } from './GeneralManagement/UpdatePassword/Up
 export { default as ManageArticles } from './GeneralManagement/ManageArticle/ManageArticles'
 export { default as VerifyArticle } from './GeneralManagement/VerifyArticle/VerifyArticle'
 export { default as UpgradeLandlord } from './GeneralManagement/UpgradeLandlord/UpgradeLandlord'
+export { default as VerifyArticleRequests } from './GeneralManagement/VerifyArticleRequests/VerifyArticleRequests'
+export { default as DetailVerifyArticleRequest } from './GeneralManagement/VerifyArticleRequests/components/DetailVerifyArticleRequest'

@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Grid, Stack, Typography } from '@mui/material'
+import { Button, Chip, Grid, Stack, Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import { Link, useNavigate } from 'react-router-dom'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
@@ -9,8 +9,11 @@ import moment from 'moment'
 import { DEFAULT_FORMAT_DATE } from '../../../common/common-constant'
 import { ArticleStatus } from '../../../common/common-enum'
 import { useEffect, useState } from 'react'
-import { getArticles } from '../../../app/slice/article.slice.'
+import { deleteArticle, getArticles } from '../../../app/slice/article.slice.'
 import { Article } from '../../../model/article/article'
+import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
+import { toast } from 'react-toastify'
+import { VNDCurrencyFormat } from '../../../utils/utils'
 
 const Articles = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -23,6 +26,14 @@ const Articles = () => {
     page: 0,
     pageSize: PAGE_SIZE,
   })
+  const [openDelete, setOpenDelete] = useState<boolean>(false)
+  const [selectedArticle, setSelectedArticle] = useState<Article>()
+
+  const handleOpenDelete = (x: Article) => {
+    setSelectedArticle(x)
+    setOpenDelete(true)
+  }
+
   const columns: GridColDef[] = [
     {
       field: '_id',
@@ -42,23 +53,6 @@ const Articles = () => {
       flex: 1,
     },
     {
-      field: 'images',
-      headerName: t('admin.article.articleImage'),
-      flex: 1,
-      renderCell: params => {
-        return (
-          <Box width={100} margin={'right'}>
-            <Box
-              component={'img'}
-              src={params.value[0]}
-              width={1}
-              height={1}
-            ></Box>
-          </Box>
-        )
-      },
-    },
-    {
       field: 'title',
       headerName: t('admin.article.articleTitle'),
       flex: 1,
@@ -67,6 +61,7 @@ const Articles = () => {
       field: 'price',
       headerName: t('admin.article.articlePrice'),
       flex: 1,
+      valueFormatter: params => VNDCurrencyFormat.format(params.value),
     },
     {
       field: 'updatedAt',
@@ -102,7 +97,13 @@ const Articles = () => {
             >
               {t('admin.article.update')}
             </Button>
-            <Button variant="contained" color="error" onClick={() => {}}>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handleOpenDelete(params.row)
+              }}
+            >
               {t('admin.article.delete')}
             </Button>
           </Stack>
@@ -170,6 +171,26 @@ const Articles = () => {
           disableRowSelectionOnClick={true}
         />
       </Grid>
+      <ConfirmDialog
+        content={t('admin.article.areYouSureToDeleteThisArticle')}
+        open={openDelete}
+        title={t('admin.article.deleteArticle')}
+        isLoading={articleState.loading}
+        onCancel={() => {
+          setOpenDelete(false)
+        }}
+        onConfirm={() => {
+          dispatch(deleteArticle(selectedArticle?._id as string))
+            .unwrap()
+            .then(() => {
+              toast.success(t('admin.article.deleteArticleSuccessfully'))
+              setOpenDelete(false)
+            })
+            .catch(() => {
+              toast.error(t('admin.permission.errorHaveOccurPleaseTryAgain'))
+            })
+        }}
+      />
     </Grid>
   )
 }

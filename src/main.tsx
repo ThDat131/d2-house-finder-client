@@ -12,6 +12,7 @@ import {
   ArticleCategory,
   ArticleDetails,
   CreateArticle,
+  DetailVerifyArticleRequest,
   FindHouseWithLocation,
   GeneralManagement,
   ManageArticles,
@@ -20,13 +21,12 @@ import {
   UpdatePassword,
   UpgradeLandlord,
   Verify,
-  VerifyArticle,
+  VerifyArticleRequests,
 } from './views/index.view'
 import { ThemeProvider } from '@emotion/react'
 import theme from './theme'
 import {
   AdminAnalyticsView,
-  AdminApplicationView,
   AdminCategoryCreateView,
   AdminArticleView,
   AdminUserCreateView,
@@ -36,6 +36,8 @@ import {
   AdminLandlordRequestsView,
   AdminPermissionView,
   AdminRoleView,
+  AdminVerifyArticleRequestsView,
+  AdminDetailUpdateVerifyArticleRequestView,
 } from './views/Admin'
 import { CssBaseline } from '@mui/material'
 import { I18nextProvider } from 'react-i18next'
@@ -66,7 +68,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'dang-tin-moi',
-        element: <CreateArticle />,
+        element: <CreateArticle type={ActionType.CREATE} />,
+      },
+      {
+        path: 'cap-nhat-tin-dang/:id',
+        element: <CreateArticle type={ActionType.UPDATE} />,
       },
       {
         path: 'cap-nhat-thong-tin-ca-nhan',
@@ -81,12 +87,16 @@ const router = createBrowserRouter([
         element: <ManageArticles />,
       },
       {
-        path: 'yeu-cau-xac-thuc',
-        element: <VerifyArticle />,
-      },
-      {
         path: 'nang-cap-tai-khoan',
         element: <UpgradeLandlord />,
+      },
+      {
+        path: 'danh-sach-yeu-cau-xac-thuc',
+        element: <VerifyArticleRequests />,
+      },
+      {
+        path: 'yeu-cau-xac-thuc-tin-dang/:id',
+        element: <DetailVerifyArticleRequest />,
       },
     ],
   },
@@ -153,6 +163,14 @@ const router = createBrowserRouter([
       {
         path: 'role',
         element: <AdminRoleView />,
+      },
+      {
+        path: 'verify-article-requests',
+        element: <AdminVerifyArticleRequestsView />,
+      },
+      {
+        path: 'verify-article-requests/:id',
+        element: <AdminDetailUpdateVerifyArticleRequestView />,
       },
     ],
   },

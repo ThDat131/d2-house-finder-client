@@ -14,7 +14,7 @@ import {
   Typography,
   styled,
 } from '@mui/material'
-import { type CSSProperties, useState, useEffect } from 'react'
+import { type CSSProperties, useState } from 'react'
 import InsightsIcon from '@mui/icons-material/Insights'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import FeedIcon from '@mui/icons-material/Feed'
@@ -33,6 +33,7 @@ import { RootState } from '../../app/store'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import { signout } from '../../app/slice/auth.slice'
+import SecurityIcon from '@mui/icons-material/Security'
 
 const AdminSideNavBar = (): JSX.Element => {
   const { t, i18n } = useTranslation()
@@ -104,6 +105,12 @@ const AdminSideNavBar = (): JSX.Element => {
       title: t('admin.sideNav.landlordRequest'),
       icon: <AccountCircleIcon />,
       url: '/admin/landlord-requests',
+    },
+    {
+      id: 9,
+      title: t('admin.sideNav.verifyArticleRequest'),
+      icon: <SecurityIcon />,
+      url: '/admin/verify-article-requests',
     },
   ]
 

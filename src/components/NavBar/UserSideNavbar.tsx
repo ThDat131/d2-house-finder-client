@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Box,
   List,
   ListItemButton,
   ListItemText,
@@ -17,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
 import { useTranslation } from 'react-i18next'
+import SecurityIcon from '@mui/icons-material/Security'
 
 const UserSideNavbar = () => {
   const { t } = useTranslation()
@@ -108,6 +108,19 @@ const UserSideNavbar = () => {
         >
           <VerifiedUserIcon />
           <ListItemText>{t('userSideNav.upgradeLandlord')}</ListItemText>
+        </ListItemButton>
+        <ListItemButton
+          style={ListItemButtonStyle}
+          selected={selectedIndex === 6}
+          onClick={() => {
+            handleListItemClick(6)
+            navigate('/quan-ly/danh-sach-yeu-cau-xac-thuc')
+          }}
+        >
+          <SecurityIcon />
+          <ListItemText>
+            {t('userSideNav.listOfVerifyArticleRequest')}
+          </ListItemText>
         </ListItemButton>
         <ListItemButton
           style={ListItemButtonStyle}

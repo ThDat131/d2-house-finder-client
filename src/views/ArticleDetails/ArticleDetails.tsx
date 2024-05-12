@@ -16,7 +16,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type Article } from '../../model/article/article'
 import Loading from '../../components/Loading'
-import { Header } from '../../components/Header'
 import PhoneIcon from '@mui/icons-material/Phone'
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact'
 import { useTranslation } from 'react-i18next'
@@ -217,7 +216,10 @@ const ArticleDetails = (): JSX.Element => {
               <Box
                 height={400}
                 sx={{
-                  backgroundImage: `url(${article?.images[0]})`,
+                  backgroundImage: `url(${
+                    article?.images[0] ??
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6C7KefXhbUwl5NEW8iFCGfowi0GlBVYFDhjR06w7wcQ&s'
+                  })`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}

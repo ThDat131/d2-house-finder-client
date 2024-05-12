@@ -1,12 +1,16 @@
 {
   "admin": {
     "analytic": {
-      "totalArticles": "Tổng số bài đăng",
+      "totalArticles": "Tổng số Tin đăng",
       "totalLandlordRequest": "Tổng số yêu cầu nâng cấp chủ trọ",
       "totalUsers": "Tổng số người dùng",
-      "totalVerification": "Tổng số yêu cầu xác thực bài đăng",
+      "totalVerification": "Tổng số yêu cầu xác thực Tin đăng",
       "userStatistic": "Thống kê người dùng",
-      "articleStatistic": "Thống kê bài viết"
+      "articleStatistic": "Thống kê bài viết",
+      "day": "Ngày",
+      "month": "Tháng",
+      "year": "Năm",
+      "statistic": "Thống kê"
     },
     "article": {
       "acreage": "Diện tích",
@@ -14,6 +18,7 @@
       "addPicture": "Thêm ảnh tại đây",
       "addressForRent": "Địa chỉ cho thuê",
       "address": "Địa chỉ chính xác",
+      "areYouSureToDeleteThisArticle": "Bạn có chắc chắn muốn xoá bài viết này",
       "articleId": "Mã tin",
       "articleImage": "Ảnh tin",
       "articlePrice": "Giá",
@@ -25,6 +30,8 @@
       "createArticle": "Tạo tin đăng",
       "createSuccess": "Đăng tin thành công!",
       "create": "Tạo mới",
+      "deleteArticleSuccessfully": "Xoá tin đăng thành công",
+      "deleteArticle": "Xoá tin đăng",
       "delete": "Xóa",
       "description": "Thông tin mô tả",
       "district": "Quận/Huyện",
@@ -175,12 +182,28 @@
       "manage": "Quản lý",
       "overview": "Tổng quan",
       "permission": "Quyền hạn",
-      "post": "Bài đăng",
+      "post": "Tin đăng",
       "requests": "Yêu cầu",
       "role": "Vai trò",
       "signOut": "Đăng xuất",
       "statistic": "Thống kê",
-      "user": "Người dùng"
+      "user": "Người dùng",
+      "verifyArticleRequest": "Yêu cầu xác thực tin đăng"
+    },
+    "verifyArticleRequest": {
+      "listOfVerifyArticleRequest": "Danh sách yêu cầu xác thực tin đăng",
+      "updateRequestId": "Cập nhật yêu cầu {{id}}",
+      "status": "Trạng thái",
+      "approved": "Chấp thuận",
+      "rejected": "Từ chối",
+      "feedBack": "Phản hồi",
+      "cancel": "Hủy bỏ",
+      "updateSuccess": "Cập nhật thành yêu cầu thành công",
+      "update": "Cập nhật",
+      "detailOfVerifyArticleRequest": "Chi tiết yêu cầu xác thực tin đăng",
+      "contract": "Giấy tờ nhà",
+      "latedImage": "Ảnh nhà trọ hiện tại",
+      "video": "Video"
     }
   },
   "acreageFilter": {
@@ -190,7 +213,8 @@
     "underAcreage": "Dưới {{acreage}} "
   },
   "articleBox": {
-    "vndPerMonth": "{{price}}/tháng"
+    "vndPerMonth": "{{price}}/tháng",
+    "thisArticleIsVerifyByUs": "Tin đăng đã được xác thực bởi D2"
   },
   "articleDetails": {
     "address": "Địa chỉ",
@@ -282,8 +306,9 @@
       "articleTitle": "Tiêu đề",
       "articleUpdatedAt": "Ngày cập nhật",
       "manageArticles": "Quản lý tin đăng",
-      "verify": "Xác thực",
-      "unverify": "Chưa xác thực"
+      "unverify": "Chưa xác thực",
+      "verifyArticle": "Xác thực Tin đăng",
+      "verify": "Xác thực"
     },
     "updateInformation": {
       "avatar": "Ảnh đại diện",
@@ -342,10 +367,14 @@
     "verifyArticle": {
       "contract": "Giấy tờ nhà",
       "latedImage": "Ảnh nhà trọ hiện tại",
+      "listOfFile": "Danh sách file",
       "personalIdImage": "Ảnh Căn cước công dân",
       "requestVerify": "Yêu cầu xác thực",
+      "sendRequestSuccessfully": "Gửi yêu cầu thành công. Vui lòng đợi quản trị viên duyệt",
+      "submit": "Xác nhận",
       "upload": "Tải lên",
-      "video": "Video"
+      "video": "Video",
+      "articleTitle": "Tiêu đề tin đăng"
     }
   },
   "header": {
@@ -387,20 +416,21 @@
     "underMillion": "Dưới {{price}} triệu"
   },
   "profile": {
-    "article": "Bài đăng",
+    "article": "Tin đăng",
     "canNotFollowYourSelf": "Không thể theo dõi chính bạn",
     "followers": "Người theo dõi",
     "followings": "Đang theo dõi",
     "follow": "Theo dõi",
     "unFollow": "Hủy theo dõi",
-    "userArticles": "Các bài đăng"
+    "userArticles": "Các Tin đăng"
   },
   "userSideNav": {
     "newArticle": "Đăng tin mới",
     "manageArticles": "Quản lý tin đăng",
     "updatePersonalInformation": "Cập nhật thông tin cá nhân",
     "upgradeLandlord": "Nâng cấp tài khoản chủ trọ",
-    "returnToHome": "Trở về trang chủ"
+    "returnToHome": "Trở về trang chủ",
+    "listOfVerifyArticleRequest": "Danh sách yêu cầu xác thực tin đăng"
   },
   "signin": {
     "accountInactive": "Tài khoản chưa được kích hoạt, vui lòng kích hoạt",
@@ -430,6 +460,7 @@
     "passwordIsTooShort": "Mật khẩu quá ngắn",
     "passwordMustMatch": "Mật khẩu phải trùng khớp",
     "password": "Mật khẩu",
+    "phone": "Số điện thoại",
     "signup": "Đăng ký"
   },
   "verify": {

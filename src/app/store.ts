@@ -21,6 +21,7 @@ import {
 import storage from 'redux-persist/lib/storage'
 import permissionReducer from './slice/permission.slice'
 import roleReducer from './slice/role.slice'
+import verifyArticleRequestReducer from './slice/verify-article-requests.slice'
 
 const persistConfig = {
   key: 'root',
@@ -43,6 +44,7 @@ export const store = configureStore({
     landlordRequest: landlordRequestReducer,
     permission: permissionReducer,
     role: roleReducer,
+    verifyArticle: verifyArticleRequestReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
