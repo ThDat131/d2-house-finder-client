@@ -6,8 +6,6 @@ import {
 import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { type SigninModel } from '../../model/auth/signin-model'
-import { type CredentialUser } from '../../model/auth/current-user'
-import { type CommonResponse } from '../../model/common/common-response'
 import { type User } from '../../model/user/user'
 import { FollowEntity } from '../../model/follow/follow-entity'
 
@@ -47,15 +45,13 @@ export const signinAPI = createAsyncThunk(
     const { httpService } = new HttpService()
 
     try {
-      const response = await httpService.post<CommonResponse<CredentialUser>>(
-        ApiPathEnum.Signin,
-        user,
-        {
-          signal: thunkAPI.signal,
-        },
-      )
+      const response = await httpService.post(ApiPathEnum.Signin, user, {
+        signal: thunkAPI.signal,
+      })
 
-      if (response.status === 401) throw new Error(response.data.message)
+      if (response.data?.statusCode === 403) {
+        return null
+      }
 
       return response.data
     } catch (error) {
@@ -69,10 +65,8 @@ const authSlice = createSlice({
   initialState,
 
   reducers: {
-    signin: (state, action: PayloadAction<CommonResponse<CredentialUser>>) => {
-      state.auth = action.payload.data
-    },
     signout: () => {
+      localStorage.removeItem('access_token')
       return initialState
     },
     getCurrentUser: state => {
@@ -111,13 +105,13 @@ const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(signinAPI.fulfilled, (state, action) => {
+      if (!action.payload) return initialState
       state.auth = action.payload.data
     })
   },
 })
 
 export const {
-  signin,
   signout,
   getCurrentUser,
   updateCurrentUser,

@@ -18,6 +18,7 @@ import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { LoadingButton } from '@mui/lab'
 import { Link, useNavigate } from 'react-router-dom'
 import BlackLogo from '../../assets/image/logo/BlackLogo.png'
+import HouseImage from '../../assets/image/house-img.jpg'
 
 export const Signup = (): JSX.Element => {
   const { t } = useTranslation()
@@ -31,6 +32,7 @@ export const Signup = (): JSX.Element => {
     password: '',
     confirmPassword: '',
     fullName: '',
+    phone: '',
   }
 
   const validationSchema = Yup.object().shape({
@@ -49,11 +51,7 @@ export const Signup = (): JSX.Element => {
   const onSubmit = () => {
     setLoading(true)
     httpService
-      .post(ApiPathEnum.Signup, {
-        fullName: formik.values.fullName,
-        email: formik.values.email,
-        password: formik.values.password,
-      })
+      .post(ApiPathEnum.Signup, formik.values)
       .then(res => {
         if (res.status === 201) {
           httpService.post(ApiPathEnum.SendCode, {
@@ -93,7 +91,7 @@ export const Signup = (): JSX.Element => {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+          backgroundImage: `url(${HouseImage})`,
           backgroundRepeat: 'no-repeat',
           backgroundColor: t =>
             t.palette.mode === 'light'
@@ -133,6 +131,18 @@ export const Signup = (): JSX.Element => {
               onFocus={onFocus}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
+              sx={{ marginBottom: 2 }}
+            />
+            <TextField
+              fullWidth
+              id="phone"
+              label={t('signup.phone')}
+              name="phone"
+              value={formik.values.phone}
+              onChange={formik.handleChange}
+              onFocus={onFocus}
+              error={formik.touched.phone && Boolean(formik.errors.phone)}
+              helperText={formik.touched.phone && formik.errors.phone}
               sx={{ marginBottom: 2 }}
             />
             <TextField

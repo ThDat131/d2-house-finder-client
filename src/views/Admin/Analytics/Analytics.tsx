@@ -23,6 +23,10 @@ const Analytics = () => {
   const [userChartData, setUserChartData] = useState()
   const [chartArticleLoading, setCharArticleLoading] = useState<boolean>(false)
   const [articleChartData, setArticleChartData] = useState()
+  const [from, setFrom] = useState(moment().startOf('month'))
+  const [to, setTo] = useState(moment().endOf('month'))
+  const [typeDate, setTypeDate] = useState<string>('DAY')
+  const [triggerUpdate, setTriggerUpdate] = useState<boolean>(false)
 
   useEffect(() => {
     setTotalLoading(true)
@@ -59,9 +63,9 @@ const Analytics = () => {
 
     httpService
       .post(`${ApiPathEnum.Statistical}/articles`, {
-        fromDate: moment().startOf('month').format('DD/MM/YYYY'),
-        toDate: moment().endOf('month').format('DD/MM/YYYY'),
-        type: 'DAY',
+        fromDate: from.format('DD/MM/YYYY'),
+        toDate: to.format('DD/MM/YYYY'),
+        type: typeDate,
       })
       .then(res => {
         if (res.status === 201) {
@@ -71,7 +75,7 @@ const Analytics = () => {
       .finally(() => {
         setCharArticleLoading(false)
       })
-  }, [])
+  }, [triggerUpdate])
 
   if (chartUserLoading || chartArticleLoading) return <Skeleton />
 
@@ -105,6 +109,14 @@ const Analytics = () => {
           <ArticleChartCard
             loading={chartArticleLoading}
             data={articleChartData}
+            from={from}
+            setFrom={setFrom}
+            to={to}
+            setTo={setTo}
+            typeDate={typeDate}
+            setTypeDate={setTypeDate}
+            trigger={triggerUpdate}
+            setTrigger={setTriggerUpdate}
           />
         </Grid>
       </Grid>

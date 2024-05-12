@@ -1,20 +1,30 @@
-import { Box, Chip, Typography } from '@mui/material'
+import { Box, Button, Chip, Stack, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { useTranslation } from 'react-i18next'
 import { HttpService } from '../../../api/HttpService'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ApiPathEnum } from '../../../api/ApiPathEnum'
-import { useAppSelector } from '../../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { RootState } from '../../../app/store'
 import { Article } from '../../../model/article/article'
 import moment from 'moment'
 import { DEFAULT_FORMAT_DATE } from '../../../common/common-constant'
 import { ArticleStatus } from '../../../common/common-enum'
+import { VNDCurrencyFormat } from '../../../utils/utils'
+import { useNavigate } from 'react-router-dom'
+import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
+import { deleteArticle } from '../../../app/slice/article.slice.'
+import { toast } from 'react-toastify'
+import VerifyArticleDialog from '../CreateArticle/components/VerifyArticleDialog'
 
 const ManageArticles = (): JSX.Element => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
   const { t } = useTranslation()
   const { httpService } = new HttpService()
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const articleState = useAppSelector((state: RootState) => state.article)
+
   const user = useAppSelector((state: RootState) => state.auth.auth.user)
   const [articles, setArticles] = useState<Article[]>([])
   const [total, setTotal] = useState<number>(0)
@@ -23,29 +33,29 @@ const ManageArticles = (): JSX.Element => {
     page: 0,
     pageSize: PAGE_SIZE,
   })
+  const [openDelete, setOpenDelete] = useState<boolean>(false)
+  const [selectedArticle, setSelectedArticle] = useState<Article>()
+  const [openVerify, setOpenVerify] = useState<boolean>(false)
+
+  const handleUpdate = (x: Article) => {
+    navigate(`/quan-ly/cap-nhat-tin-dang/${x._id}`, { state: x })
+  }
+
+  const handleOpenDelete = (x: Article) => {
+    setSelectedArticle(x)
+    setOpenDelete(true)
+  }
+
+  const handleOpenVerifyArticle = (x: Article) => {
+    setSelectedArticle(x)
+    setOpenVerify(true)
+  }
 
   const columns: GridColDef[] = [
     {
       field: '_id',
       headerName: t('generalManagement.manageArticles.articleId'),
       flex: 1,
-    },
-    {
-      field: 'images',
-      headerName: t('generalManagement.manageArticles.articleImage'),
-      flex: 1,
-      renderCell: params => {
-        return (
-          <Box width={100} margin={'right'}>
-            <Box
-              component={'img'}
-              src={params.value[0]}
-              width={1}
-              height={1}
-            ></Box>
-          </Box>
-        )
-      },
     },
     {
       field: 'title',
@@ -56,6 +66,7 @@ const ManageArticles = (): JSX.Element => {
       field: 'price',
       headerName: t('generalManagement.manageArticles.articlePrice'),
       flex: 1,
+      valueFormatter: params => VNDCurrencyFormat.format(params.value),
     },
     {
       field: 'updatedAt',
@@ -87,6 +98,43 @@ const ManageArticles = (): JSX.Element => {
         }
       },
     },
+    {
+      field: 'action',
+      headerName: t('admin.category.action'),
+      renderCell: params => {
+        return (
+          <Stack spacing={1} direction={'row'}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleOpenVerifyArticle(params.row)
+              }}
+              disabled={params.row.status === ArticleStatus.VERIFY}
+            >
+              {t('generalManagement.manageArticles.verifyArticle')}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleUpdate(params.row)
+              }}
+            >
+              {t('admin.category.update')}
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handleOpenDelete(params.row)
+              }}
+            >
+              {t('admin.category.delete')}
+            </Button>
+          </Stack>
+        )
+      },
+      width: 400,
+    },
   ]
 
   const fetchArticle = (page: number) => {
@@ -97,6 +145,8 @@ const ManageArticles = (): JSX.Element => {
           current: page + 1,
           pageSize: paginationModel.pageSize,
           createdBy: user._id,
+          populate: 'categoryId',
+          fields: 'categoryId._id,categoryId.name',
         },
       })
       .then(res => {
@@ -135,11 +185,36 @@ const ManageArticles = (): JSX.Element => {
               paginationModel,
             },
           }}
-          pageSizeOptions={[5, 10, 20]}
           onPaginationModelChange={setPaginationModel}
           disableRowSelectionOnClick={true}
         />
       </Box>
+      <ConfirmDialog
+        content={t('admin.article.areYouSureToDeleteThisArticle')}
+        open={openDelete}
+        title={t('admin.article.deleteArticle')}
+        isLoading={articleState.loading}
+        onCancel={() => {
+          setOpenDelete(false)
+        }}
+        onConfirm={() => {
+          dispatch(deleteArticle(selectedArticle?._id as string))
+            .unwrap()
+            .then(() => {
+              toast.success(t('admin.article.deleteArticleSuccessfully'))
+              fetchArticle(paginationModel.page)
+              setOpenDelete(false)
+            })
+            .catch(() => {
+              toast.error(t('admin.permission.errorHaveOccurPleaseTryAgain'))
+            })
+        }}
+      />
+      <VerifyArticleDialog
+        open={openVerify}
+        setOpen={setOpenVerify}
+        article={selectedArticle as Article}
+      />
     </>
   )
 }

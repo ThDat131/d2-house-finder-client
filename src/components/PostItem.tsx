@@ -1,9 +1,11 @@
-import { Box, Grid, Stack, Typography } from '@mui/material'
+import { Box, Grid, Stack, Tooltip, Typography } from '@mui/material'
 import { VNDCurrencyFormat } from '../utils/utils'
 import { type Article } from '../model/article/article'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
+import SecurityTwoToneIcon from '@mui/icons-material/SecurityTwoTone'
+import { ArticleStatus } from '../common/common-enum'
 
 interface PostItemProps {
   data: Article
@@ -27,7 +29,7 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
       boxShadow={3}
     >
       <Grid item xs={5}>
-        <Box height={240}>
+        <Box height={240} position={'relative'}>
           <Box
             style={{ objectFit: 'cover', objectPosition: 'center' }}
             onError={({ currentTarget }) => {
@@ -48,6 +50,22 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
               navigate(`/bai-dang/${data._id}`)
             }}
           />
+          {data.status === ArticleStatus.VERIFY && (
+            <Tooltip title={t('articleBox.thisArticleIsVerifyByUs')}>
+              <SecurityTwoToneIcon
+                sx={{
+                  position: 'absolute',
+                  bottom: 10,
+                  right: 10,
+                  stroke: '#fff',
+                  strokeWidth: 1,
+                  cursor: 'pointer',
+                }}
+                fontSize="large"
+                color={'primary'}
+              />
+            </Tooltip>
+          )}
         </Box>
       </Grid>
       <Grid item xs={7} display={'flex'} flexWrap={'wrap'} pl={2} height={240}>

@@ -144,15 +144,36 @@ export const updateArticle = createAsyncThunk(
     try {
       const response = await httpService.patch<
         CommonResponse<Article> | ErrorResponse
-      >(`${ApiPathEnum.Article}/${article._id}`, article, {
+      >(`${ApiPathEnum.Article}`, article, {
         signal: thunkAPI.signal,
       })
 
-      if (response.status === 400) {
+      if (response.status !== 200) {
         throw new Error(response.data.message)
       }
 
       return response.data as CommonResponse<Article>
+    } catch (ex) {
+      const error = ex as Error
+      return thunkAPI.rejectWithValue(error.message)
+    }
+  },
+)
+
+export const deleteArticle = createAsyncThunk(
+  'article/deleteArticle',
+  async (id: string, thunkAPI) => {
+    try {
+      const response = await httpService.delete(
+        `${ApiPathEnum.Article}/${id}`,
+        {
+          signal: thunkAPI.signal,
+        },
+      )
+
+      if (response.status !== 200) {
+        throw new Error(response.data.message)
+      }
     } catch (ex) {
       const error = ex as Error
       return thunkAPI.rejectWithValue(error.message)
@@ -316,6 +337,24 @@ const articleSlice = createSlice({
         state.loading = false
       },
     )
+    builder.addCase(updateArticle.pending, state => {
+      state.loading = true
+    })
+    builder.addCase(updateArticle.rejected, state => {
+      state.loading = false
+    })
+    builder.addCase(updateArticle.fulfilled, state => {
+      state.loading = false
+    })
+    builder.addCase(deleteArticle.pending, state => {
+      state.loading = true
+    })
+    builder.addCase(deleteArticle.rejected, state => {
+      state.loading = false
+    })
+    builder.addCase(deleteArticle.fulfilled, state => {
+      state.loading = false
+    })
     builder.addCase(
       createComment.fulfilled,
       (state, action: PayloadAction<CommonResponse<Comment>>) => {

@@ -29,4 +29,5 @@ export interface UpgradeLandlordRequestUpdateModel {
   id: string
   status: string
   feedBack: string
+  roleId: string
 }

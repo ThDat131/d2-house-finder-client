@@ -14,19 +14,19 @@ import {
 } from '@mui/material'
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LandlordRequestStatusEnum } from '../../../../common/common-enum'
-import { UpgradeLandlordRequestUpdateModel } from '../../../../model/upgrade-landlord-request/upgrade-landlord-request'
 import { toast } from 'react-toastify'
 import { useAppDispatch } from '../../../../app/hooks'
-import { updateLandlordRequest } from '../../../../app/slice/landlord-requests.slice'
+import { VerificationStatusEnum } from '../../../../common/common-enum'
+import { VerifyArticleRequestsUpdateModel } from '../../../../model/verify-article-request/verify-article-request'
+import { updateVerifyArticleRequest } from '../../../../app/slice/verify-article-requests.slice'
 
-interface UpdateLandlordRequestProps {
+interface UpdateVerifyArticleRequestProps {
   id: string | undefined
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const UpdateLandlordRequest: React.FC<UpdateLandlordRequestProps> = ({
+const UpdateVerifyArticleRequest: React.FC<UpdateVerifyArticleRequestProps> = ({
   id,
   open,
   setOpen,
@@ -36,9 +36,7 @@ const UpdateLandlordRequest: React.FC<UpdateLandlordRequestProps> = ({
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [feedBack, setFeedBack] = useState<string>('')
-  const [status, setStatus] = useState<string>(
-    LandlordRequestStatusEnum.REJECTED,
-  )
+  const [status, setStatus] = useState<string>(VerificationStatusEnum.REJECTED)
 
   const onCancel = () => {
     setOpen(false)
@@ -51,17 +49,21 @@ const UpdateLandlordRequest: React.FC<UpdateLandlordRequestProps> = ({
 
     setIsLoading(true)
 
-    const data: UpgradeLandlordRequestUpdateModel = {
+    const data: VerifyArticleRequestsUpdateModel = {
       id,
       feedBack,
       status,
-      roleId: '66402d2479d9e43ec7a8b283',
     }
 
-    dispatch(updateLandlordRequest(data))
+    dispatch(updateVerifyArticleRequest(data))
       .unwrap()
       .then(res => {
-        toast.success(t('admin.landlordRequest.updateSuccess'))
+        console.log(res)
+        if (res?.statusCode && res.statusCode !== 200) {
+          toast.error(t('admin.permission.errorHaveOccurPleaseTryAgain'))
+          return
+        }
+        toast.success(t('admin.verifyArticleRequest.updateSuccess'))
         setOpen(false)
       })
       .finally(() => {
@@ -72,13 +74,13 @@ const UpdateLandlordRequest: React.FC<UpdateLandlordRequestProps> = ({
   return (
     <Dialog open={open} onClose={onCancel}>
       <DialogTitle>
-        {t('admin.landlordRequest.updateRequestId', { id })}
+        {t('admin.verifyArticleRequest.updateRequestId', { id })}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={3} mt={2}>
           <FormControl fullWidth>
             <InputLabel id="status">
-              {t('admin.landlordRequest.status')}
+              {t('admin.verifyArticleRequest.status')}
             </InputLabel>
             <Select
               labelId="status"
@@ -86,13 +88,13 @@ const UpdateLandlordRequest: React.FC<UpdateLandlordRequestProps> = ({
               onChange={evt => {
                 setStatus(evt.target.value)
               }}
-              label={t('admin.landlordRequest.status')}
+              label={t('admin.verifyArticleRequest.status')}
             >
-              <MenuItem value={LandlordRequestStatusEnum.APPROVED}>
-                {t('admin.landlordRequest.approved')}
+              <MenuItem value={VerificationStatusEnum.SUCCEED}>
+                {t('admin.verifyArticleRequest.approved')}
               </MenuItem>
-              <MenuItem value={LandlordRequestStatusEnum.REJECTED}>
-                {t('admin.landlordRequest.rejected')}
+              <MenuItem value={VerificationStatusEnum.REJECTED}>
+                {t('admin.verifyArticleRequest.rejected')}
               </MenuItem>
             </Select>
           </FormControl>
@@ -101,20 +103,20 @@ const UpdateLandlordRequest: React.FC<UpdateLandlordRequestProps> = ({
             onChange={evt => {
               setFeedBack(evt.target.value)
             }}
-            label={t('admin.landlordRequest.feedBack')}
+            label={t('admin.verifyArticleRequest.feedBack')}
           />
         </Stack>
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel} disabled={isLoading} color="primary">
-          {t('admin.landlordRequest.cancel')}
+          {t('admin.verifyArticleRequest.cancel')}
         </Button>
         <LoadingButton loading={isLoading} onClick={onConfirm} color="primary">
-          {t('admin.landlordRequest.update')}
+          {t('admin.verifyArticleRequest.update')}
         </LoadingButton>
       </DialogActions>
     </Dialog>
   )
 }
 
-export default UpdateLandlordRequest
+export default UpdateVerifyArticleRequest

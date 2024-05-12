@@ -15,7 +15,12 @@ import {
 } from '@mui/material'
 import draftToHtml from 'draftjs-to-html'
 import { Editor } from 'react-draft-wysiwyg'
-import { convertToRaw, EditorState } from 'draft-js'
+import {
+  convertToRaw,
+  EditorState,
+  ContentState,
+  convertFromHTML,
+} from 'draft-js'
 import { useTranslation } from 'react-i18next'
 import { type ArticleCreatedModel } from '../../../model/article/article-create'
 import * as Yup from 'yup'
@@ -45,27 +50,34 @@ import { type CommonResponse } from '../../../model/common/common-response'
 import { LoadingButton } from '@mui/lab'
 import GoongMap from '../../../components/GoongMap'
 import { FlyToInterpolator } from '@goongmaps/goong-map-react'
-import { createArticle } from '../../../app/slice/article.slice.'
+import { createArticle, updateArticle } from '../../../app/slice/article.slice.'
 import { toast } from 'react-toastify'
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { createNotification } from '../../../app/firebase/function'
 import { Notification } from '../../../model/notification/notification'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import { NotificationTypeEnum } from '../../../model/notification/notification--type'
 import './CreateArticle.css'
+import { ActionType } from '../../../common/common-enum'
+import { Article } from '../../../model/article/article'
 
 interface ImageType {
   blob: string
   url: string
 }
 
-const CreateArticle = () => {
+interface CreateArticleProps {
+  type: ActionType
+}
+
+const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
   const { httpService, httpGoongService } = new HttpService()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const provinces = useAppSelector((state: RootState) => state.provinces.data)
   const categories = useAppSelector(
@@ -98,6 +110,7 @@ const CreateArticle = () => {
     transitionDuration: 1000,
     transitionInterpolator: new FlyToInterpolator(),
   })
+  const [article, setArticle] = useState<Article>()
 
   useEffect(() => {
     if (categories?.length > 0) return
@@ -112,6 +125,49 @@ const CreateArticle = () => {
     const provincePromise = dispatch(getAllProvinces())
     return () => {
       provincePromise.abort()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (type === ActionType.UPDATE) {
+      const initial = location.state as Article
+      setArticle(initial)
+
+      const convertedDescription = convertFromHTML(initial.description)
+      const contentState = ContentState.createFromBlockArray(
+        convertedDescription.contentBlocks,
+        convertedDescription.entityMap,
+      )
+      const newState = EditorState.push(
+        description,
+        contentState,
+        'insert-characters',
+      )
+
+      setDescription(newState)
+
+      dispatch(getAllDistricts(initial.address.provinceCode.toString()))
+        .unwrap()
+        .then(response => {
+          setDistricts(response.results)
+        })
+
+      dispatch(getAllWards(initial.address.districtCode.toString()))
+        .unwrap()
+        .then(response => {
+          setWards(response.results)
+        })
+
+      const addressObject = initial.address
+      const address = `${addressObject.streetAddress}, ${addressObject.wardName}, ${addressObject.districtName}, ${addressObject.provinceName}`
+
+      setExactAddress(address)
+      setImageUrls(initial.images)
+      const uploadImages = initial.images.map(x => ({
+        blob: x,
+        url: x,
+      }))
+      setUploadedImages(uploadImages)
     }
   }, [])
 
@@ -230,22 +286,31 @@ const CreateArticle = () => {
   }
 
   const initialValues: ArticleCreatedModel = {
-    title: '',
-    description: '',
-    categoryId: '',
-    price: 0,
-    acreage: 0,
-    streetAddress: '',
-    latitude: 0,
-    longitude: 0,
-    provinceCode: 0,
-    districtCode: 0,
-    wardCode: 0,
-    provinceName: '',
-    districtName: '',
-    wardName: '',
-    images: [],
-    quantity: 0,
+    _id: type === ActionType.CREATE ? '' : article?._id ?? '',
+    title: type === ActionType.CREATE ? '' : article?.title ?? '',
+    description: type === ActionType.CREATE ? '' : article?.description ?? '',
+    categoryId:
+      type === ActionType.CREATE ? '' : article?.categoryId?._id ?? '',
+    price: type === ActionType.CREATE ? 0 : article?.price ?? 0,
+    acreage: type === ActionType.CREATE ? 0 : article?.acreage ?? 0,
+    streetAddress:
+      type === ActionType.CREATE ? '' : article?.address.streetAddress ?? '',
+    latitude:
+      type === ActionType.CREATE ? 0 : article?.location.coordinates[1] ?? 0,
+    longitude:
+      type === ActionType.CREATE ? 0 : article?.location.coordinates[0] ?? 0,
+    provinceCode:
+      type === ActionType.CREATE ? 0 : article?.address.provinceCode ?? 0,
+    districtCode:
+      type === ActionType.CREATE ? 0 : article?.address.districtCode ?? 0,
+    wardCode: type === ActionType.CREATE ? 0 : article?.address.wardCode ?? 0,
+    provinceName:
+      type === ActionType.CREATE ? '' : article?.address.provinceName ?? '',
+    districtName:
+      type === ActionType.CREATE ? '' : article?.address.districtName ?? '',
+    wardName: type === ActionType.CREATE ? '' : article?.address.wardName ?? '',
+    images: type === ActionType.CREATE ? [] : article?.images ?? [],
+    quantity: type === ActionType.CREATE ? 0 : article?.quantity ?? 0,
   }
 
   const validationSchema = Yup.object().shape({
@@ -282,49 +347,65 @@ const CreateArticle = () => {
   })
 
   const onSubmit = () => {
-    dispatch(createArticle(formik.values))
-      .unwrap()
-      .then(res => {
-        authState.auth.user.followers?.forEach(x => {
-          const notification: Notification = {
-            id: uuidv4(),
-            actionUrl: `bai-dang/${res?.data._id}`,
-            content: t(
-              'generalManagement.createNewArticle.userHaveCreateNewArticle',
-              {
-                user: authState.auth.user.fullName,
+    if (type === ActionType.CREATE) {
+      dispatch(createArticle(formik.values))
+        .unwrap()
+        .then(res => {
+          authState.auth.user.followers?.forEach(x => {
+            const notification: Notification = {
+              id: uuidv4(),
+              actionUrl: `bai-dang/${res?.data._id}`,
+              content: t(
+                'generalManagement.createNewArticle.userHaveCreateNewArticle',
+                {
+                  user: authState.auth.user.fullName,
+                },
+              ),
+              createdAt: moment(new Date()).format('DD/MM/YYYY h:mm:ss'),
+              isRead: false,
+              sendFrom: {
+                _id: authState.auth.user._id,
+                avatar: authState.auth.user.avatar,
+                fullName: authState.auth.user.fullName,
               },
-            ),
-            createdAt: moment(new Date()).format('DD/MM/YYYY h:mm:ss'),
-            isRead: false,
-            sendFrom: {
-              _id: authState.auth.user._id,
-              avatar: authState.auth.user.avatar,
-              fullName: authState.auth.user.fullName,
-            },
-            sendTo: x._id,
-            type: NotificationTypeEnum.NEW_POST,
-          }
+              sendTo: x._id,
+              type: NotificationTypeEnum.NEW_POST,
+            }
 
-          createNotification(
-            notification,
-            notification.sendFrom,
-            notification.sendTo,
-          )
+            createNotification(
+              notification,
+              notification.sendFrom,
+              notification.sendTo,
+            )
+          })
+
+          toast.success(t('generalManagement.createNewArticle.createSuccess'))
+          dispatch(selectProvince(null))
+          dispatch(selectDistrict(null))
+          dispatch(selectWard(null))
+          navigate('/quan-ly/tin-dang')
         })
-
-        toast.success(t('generalManagement.createNewArticle.createSuccess'))
-        dispatch(selectProvince(null))
-        dispatch(selectDistrict(null))
-        dispatch(selectWard(null))
-        navigate('/')
-      })
+    } else {
+      dispatch(updateArticle(formik.values))
+        .unwrap()
+        .then(res => {
+          toast.success(t('admin.article.updateSuccess'))
+          dispatch(selectProvince(null))
+          dispatch(selectDistrict(null))
+          dispatch(selectWard(null))
+          navigate('/quan-ly/tin-dang')
+        })
+        .catch(res => {
+          toast.error(t('admin.permission.errorHaveOccurPleaseTryAgain'))
+        })
+    }
   }
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
+    enableReinitialize: true,
   })
 
   const getExactAddress = (): string => {
@@ -355,7 +436,9 @@ const CreateArticle = () => {
     <>
       <Box borderBottom={1} mb={4}>
         <Typography variant={'h3'} mb={2}>
-          {t('generalManagement.createNewArticle.postArticle')}
+          {type === ActionType.CREATE
+            ? t('generalManagement.createNewArticle.postArticle')
+            : t('admin.article.updateArticle')}
         </Typography>
       </Box>
       <form
@@ -792,7 +875,9 @@ const CreateArticle = () => {
                 variant="contained"
                 loading={loading}
               >
-                {t('generalManagement.createNewArticle.create')}
+                {type === ActionType.CREATE
+                  ? t('generalManagement.createNewArticle.create')
+                  : t('admin.article.update')}
               </LoadingButton>
             </Grid>
           </Grid>
