@@ -14,3 +14,4 @@ export { default as VerifyArticle } from './GeneralManagement/VerifyArticle/Veri
 export { default as UpgradeLandlord } from './GeneralManagement/UpgradeLandlord/UpgradeLandlord'
 export { default as VerifyArticleRequests } from './GeneralManagement/VerifyArticleRequests/VerifyArticleRequests'
 export { default as DetailVerifyArticleRequest } from './GeneralManagement/VerifyArticleRequests/components/DetailVerifyArticleRequest'
+export { default as NotFound } from './NotFound/NotFound'

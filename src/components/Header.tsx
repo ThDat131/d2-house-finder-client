@@ -43,6 +43,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import { Notification } from '../model/notification/notification'
 import { getNotificationByUserId } from '../app/firebase/function'
 import moment from 'moment'
+import ProtectedComponent from './ProtectedComponent'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
@@ -362,20 +363,23 @@ export const Header = (): JSX.Element => {
                   >
                     <Paper sx={{ height: 1 }}>
                       <List>
-                        <ListItemButton
-                          onClick={() => {
-                            navigate('/quan-ly/dang-tin-moi')
-                          }}
-                        >
-                          {t('header.postAnArticle')}
-                        </ListItemButton>
-                        <ListItemButton
-                          onClick={() => {
-                            navigate('/quan-ly/tin-dang')
-                          }}
-                        >
-                          {t('header.manageArticles')}
-                        </ListItemButton>
+                        <ProtectedComponent role="LANDLORD">
+                          <ListItemButton
+                            onClick={() => {
+                              navigate('/quan-ly/dang-tin-moi')
+                            }}
+                          >
+                            {t('header.postAnArticle')}
+                          </ListItemButton>
+                          <ListItemButton
+                            onClick={() => {
+                              navigate('/quan-ly/tin-dang')
+                            }}
+                          >
+                            {t('header.manageArticles')}
+                          </ListItemButton>
+                        </ProtectedComponent>
+
                         <ListItemButton
                           onClick={() => {
                             navigate('/quan-ly/cap-nhat-thong-tin-ca-nhan')

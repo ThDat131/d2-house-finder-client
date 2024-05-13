@@ -17,6 +17,7 @@ import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
 import { useTranslation } from 'react-i18next'
 import SecurityIcon from '@mui/icons-material/Security'
+import ProtectedComponent from '../ProtectedComponent'
 
 const UserSideNavbar = () => {
   const { t } = useTranslation()
@@ -40,11 +41,8 @@ const UserSideNavbar = () => {
 
   return (
     <Stack alignItems={'center'} py={3} style={SideBarStyle}>
-      <Stack direction={'row'} gap={1} mb={2} alignItems={'center'}>
+      <Stack direction={'row'} gap={1} mb={2} px={3} alignItems={'center'}>
         <Avatar src={user.avatar} />
-        {/* <Box width={50} height={50}>
-          <Box component={'img'} src={user.avatar} width={1} height={1} />
-        </Box> */}
         <Stack spacing={1} width={1}>
           <Typography fontWeight={'bold'}>{user.fullName}</Typography>
           <Typography>{user.phone}</Typography>
@@ -52,7 +50,6 @@ const UserSideNavbar = () => {
       </Stack>
       <List
         sx={{
-          // selected and (selected + hover) states
           '&& .Mui-selected, && .Mui-selected:hover': {
             '&, & .MuiListItemIcon-root': {
               fontWeight: 700,
@@ -63,28 +60,43 @@ const UserSideNavbar = () => {
           },
         }}
       >
-        <ListItemButton
-          style={ListItemButtonStyle}
-          selected={selectedIndex === 1}
-          onClick={() => {
-            handleListItemClick(1)
-            navigate('/quan-ly/dang-tin-moi')
-          }}
-        >
-          <AddIcon />
-          <ListItemText>{t('userSideNav.newArticle')}</ListItemText>
-        </ListItemButton>
-        <ListItemButton
-          style={ListItemButtonStyle}
-          selected={selectedIndex === 2}
-          onClick={() => {
-            handleListItemClick(2)
-            navigate('/quan-ly/tin-dang')
-          }}
-        >
-          <NewspaperIcon />
-          <ListItemText>{t('userSideNav.manageArticles')}</ListItemText>
-        </ListItemButton>
+        <ProtectedComponent role="LANDLORD">
+          <ListItemButton
+            style={ListItemButtonStyle}
+            selected={selectedIndex === 1}
+            onClick={() => {
+              handleListItemClick(1)
+              navigate('/quan-ly/dang-tin-moi')
+            }}
+          >
+            <AddIcon />
+            <ListItemText>{t('userSideNav.newArticle')}</ListItemText>
+          </ListItemButton>
+          <ListItemButton
+            style={ListItemButtonStyle}
+            selected={selectedIndex === 2}
+            onClick={() => {
+              handleListItemClick(2)
+              navigate('/quan-ly/tin-dang')
+            }}
+          >
+            <NewspaperIcon />
+            <ListItemText>{t('userSideNav.manageArticles')}</ListItemText>
+          </ListItemButton>
+          <ListItemButton
+            style={ListItemButtonStyle}
+            selected={selectedIndex === 6}
+            onClick={() => {
+              handleListItemClick(6)
+              navigate('/quan-ly/danh-sach-yeu-cau-xac-thuc')
+            }}
+          >
+            <SecurityIcon />
+            <ListItemText>
+              {t('userSideNav.listOfVerifyArticleRequest')}
+            </ListItemText>
+          </ListItemButton>
+        </ProtectedComponent>
         <ListItemButton
           style={ListItemButtonStyle}
           selected={selectedIndex === 3}
@@ -108,19 +120,6 @@ const UserSideNavbar = () => {
         >
           <VerifiedUserIcon />
           <ListItemText>{t('userSideNav.upgradeLandlord')}</ListItemText>
-        </ListItemButton>
-        <ListItemButton
-          style={ListItemButtonStyle}
-          selected={selectedIndex === 6}
-          onClick={() => {
-            handleListItemClick(6)
-            navigate('/quan-ly/danh-sach-yeu-cau-xac-thuc')
-          }}
-        >
-          <SecurityIcon />
-          <ListItemText>
-            {t('userSideNav.listOfVerifyArticleRequest')}
-          </ListItemText>
         </ListItemButton>
         <ListItemButton
           style={ListItemButtonStyle}
