@@ -36,7 +36,7 @@ const VerifyArticleRequestsView = () => {
     {
       field: 'articleId.title',
       headerName: t('generalManagement.verifyArticle.articleTitle'),
-      renderCell: params => params.row.articleId.title,
+      renderCell: params => params.row.articleId?.title ?? '',
       flex: 1,
     },
     {

@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { persistor, store } from './app/store'
+import { RootState, persistor, store } from './app/store'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Signin from './views/Signin/Signin'
@@ -16,11 +16,13 @@ import {
   FindHouseWithLocation,
   GeneralManagement,
   ManageArticles,
+  NotFound,
   Profile,
   UpdateInformation,
   UpdatePassword,
   UpgradeLandlord,
   Verify,
+  VerifyArticle,
   VerifyArticleRequests,
 } from './views/index.view'
 import { ThemeProvider } from '@emotion/react'
@@ -48,6 +50,8 @@ import { ActionType } from './common/common-enum'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { PersistGate } from 'redux-persist/integration/react'
+import ProtectedRoute from './components/Route/ProtectedRoute'
+import RoleProtectedRoute from './components/Route/RoleProtectedRoute'
 
 const router = createBrowserRouter([
   {
@@ -64,45 +68,95 @@ const router = createBrowserRouter([
   },
   {
     path: '/quan-ly',
-    element: <GeneralManagement />,
+    element: (
+      <ProtectedRoute>
+        <GeneralManagement />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: 'dang-tin-moi',
-        element: <CreateArticle type={ActionType.CREATE} />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="LANDLORD">
+              <CreateArticle type={ActionType.CREATE} />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'cap-nhat-tin-dang/:id',
-        element: <CreateArticle type={ActionType.UPDATE} />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="LANDLORD">
+              <CreateArticle type={ActionType.UPDATE} />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'cap-nhat-thong-tin-ca-nhan',
-        element: <UpdateInformation />,
+        element: (
+          <ProtectedRoute>
+            <UpdateInformation />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'cap-nhat-mat-khau',
-        element: <UpdatePassword />,
+        element: (
+          <ProtectedRoute>
+            <UpdatePassword />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'tin-dang',
-        element: <ManageArticles />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="LANDLORD">
+              <ManageArticles />,
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'nang-cap-tai-khoan',
-        element: <UpgradeLandlord />,
+        element: (
+          <ProtectedRoute>
+            <UpgradeLandlord />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'danh-sach-yeu-cau-xac-thuc',
-        element: <VerifyArticleRequests />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="LANDLORD">
+              <VerifyArticleRequests />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'yeu-cau-xac-thuc-tin-dang/:id',
-        element: <DetailVerifyArticleRequest />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="LANDLORD">
+              <DetailVerifyArticleRequest />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
     ],
   },
   {
     path: '/tim-tro-theo-vi-tri',
-    element: <FindHouseWithLocation />,
+    element: (
+      <ProtectedRoute>
+        <FindHouseWithLocation />,
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/bai-dang/:id',
@@ -110,67 +164,154 @@ const router = createBrowserRouter([
   },
   {
     path: '/admin',
-    element: <Admin />,
+    element: (
+      <ProtectedRoute>
+        <RoleProtectedRoute role="ADMIN">
+          <Admin />
+        </RoleProtectedRoute>
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: 'user',
-        element: <AdminUserView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminUserView />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'user/create',
-        element: <AdminUserCreateView type={ActionType.CREATE} />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminUserCreateView type={ActionType.CREATE} />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'user/update/:id',
-        element: <AdminUserCreateView type={ActionType.UPDATE} />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminUserCreateView type={ActionType.UPDATE} />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'category/create',
-        element: <AdminCategoryCreateView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminCategoryCreateView />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'category',
-        element: <AdminCategoriesView />,
-      },
-      {
-        path: 'statistic',
-        element: <AdminAnalyticsView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminCategoriesView />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: '',
-        element: <AdminAnalyticsView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminAnalyticsView />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'article',
-        element: <AdminArticleView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminArticleView />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'article/create',
-        element: <AdminArticleCreateView type={ActionType.CREATE} />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminArticleCreateView type={ActionType.CREATE} />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'article/update/:id',
-        element: <AdminArticleCreateView type={ActionType.UPDATE} />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminArticleCreateView type={ActionType.UPDATE} />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'landlord-requests',
-        element: <AdminLandlordRequestsView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminLandlordRequestsView />,
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'permission',
-        element: <AdminPermissionView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminPermissionView />,
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'role',
-        element: <AdminRoleView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminRoleView />,
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'verify-article-requests',
-        element: <AdminVerifyArticleRequestsView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              <AdminVerifyArticleRequestsView />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'verify-article-requests/:id',
-        element: <AdminDetailUpdateVerifyArticleRequestView />,
+        element: (
+          <ProtectedRoute>
+            <RoleProtectedRoute role="ADMIN">
+              {' '}
+              <AdminDetailUpdateVerifyArticleRequestView />
+            </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
     ],
   },
@@ -185,6 +326,10 @@ const router = createBrowserRouter([
   {
     path: 'xac-nhan',
     element: <Verify />,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ])
 
