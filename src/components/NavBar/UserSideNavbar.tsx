@@ -11,7 +11,7 @@ import NewspaperIcon from '@mui/icons-material/Newspaper'
 import EditIcon from '@mui/icons-material/Edit'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
@@ -19,15 +19,19 @@ import { useTranslation } from 'react-i18next'
 import SecurityIcon from '@mui/icons-material/Security'
 import ProtectedComponent from '../ProtectedComponent'
 
+const currentPage = localStorage.getItem('userNavigationPage') ?? '1'
+
 const UserSideNavbar = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const user = useAppSelector((state: RootState) => state.auth.auth.user)
-  const [selectedIndex, setSelectedIndex] = useState(1)
+  const [selectedIndex, setSelectedIndex] = useState(parseInt(currentPage))
 
   const handleListItemClick = (index: number) => {
     setSelectedIndex(index)
+    localStorage.setItem('userNavigationPage', index.toString())
   }
+
   const ListItemButtonStyle: React.CSSProperties = {
     justifyContent: 'flex-start',
     gap: 8,
@@ -38,6 +42,10 @@ const UserSideNavbar = () => {
     borderRight: '1px solid #e6e6e6',
     width: 250,
   }
+
+  useEffect(() => {
+    if (currentPage) setSelectedIndex(parseInt(currentPage))
+  }, [])
 
   return (
     <Stack alignItems={'center'} py={3} style={SideBarStyle}>
