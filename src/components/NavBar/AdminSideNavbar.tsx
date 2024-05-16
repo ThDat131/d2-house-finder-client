@@ -14,7 +14,7 @@ import {
   Typography,
   styled,
 } from '@mui/material'
-import { type CSSProperties, useState } from 'react'
+import { type CSSProperties, useState, useEffect } from 'react'
 import InsightsIcon from '@mui/icons-material/Insights'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import FeedIcon from '@mui/icons-material/Feed'
@@ -35,12 +35,16 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import { signout } from '../../app/slice/auth.slice'
 import SecurityIcon from '@mui/icons-material/Security'
 
+const currentPage = localStorage.getItem('adminNavigationPage') ?? '1'
+const currentChildUrl = localStorage.getItem('adminChildUrl') ?? ''
+
 const AdminSideNavBar = (): JSX.Element => {
   const { t, i18n } = useTranslation()
   const dispatch = useAppDispatch()
 
-  const [selectedIndex, setSelectedIndex] = useState(1)
-  const [selectedChildUrl, setSelectedChildUrl] = useState<string>('')
+  const [selectedIndex, setSelectedIndex] = useState(parseInt(currentPage))
+  const [selectedChildUrl, setSelectedChildUrl] =
+    useState<string>(currentChildUrl)
   const [open, setOpen] = useState<boolean>(true)
   const [expanded, setExpanded] = useState(-1)
   const [language, setLanguage] = useState<string>(
@@ -113,6 +117,15 @@ const AdminSideNavBar = (): JSX.Element => {
       url: '/admin/verify-article-requests',
     },
   ]
+
+  useEffect(() => {
+    if (currentPage) setSelectedIndex(parseInt(currentPage))
+
+    if (currentChildUrl) {
+      setExpanded(parseInt(currentPage))
+      setSelectedChildUrl(currentChildUrl)
+    }
+  }, [])
 
   const headingStyle: CSSProperties = {
     padding: 0,
@@ -279,7 +292,9 @@ const AdminSideNavBar = (): JSX.Element => {
                     navigate(x.url)
                     setSelectedIndex(x.id)
                     setSelectedChildUrl('')
+                    localStorage.setItem('adminChildUrl', '')
                     setExpanded(-1)
+                    localStorage.setItem('adminNavigationPage', x.id.toString())
                   }}
                   selected={selectedIndex === x.id}
                 >
@@ -333,6 +348,16 @@ const AdminSideNavBar = (): JSX.Element => {
                             setSelectedIndex(x.id)
                             navigate(`${x.url}/create`)
                             setSelectedChildUrl(`${x.url}/create`)
+                            localStorage.setItem(
+                              'adminChildUrl',
+                              `${x.url}/create`,
+                            )
+
+                            localStorage.setItem(
+                              'adminNavigationPage',
+                              x.id.toString(),
+                            )
+                            setExpanded(x.id)
                           }}
                         >
                           <ListItemIcon>
@@ -348,6 +373,11 @@ const AdminSideNavBar = (): JSX.Element => {
                           onClick={() => {
                             navigate(`${x.url}`)
                             setSelectedChildUrl(x.url)
+                            localStorage.setItem(
+                              'adminNavigationPage',
+                              x.id.toString(),
+                            )
+                            localStorage.setItem('adminChildUrl', x.url)
                           }}
                         >
                           <ListItemIcon>
@@ -374,6 +404,8 @@ const AdminSideNavBar = (): JSX.Element => {
                     setSelectedIndex(x.id)
                     setSelectedChildUrl('')
                     setExpanded(-1)
+                    localStorage.setItem('adminChildUrl', '')
+                    localStorage.setItem('adminNavigationPage', x.id.toString())
                   }}
                 >
                   <ListItemIcon>{x.icon}</ListItemIcon>
@@ -401,6 +433,8 @@ const AdminSideNavBar = (): JSX.Element => {
                     setSelectedIndex(x.id)
                     setSelectedChildUrl('')
                     setExpanded(-1)
+                    localStorage.setItem('adminChildUrl', '')
+                    localStorage.setItem('adminNavigationPage', x.id.toString())
                   }}
                   selected={selectedIndex === x.id}
                 >
