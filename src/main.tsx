@@ -52,6 +52,8 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { PersistGate } from 'redux-persist/integration/react'
 import ProtectedRoute from './components/Route/ProtectedRoute'
 import RoleProtectedRoute from './components/Route/RoleProtectedRoute'
+import { ALL_PERMISSION } from './app/permissions-root'
+import WelcomePage from './views/Admin/Welcome/Welcome'
 
 const router = createBrowserRouter([
   {
@@ -78,7 +80,11 @@ const router = createBrowserRouter([
         path: 'dang-tin-moi',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="LANDLORD">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'POST',
+              )}
+            >
               <CreateArticle type={ActionType.CREATE} />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -88,7 +94,11 @@ const router = createBrowserRouter([
         path: 'cap-nhat-tin-dang/:id',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="LANDLORD">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'UPDATE',
+              )}
+            >
               <CreateArticle type={ActionType.UPDATE} />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -98,7 +108,13 @@ const router = createBrowserRouter([
         path: 'cap-nhat-thong-tin-ca-nhan',
         element: (
           <ProtectedRoute>
-            <UpdateInformation />,
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.USERS.filter(
+                x => x.method === 'PUT' || x.method === 'PATCH',
+              )}
+            >
+              <UpdateInformation />,
+            </RoleProtectedRoute>
           </ProtectedRoute>
         ),
       },
@@ -114,7 +130,7 @@ const router = createBrowserRouter([
         path: 'tin-dang',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="LANDLORD">
+            <RoleProtectedRoute permissions={[]}>
               <ManageArticles />,
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -124,7 +140,14 @@ const router = createBrowserRouter([
         path: 'nang-cap-tai-khoan',
         element: (
           <ProtectedRoute>
-            <UpgradeLandlord />,
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION['LANDLORD-REQUEST'].filter(
+                x => x.method === 'GET' || x.method === 'POST',
+              )}
+            >
+              <UpgradeLandlord />
+            </RoleProtectedRoute>
+            ,
           </ProtectedRoute>
         ),
       },
@@ -132,7 +155,11 @@ const router = createBrowserRouter([
         path: 'danh-sach-yeu-cau-xac-thuc',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="LANDLORD">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.VERIFICATIONS.filter(
+                x => x.method === 'GET',
+              )}
+            >
               <VerifyArticleRequests />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -142,7 +169,12 @@ const router = createBrowserRouter([
         path: 'yeu-cau-xac-thuc-tin-dang/:id',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="LANDLORD">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.VERIFICATIONS.filter(
+                x => x.method === 'GET',
+              )}
+            >
+              <VerifyArticleRequests />
               <DetailVerifyArticleRequest />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -166,7 +198,7 @@ const router = createBrowserRouter([
     path: '/admin',
     element: (
       <ProtectedRoute>
-        <RoleProtectedRoute role="ADMIN">
+        <RoleProtectedRoute role="ADMIN" permissions={[]}>
           <Admin />
         </RoleProtectedRoute>
       </ProtectedRoute>
@@ -176,7 +208,9 @@ const router = createBrowserRouter([
         path: 'user',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.USERS.filter(x => x.method === 'GET')}
+            >
               <AdminUserView />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -186,7 +220,11 @@ const router = createBrowserRouter([
         path: 'user/create',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.USERS.filter(
+                x => x.method === 'POST',
+              )}
+            >
               <AdminUserCreateView type={ActionType.CREATE} />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -196,7 +234,11 @@ const router = createBrowserRouter([
         path: 'user/update/:id',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.USERS.filter(
+                x => x.method === 'PATCH' || x.method === 'PUT',
+              )}
+            >
               <AdminUserCreateView type={ActionType.UPDATE} />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -206,7 +248,11 @@ const router = createBrowserRouter([
         path: 'category/create',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.CATEGORIES.filter(
+                x => x.method === 'POST',
+              )}
+            >
               <AdminCategoryCreateView />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -216,17 +262,25 @@ const router = createBrowserRouter([
         path: 'category',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.CATEGORIES.filter(
+                x => x.method === 'GET',
+              )}
+            >
               <AdminCategoriesView />
             </RoleProtectedRoute>
           </ProtectedRoute>
         ),
       },
       {
-        path: '',
+        path: 'statistic',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.STATISTICAL.filter(
+                x => x.method === 'POST',
+              )}
+            >
               <AdminAnalyticsView />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -236,7 +290,7 @@ const router = createBrowserRouter([
         path: 'article',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute permissions={[]}>
               <AdminArticleView />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -246,7 +300,11 @@ const router = createBrowserRouter([
         path: 'article/create',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'POST',
+              )}
+            >
               <AdminArticleCreateView type={ActionType.CREATE} />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -256,7 +314,11 @@ const router = createBrowserRouter([
         path: 'article/update/:id',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'PATCH' || x.method === 'PUT',
+              )}
+            >
               <AdminArticleCreateView type={ActionType.UPDATE} />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -266,7 +328,11 @@ const router = createBrowserRouter([
         path: 'landlord-requests',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION['LANDLORD-REQUEST'].filter(
+                x => x.method === 'GET',
+              )}
+            >
               <AdminLandlordRequestsView />,
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -276,7 +342,11 @@ const router = createBrowserRouter([
         path: 'permission',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.PERMISSIONS.filter(
+                x => x.method === 'GET',
+              )}
+            >
               <AdminPermissionView />,
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -286,7 +356,9 @@ const router = createBrowserRouter([
         path: 'role',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.ROLES.filter(x => x.method === 'GET')}
+            >
               <AdminRoleView />,
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -296,7 +368,11 @@ const router = createBrowserRouter([
         path: 'verify-article-requests',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.VERIFICATIONS.filter(
+                x => x.method === 'GET',
+              )}
+            >
               <AdminVerifyArticleRequestsView />
             </RoleProtectedRoute>
           </ProtectedRoute>
@@ -306,10 +382,21 @@ const router = createBrowserRouter([
         path: 'verify-article-requests/:id',
         element: (
           <ProtectedRoute>
-            <RoleProtectedRoute role="ADMIN">
-              {' '}
+            <RoleProtectedRoute
+              permissions={ALL_PERMISSION.VERIFICATIONS.filter(
+                x => x.method === 'GET',
+              )}
+            >
               <AdminDetailUpdateVerifyArticleRequestView />
             </RoleProtectedRoute>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '',
+        element: (
+          <ProtectedRoute>
+            <WelcomePage />
           </ProtectedRoute>
         ),
       },

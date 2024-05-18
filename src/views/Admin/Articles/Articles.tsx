@@ -14,6 +14,8 @@ import { Article } from '../../../model/article/article'
 import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
 import { toast } from 'react-toastify'
 import { VNDCurrencyFormat } from '../../../utils/utils'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
+import ProtectedComponent from '../../../components/ProtectedComponent'
 
 const Articles = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -89,23 +91,35 @@ const Articles = () => {
       renderCell: params => {
         return (
           <Stack spacing={1} direction={'row'}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleUpdate(params.row)
-              }}
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'PUT' || x.method === 'PATCH',
+              )}
             >
-              {t('admin.article.update')}
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handleOpenDelete(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleUpdate(params.row)
+                }}
+              >
+                {t('admin.article.update')}
+              </Button>
+            </ProtectedComponent>
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'DELETE',
+              )}
             >
-              {t('admin.article.delete')}
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handleOpenDelete(params.row)
+                }}
+              >
+                {t('admin.article.delete')}
+              </Button>
+            </ProtectedComponent>
           </Stack>
         )
       },

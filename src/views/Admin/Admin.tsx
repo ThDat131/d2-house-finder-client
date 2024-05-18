@@ -1,7 +1,7 @@
 import AdminSideNavBar from '../../components/NavBar/AdminSideNavbar'
 import { Box, Grid } from '@mui/material'
 import { useEffect, useRef } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { getCurrentUser, signout } from '../../app/slice/auth.slice'
 import { RootState } from '../../app/store'
@@ -9,10 +9,18 @@ import { RootState } from '../../app/store'
 const Admin = (): JSX.Element => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
   const currentUserRef = useRef(false)
   const isRefreshToken = useAppSelector(
     (state: RootState) => state.auth.isRefreshToken,
   )
+
+  useEffect(() => {
+    if (location.pathname === '/admin/') {
+      localStorage.setItem('adminChildUrl', '')
+      localStorage.setItem('adminNavigationPage', '-1')
+    }
+  }, [])
 
   useEffect(() => {
     if (!currentUserRef.current) {

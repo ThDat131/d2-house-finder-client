@@ -14,6 +14,8 @@ import { ActionType } from '../../../common/common-enum'
 import CreateUpdateDialog from './components/CreateUpdateDialog'
 import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
 import { toast } from 'react-toastify'
+import ProtectedComponent from '../../../components/ProtectedComponent'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
 
 const Permissions = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -87,23 +89,35 @@ const Permissions = () => {
       renderCell: params => {
         return (
           <Stack spacing={1} direction={'row'}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleOpenUpdate(params.row)
-              }}
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.PERMISSIONS.filter(
+                x => x.method === 'PUT' || x.method === 'PATCH',
+              )}
             >
-              {t('admin.permission.update')}
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handleOpenDelete(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleOpenUpdate(params.row)
+                }}
+              >
+                {t('admin.permission.update')}
+              </Button>
+            </ProtectedComponent>
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.PERMISSIONS.filter(
+                x => x.method === 'DELETE',
+              )}
             >
-              {t('admin.permission.delete')}
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handleOpenDelete(params.row)
+                }}
+              >
+                {t('admin.permission.delete')}
+              </Button>
+            </ProtectedComponent>
           </Stack>
         )
       },

@@ -20,6 +20,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { User } from '../../../model/user/user'
 import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
 import { toast } from 'react-toastify'
+import ProtectedComponent from '../../../components/ProtectedComponent'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
 
 const Users = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -68,23 +70,35 @@ const Users = () => {
       renderCell: params => {
         return (
           <Stack spacing={1} direction={'row'}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleUpdate(params.row)
-              }}
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.USERS.filter(
+                x => x.method === 'PUT' || x.method === 'PATCH',
+              )}
             >
-              {t('admin.category.update')}
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handleOpenDelete(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleUpdate(params.row)
+                }}
+              >
+                {t('admin.category.update')}
+              </Button>
+            </ProtectedComponent>
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.USERS.filter(
+                x => x.method === 'DELETE',
+              )}
             >
-              {t('admin.category.delete')}
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handleOpenDelete(params.row)
+                }}
+              >
+                {t('admin.category.delete')}
+              </Button>
+            </ProtectedComponent>
           </Stack>
         )
       },

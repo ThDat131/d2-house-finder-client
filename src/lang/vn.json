@@ -1,5 +1,7 @@
 {
   "admin": {
+    "welcomeToAdminPage": "Chào mừng đến với trang quản trị.",
+    "manageYourApplicationSettingsAndInformationFromHere": "Quản lý cài đặt hệ thống và thông tin ở đây",
     "analytic": {
       "totalArticles": "Tổng số Tin đăng",
       "totalLandlordRequest": "Tổng số yêu cầu nâng cấp chủ trọ",
@@ -404,7 +406,8 @@
     "signin": "Đăng nhập",
     "signout": "Đăng xuất",
     "sort": "Sắp xếp",
-    "totalNumberOfPost": "Tổng quan {{number}} kết quả"
+    "totalNumberOfPost": "Tổng quan {{number}} kết quả",
+    "pleaseSignInToContinue": "Vui lòng đăng nhập"
   },
   "goongMap": {
     "watchNow": "Xem ngay"

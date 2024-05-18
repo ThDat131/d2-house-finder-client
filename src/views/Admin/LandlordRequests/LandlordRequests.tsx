@@ -9,6 +9,8 @@ import { LandlordRequestStatusEnum } from '../../../common/common-enum'
 import UpdateLandlordRequest from './components/UpdateLandlordRequest'
 import DetailsUpgradeDialog from '../../GeneralManagement/UpgradeLandlord/components/DetailsUpgradeDialog'
 import { UpgradeLandlordRequest } from '../../../model/upgrade-landlord-request/upgrade-landlord-request'
+import ProtectedComponent from '../../../components/ProtectedComponent'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
 const LandlordRequests = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
   const { t } = useTranslation()
@@ -71,14 +73,20 @@ const LandlordRequests = () => {
         return (
           <Stack spacing={1} direction={'row'}>
             {params.row.status === LandlordRequestStatusEnum.PENDING && (
-              <Button
-                variant="contained"
-                onClick={() => {
-                  handleUpdateRequest(params.row)
-                }}
+              <ProtectedComponent
+                permissions={ALL_PERMISSION['LANDLORD-REQUEST'].filter(
+                  x => x.method === 'PUT' || x.method === 'PATCH',
+                )}
               >
-                {t('admin.landlordRequest.update')}
-              </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    handleUpdateRequest(params.row)
+                  }}
+                >
+                  {t('admin.landlordRequest.update')}
+                </Button>
+              </ProtectedComponent>
             )}
             <Button
               variant="contained"

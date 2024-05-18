@@ -14,6 +14,8 @@ import { Category } from '../../../model/category/category'
 import UpdateCategory from './components/UpdateCategory'
 import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
 import { toast } from 'react-toastify'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
+import ProtectedComponent from '../../../components/ProtectedComponent'
 
 const Categories = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -48,23 +50,35 @@ const Categories = () => {
       renderCell: params => {
         return (
           <Stack spacing={1} direction={'row'}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleUpdate(params.row)
-              }}
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.CATEGORIES.filter(
+                x => x.method === 'PUT' || x.method === 'PATCH',
+              )}
             >
-              {t('admin.category.update')}
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handleOpenDelete(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleUpdate(params.row)
+                }}
+              >
+                {t('admin.category.update')}
+              </Button>
+            </ProtectedComponent>
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.CATEGORIES.filter(
+                x => x.method === 'DELETE',
+              )}
             >
-              {t('admin.category.delete')}
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handleOpenDelete(params.row)
+                }}
+              >
+                {t('admin.category.delete')}
+              </Button>
+            </ProtectedComponent>
           </Stack>
         )
       },

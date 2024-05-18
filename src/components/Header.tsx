@@ -44,6 +44,9 @@ import { Notification } from '../model/notification/notification'
 import { getNotificationByUserId } from '../app/firebase/function'
 import moment from 'moment'
 import ProtectedComponent from './ProtectedComponent'
+import { ALL_PERMISSION } from '../app/permissions-root'
+import engFlag from '../assets/image/flag/eng.png'
+import vnFlag from '../assets/image/flag/vn.png'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
@@ -154,8 +157,7 @@ export const Header = (): JSX.Element => {
         color: '#fff',
         transform: 'translateX(22px)',
         '& .MuiSwitch-thumb:before': {
-          backgroundImage:
-            'url("https://cdn-icons-png.flaticon.com/512/14539/14539032.png")',
+          backgroundImage: `url(${engFlag})`,
           backgroundSize: '30px 30px',
         },
         '& + .MuiSwitch-track': {
@@ -176,8 +178,7 @@ export const Header = (): JSX.Element => {
         top: 0,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundImage:
-          'url("https://cdn-icons-png.flaticon.com/512/197/197473.png")',
+        backgroundImage: `url(${vnFlag})`,
         backgroundSize: '30px 30px',
       },
     },
@@ -208,22 +209,33 @@ export const Header = (): JSX.Element => {
               to={'/'}
               label={t('header.home')}
               value={''}
-              sx={{ color: '#fff' }}
+              sx={{ color: '#fff', opacity: 1 }}
             />
-            <Tab
-              component={Link}
-              to={'/tim-tro-theo-vi-tri'}
-              label={t('header.smartSearch')}
-              value={'smartSearch'}
-              sx={{ color: '#fff' }}
-            />
-            {currentUser.role.name === 'ADMIN' && (
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ARTICLES.filter(x =>
+                x.apiPath.includes('search-by-location'),
+              )}
+              allowAnonymous={true}
+            >
+              <Tab
+                component={Link}
+                to={'/tim-tro-theo-vi-tri'}
+                label={t('header.smartSearch')}
+                value={'smartSearch'}
+                sx={{ color: '#fff', opacity: 1 }}
+              />
+            </ProtectedComponent>
+
+            {currentUser.role.name.includes('ADMIN') && (
               <Tab
                 component={Link}
                 to={'/admin'}
                 label={'ADMIN'}
                 value={'admin'}
-                sx={{ color: '#fff' }}
+                sx={{ color: '#fff', opacity: 1 }}
+                onClick={() => {
+                  localStorage.setItem('adminNavigationPage', '1')
+                }}
               />
             )}
           </Tabs>
@@ -237,7 +249,7 @@ export const Header = (): JSX.Element => {
             </InputLabel>
             <Select
               labelId="category-select"
-              disableUnderline={true}
+              style={{ textDecoration: 'none' }}
               value={categoryState.selected?._id}
               sx={{
                 color: '#fff',
@@ -363,10 +375,16 @@ export const Header = (): JSX.Element => {
                   >
                     <Paper sx={{ height: 1 }}>
                       <List>
-                        <ProtectedComponent role="LANDLORD">
+                        <ProtectedComponent
+                          permissions={ALL_PERMISSION.ARTICLES.filter(
+                            x => x.method === 'POST',
+                          )}
+                        >
                           <ListItemButton
                             onClick={() => {
                               navigate('/quan-ly/dang-tin-moi')
+                              localStorage.setItem('userNavigationPage', '1')
+                              setShowUserOpts(false)
                             }}
                           >
                             {t('header.postAnArticle')}
@@ -374,19 +392,30 @@ export const Header = (): JSX.Element => {
                           <ListItemButton
                             onClick={() => {
                               navigate('/quan-ly/tin-dang')
+                              localStorage.setItem('userNavigationPage', '2')
+                              setShowUserOpts(false)
                             }}
                           >
                             {t('header.manageArticles')}
                           </ListItemButton>
                         </ProtectedComponent>
 
-                        <ListItemButton
-                          onClick={() => {
-                            navigate('/quan-ly/cap-nhat-thong-tin-ca-nhan')
-                          }}
+                        <ProtectedComponent
+                          permissions={ALL_PERMISSION.USERS.filter(
+                            x => x.method === 'PUT' || x.method === 'PATCH',
+                          )}
                         >
-                          {t('header.personalInformation')}
-                        </ListItemButton>
+                          <ListItemButton
+                            onClick={() => {
+                              navigate('/quan-ly/cap-nhat-thong-tin-ca-nhan')
+                              localStorage.setItem('userNavigationPage', '3')
+                              setShowUserOpts(false)
+                            }}
+                          >
+                            {t('header.personalInformation')}
+                          </ListItemButton>
+                        </ProtectedComponent>
+
                         <ListItemButton onClick={handleSignout}>
                           {t('header.signout')}
                         </ListItemButton>
@@ -399,7 +428,7 @@ export const Header = (): JSX.Element => {
           ) : (
             <Box sx={{ marginLeft: 'auto' }}>
               <Button
-                sx={{ color: '#fff' }}
+                sx={{ color: '#fff', opacity: 1 }}
                 onClick={() => {
                   navigate('/dang-nhap')
                 }}
@@ -407,7 +436,7 @@ export const Header = (): JSX.Element => {
                 {t('header.signin')}
               </Button>
               <Button
-                sx={{ color: '#fff' }}
+                sx={{ color: '#fff', opacity: 1 }}
                 onClick={() => {
                   navigate('dang-ky')
                 }}

@@ -34,6 +34,10 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import { signout } from '../../app/slice/auth.slice'
 import SecurityIcon from '@mui/icons-material/Security'
+import ProtectedComponent from '../ProtectedComponent'
+import { ALL_PERMISSION } from '../../app/permissions-root'
+import engFlag from '../../assets/image/flag/eng.png'
+import vnFlag from '../../assets/image/flag/vn.png'
 
 const currentPage = localStorage.getItem('adminNavigationPage') ?? '1'
 const currentChildUrl = localStorage.getItem('adminChildUrl') ?? ''
@@ -58,7 +62,7 @@ const AdminSideNavBar = (): JSX.Element => {
       id: 1,
       title: t('admin.sideNav.statistic'),
       icon: <InsightsIcon />,
-      url: '/admin',
+      url: '/admin/statistic',
     },
     // {
     //   id: 2,
@@ -201,8 +205,7 @@ const AdminSideNavBar = (): JSX.Element => {
         color: '#fff',
         transform: 'translateX(22px)',
         '& .MuiSwitch-thumb:before': {
-          backgroundImage:
-            'url("https://cdn-icons-png.flaticon.com/512/14539/14539032.png")',
+          backgroundImage: `url(${engFlag})`,
           backgroundSize: '30px 30px',
         },
         '& + .MuiSwitch-track': {
@@ -223,8 +226,7 @@ const AdminSideNavBar = (): JSX.Element => {
         top: 0,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        backgroundImage:
-          'url("https://cdn-icons-png.flaticon.com/512/197/197473.png")',
+        backgroundImage: `url(${vnFlag})`,
         backgroundSize: '30px 30px',
       },
     },
@@ -285,23 +287,33 @@ const AdminSideNavBar = (): JSX.Element => {
         <AccordionDetails>
           <List sx={listStyle}>
             {overviewData.map(x => (
-              <ListItem key={x.title} disablePadding>
-                <ListItemButton
-                  className="parent"
-                  onClick={() => {
-                    navigate(x.url)
-                    setSelectedIndex(x.id)
-                    setSelectedChildUrl('')
-                    localStorage.setItem('adminChildUrl', '')
-                    setExpanded(-1)
-                    localStorage.setItem('adminNavigationPage', x.id.toString())
-                  }}
-                  selected={selectedIndex === x.id}
-                >
-                  <ListItemIcon>{x.icon}</ListItemIcon>
-                  <ListItemText primary={x.title} />
-                </ListItemButton>
-              </ListItem>
+              <ProtectedComponent
+                key={x.title}
+                permissions={
+                  x.url.includes('statistic') ? ALL_PERMISSION.STATISTICAL : []
+                }
+              >
+                <ListItem disablePadding>
+                  <ListItemButton
+                    className="parent"
+                    onClick={() => {
+                      navigate(x.url)
+                      setSelectedIndex(x.id)
+                      setSelectedChildUrl('')
+                      localStorage.setItem('adminChildUrl', '')
+                      setExpanded(-1)
+                      localStorage.setItem(
+                        'adminNavigationPage',
+                        x.id.toString(),
+                      )
+                    }}
+                    selected={selectedIndex === x.id}
+                  >
+                    <ListItemIcon>{x.icon}</ListItemIcon>
+                    <ListItemText primary={x.title} />
+                  </ListItemButton>
+                </ListItem>
+              </ProtectedComponent>
             ))}
           </List>
         </AccordionDetails>
@@ -315,103 +327,172 @@ const AdminSideNavBar = (): JSX.Element => {
         <AccordionDetails>
           <List sx={listStyle}>
             {managementData.map(x => (
-              <ListItem key={x.title} disablePadding>
-                <Accordion
-                  disableGutters
-                  elevation={0}
-                  expanded={x.id === expanded}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    onClick={() => {
-                      x.id === selectedIndex
-                        ? setSelectedIndex(-1)
-                        : setSelectedIndex(x.id)
-                      x.id === expanded ? setExpanded(-1) : setExpanded(x.id)
-                    }}
+              <ProtectedComponent
+                key={x.title}
+                permissions={
+                  x.url.includes('user')
+                    ? ALL_PERMISSION.USERS.filter(x => x.method === 'GET')
+                    : x.url.includes('article')
+                      ? []
+                      : x.url.includes('category')
+                        ? ALL_PERMISSION.ARTICLES.filter(
+                            x => x.method === 'GET',
+                          )
+                        : []
+                }
+              >
+                <ListItem disablePadding>
+                  <Accordion
+                    disableGutters
+                    elevation={0}
+                    expanded={x.id === expanded}
                   >
-                    <ListItemButton
-                      selected={selectedIndex === x.id}
-                      sx={{ padding: 0 }}
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      onClick={() => {
+                        x.id === selectedIndex
+                          ? setSelectedIndex(-1)
+                          : setSelectedIndex(x.id)
+                        x.id === expanded ? setExpanded(-1) : setExpanded(x.id)
+                      }}
                     >
-                      <ListItemIcon>{x.icon}</ListItemIcon>
-                      <ListItemText primary={x.title} />
-                    </ListItemButton>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <List sx={childListStyle}>
-                      <ListItem>
-                        <ListItemButton
-                          sx={{ pl: 5 }}
-                          selected={selectedChildUrl === `${x.url}/create`}
-                          onClick={() => {
-                            setSelectedIndex(x.id)
-                            navigate(`${x.url}/create`)
-                            setSelectedChildUrl(`${x.url}/create`)
-                            localStorage.setItem(
-                              'adminChildUrl',
-                              `${x.url}/create`,
-                            )
+                      <ListItemButton
+                        selected={selectedIndex === x.id}
+                        sx={{ padding: 0 }}
+                      >
+                        <ListItemIcon>{x.icon}</ListItemIcon>
+                        <ListItemText primary={x.title} />
+                      </ListItemButton>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <List sx={childListStyle}>
+                        <ListItem>
+                          <ProtectedComponent
+                            permissions={
+                              x.url.includes('user')
+                                ? ALL_PERMISSION.USERS.filter(
+                                    x => x.method === 'POST',
+                                  )
+                                : x.url.includes('article')
+                                  ? ALL_PERMISSION.ARTICLES.filter(
+                                      x => x.method === 'POST',
+                                    )
+                                  : x.url.includes('category')
+                                    ? ALL_PERMISSION.ARTICLES.filter(
+                                        x => x.method === 'POST',
+                                      )
+                                    : []
+                            }
+                          >
+                            <ListItemButton
+                              sx={{ pl: 5 }}
+                              selected={selectedChildUrl === `${x.url}/create`}
+                              onClick={() => {
+                                setSelectedIndex(x.id)
+                                navigate(`${x.url}/create`)
+                                setSelectedChildUrl(`${x.url}/create`)
+                                localStorage.setItem(
+                                  'adminChildUrl',
+                                  `${x.url}/create`,
+                                )
 
-                            localStorage.setItem(
-                              'adminNavigationPage',
-                              x.id.toString(),
-                            )
-                            setExpanded(x.id)
-                          }}
-                        >
-                          <ListItemIcon>
-                            <AddIcon />
-                          </ListItemIcon>
-                          <ListItemText primary={t('admin.sideNav.create')} />
-                        </ListItemButton>
-                      </ListItem>
-                      <ListItem>
-                        <ListItemButton
-                          sx={{ pl: 5 }}
-                          selected={selectedChildUrl === x.url}
-                          onClick={() => {
-                            navigate(`${x.url}`)
-                            setSelectedChildUrl(x.url)
-                            localStorage.setItem(
-                              'adminNavigationPage',
-                              x.id.toString(),
-                            )
-                            localStorage.setItem('adminChildUrl', x.url)
-                          }}
-                        >
-                          <ListItemIcon>
-                            <ListIcon />
-                          </ListItemIcon>
-                          <ListItemText primary={t('admin.sideNav.list')} />
-                        </ListItemButton>
-                      </ListItem>
-                    </List>
-                  </AccordionDetails>
-                </Accordion>
-              </ListItem>
+                                localStorage.setItem(
+                                  'adminNavigationPage',
+                                  x.id.toString(),
+                                )
+                                setExpanded(x.id)
+                              }}
+                            >
+                              <ListItemIcon>
+                                <AddIcon />
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={t('admin.sideNav.create')}
+                              />
+                            </ListItemButton>
+                          </ProtectedComponent>
+                        </ListItem>
+                        <ListItem>
+                          <ProtectedComponent
+                            permissions={
+                              x.url.includes('user')
+                                ? ALL_PERMISSION.USERS.filter(
+                                    x =>
+                                      x.method === 'PUT' ||
+                                      x.method === 'PATCH',
+                                  )
+                                : x.url.includes('article')
+                                  ? []
+                                  : x.url.includes('category')
+                                    ? ALL_PERMISSION.ARTICLES.filter(
+                                        x =>
+                                          x.method === 'PUT' ||
+                                          x.method === 'PATCH',
+                                      )
+                                    : []
+                            }
+                          >
+                            <ListItemButton
+                              sx={{ pl: 5 }}
+                              selected={selectedChildUrl === x.url}
+                              onClick={() => {
+                                navigate(`${x.url}`)
+                                setSelectedChildUrl(x.url)
+                                localStorage.setItem(
+                                  'adminNavigationPage',
+                                  x.id.toString(),
+                                )
+                                localStorage.setItem('adminChildUrl', x.url)
+                              }}
+                            >
+                              <ListItemIcon>
+                                <ListIcon />
+                              </ListItemIcon>
+                              <ListItemText primary={t('admin.sideNav.list')} />
+                            </ListItemButton>
+                          </ProtectedComponent>
+                        </ListItem>
+                      </List>
+                    </AccordionDetails>
+                  </Accordion>
+                </ListItem>
+              </ProtectedComponent>
             ))}
           </List>
           <List sx={listStyle}>
             {managementDataV2.map(x => (
-              <ListItem key={x.id} sx={{ mb: 1 }}>
-                <ListItemButton
-                  className="parent"
-                  selected={selectedIndex === x.id}
-                  sx={{ pl: 2 }}
-                  onClick={() => {
-                    navigate(x.url)
-                    setSelectedIndex(x.id)
-                    setSelectedChildUrl('')
-                    setExpanded(-1)
-                    localStorage.setItem('adminChildUrl', '')
-                    localStorage.setItem('adminNavigationPage', x.id.toString())
-                  }}
-                >
-                  <ListItemIcon>{x.icon}</ListItemIcon>
-                  <ListItemText primary={x.title} />
-                </ListItemButton>
-              </ListItem>
+              <ProtectedComponent
+                key={x.id}
+                permissions={
+                  x.url.includes('permission')
+                    ? ALL_PERMISSION.PERMISSIONS.filter(x => x.method === 'GET')
+                    : x.url.includes('role')
+                      ? ALL_PERMISSION.USERS.filter(x => x.method === 'GET')
+                      : []
+                }
+              >
+                <ListItem sx={{ mb: 1 }}>
+                  <ListItemButton
+                    className="parent"
+                    selected={selectedIndex === x.id}
+                    sx={{ pl: 2 }}
+                    onClick={() => {
+                      navigate(x.url)
+                      setSelectedIndex(x.id)
+                      setSelectedChildUrl('')
+                      setExpanded(-1)
+                      localStorage.setItem('adminChildUrl', '')
+                      localStorage.setItem(
+                        'adminNavigationPage',
+                        x.id.toString(),
+                      )
+                    }}
+                  >
+                    <ListItemIcon>{x.icon}</ListItemIcon>
+                    <ListItemText primary={x.title} />
+                  </ListItemButton>
+                </ListItem>
+              </ProtectedComponent>
             ))}
           </List>
         </AccordionDetails>
@@ -425,23 +506,41 @@ const AdminSideNavBar = (): JSX.Element => {
         <AccordionDetails>
           <List sx={listStyle}>
             {requestsData.map(x => (
-              <ListItem key={x.title} disablePadding>
-                <ListItemButton
-                  className="parent"
-                  onClick={() => {
-                    navigate(x.url)
-                    setSelectedIndex(x.id)
-                    setSelectedChildUrl('')
-                    setExpanded(-1)
-                    localStorage.setItem('adminChildUrl', '')
-                    localStorage.setItem('adminNavigationPage', x.id.toString())
-                  }}
-                  selected={selectedIndex === x.id}
-                >
-                  <ListItemIcon>{x.icon}</ListItemIcon>
-                  <ListItemText primary={x.title} />
-                </ListItemButton>
-              </ListItem>
+              <ProtectedComponent
+                key={x.id}
+                permissions={
+                  x.url.includes('landlord')
+                    ? ALL_PERMISSION['LANDLORD-REQUEST'].filter(
+                        x => x.method === 'GET',
+                      )
+                    : x.url.includes('article')
+                      ? ALL_PERMISSION.VERIFICATIONS.filter(
+                          x => x.method === 'GET',
+                        )
+                      : []
+                }
+              >
+                <ListItem key={x.title} disablePadding>
+                  <ListItemButton
+                    className="parent"
+                    onClick={() => {
+                      navigate(x.url)
+                      setSelectedIndex(x.id)
+                      setSelectedChildUrl('')
+                      setExpanded(-1)
+                      localStorage.setItem('adminChildUrl', '')
+                      localStorage.setItem(
+                        'adminNavigationPage',
+                        x.id.toString(),
+                      )
+                    }}
+                    selected={selectedIndex === x.id}
+                  >
+                    <ListItemIcon>{x.icon}</ListItemIcon>
+                    <ListItemText primary={x.title} />
+                  </ListItemButton>
+                </ListItem>
+              </ProtectedComponent>
             ))}
           </List>
         </AccordionDetails>

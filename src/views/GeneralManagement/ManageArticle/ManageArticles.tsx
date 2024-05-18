@@ -16,6 +16,8 @@ import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
 import { deleteArticle } from '../../../app/slice/article.slice.'
 import { toast } from 'react-toastify'
 import VerifyArticleDialog from '../CreateArticle/components/VerifyArticleDialog'
+import ProtectedComponent from '../../../components/ProtectedComponent'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
 
 const ManageArticles = (): JSX.Element => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -104,32 +106,52 @@ const ManageArticles = (): JSX.Element => {
       renderCell: params => {
         return (
           <Stack spacing={1} direction={'row'}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleOpenVerifyArticle(params.row)
-              }}
-              disabled={params.row.status === ArticleStatus.VERIFY}
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.VERIFICATIONS.filter(
+                x => x.method === 'POST',
+              )}
             >
-              {t('generalManagement.manageArticles.verifyArticle')}
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleUpdate(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleOpenVerifyArticle(params.row)
+                }}
+                disabled={params.row.status === ArticleStatus.VERIFY}
+              >
+                {t('generalManagement.manageArticles.verifyArticle')}
+              </Button>
+            </ProtectedComponent>
+
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'PUT' || x.method === 'PATCH',
+              )}
             >
-              {t('admin.category.update')}
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handleOpenDelete(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleUpdate(params.row)
+                }}
+                disabled={params.row.status === ArticleStatus.VERIFY}
+              >
+                {t('admin.category.update')}
+              </Button>
+            </ProtectedComponent>
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'DELETE',
+              )}
             >
-              {t('admin.category.delete')}
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handleOpenDelete(params.row)
+                }}
+              >
+                {t('admin.category.delete')}
+              </Button>
+            </ProtectedComponent>
           </Stack>
         )
       },
