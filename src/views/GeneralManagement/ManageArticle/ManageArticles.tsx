@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Stack, Typography } from '@mui/material'
+import { Box, Button, Chip, Grid, Stack, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { useTranslation } from 'react-i18next'
 import { HttpService } from '../../../api/HttpService'
@@ -16,6 +16,8 @@ import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
 import { deleteArticle } from '../../../app/slice/article.slice.'
 import { toast } from 'react-toastify'
 import VerifyArticleDialog from '../CreateArticle/components/VerifyArticleDialog'
+import ProtectedComponent from '../../../components/ProtectedComponent'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
 
 const ManageArticles = (): JSX.Element => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -85,7 +87,7 @@ const ManageArticles = (): JSX.Element => {
             return (
               <Chip
                 label={t('generalManagement.manageArticles.verify')}
-                color="primary"
+                color="success"
               />
             )
           case ArticleStatus.UNVERIFY:
@@ -104,32 +106,52 @@ const ManageArticles = (): JSX.Element => {
       renderCell: params => {
         return (
           <Stack spacing={1} direction={'row'}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleOpenVerifyArticle(params.row)
-              }}
-              disabled={params.row.status === ArticleStatus.VERIFY}
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.VERIFICATIONS.filter(
+                x => x.method === 'POST',
+              )}
             >
-              {t('generalManagement.manageArticles.verifyArticle')}
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleUpdate(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleOpenVerifyArticle(params.row)
+                }}
+                disabled={params.row.status === ArticleStatus.VERIFY}
+              >
+                {t('generalManagement.manageArticles.verify')}
+              </Button>
+            </ProtectedComponent>
+
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'PUT' || x.method === 'PATCH',
+              )}
             >
-              {t('admin.category.update')}
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handleOpenDelete(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleUpdate(params.row)
+                }}
+                disabled={params.row.status === ArticleStatus.VERIFY}
+              >
+                {t('admin.category.update')}
+              </Button>
+            </ProtectedComponent>
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'DELETE',
+              )}
             >
-              {t('admin.category.delete')}
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handleOpenDelete(params.row)
+                }}
+              >
+                {t('admin.category.delete')}
+              </Button>
+            </ProtectedComponent>
           </Stack>
         )
       },
@@ -165,13 +187,13 @@ const ManageArticles = (): JSX.Element => {
   }, [paginationModel])
 
   return (
-    <>
+    <Grid item>
       <Box borderBottom={1} mb={4}>
         <Typography variant={'h3'} mb={2}>
           {t('generalManagement.manageArticles.manageArticles')}
         </Typography>
       </Box>
-      <Box sx={{ display: 'grid' }}>
+      <Box sx={{ height: 1, display: 'grid' }}>
         <DataGrid
           sx={{ width: 1 }}
           getRowId={x => x._id}
@@ -187,6 +209,18 @@ const ManageArticles = (): JSX.Element => {
           }}
           onPaginationModelChange={setPaginationModel}
           disableRowSelectionOnClick={true}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+            noResultsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+          }}
         />
       </Box>
       <ConfirmDialog
@@ -215,7 +249,7 @@ const ManageArticles = (): JSX.Element => {
         setOpen={setOpenVerify}
         article={selectedArticle as Article}
       />
-    </>
+    </Grid>
   )
 }
 

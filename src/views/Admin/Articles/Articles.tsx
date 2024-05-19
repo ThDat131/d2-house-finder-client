@@ -14,6 +14,8 @@ import { Article } from '../../../model/article/article'
 import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
 import { toast } from 'react-toastify'
 import { VNDCurrencyFormat } from '../../../utils/utils'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
+import ProtectedComponent from '../../../components/ProtectedComponent'
 
 const Articles = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -77,7 +79,7 @@ const Articles = () => {
       renderCell: params => {
         switch (params.value) {
           case ArticleStatus.VERIFY:
-            return <Chip label={t('admin.article.verify')} color="primary" />
+            return <Chip label={t('admin.article.verify')} color="success" />
           case ArticleStatus.UNVERIFY:
             return <Chip label={t('admin.article.unverify')} color="error" />
         }
@@ -89,23 +91,35 @@ const Articles = () => {
       renderCell: params => {
         return (
           <Stack spacing={1} direction={'row'}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleUpdate(params.row)
-              }}
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'PUT' || x.method === 'PATCH',
+              )}
             >
-              {t('admin.article.update')}
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handleOpenDelete(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleUpdate(params.row)
+                }}
+              >
+                {t('admin.article.update')}
+              </Button>
+            </ProtectedComponent>
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ARTICLES.filter(
+                x => x.method === 'DELETE',
+              )}
             >
-              {t('admin.article.delete')}
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handleOpenDelete(params.row)
+                }}
+              >
+                {t('admin.article.delete')}
+              </Button>
+            </ProtectedComponent>
           </Stack>
         )
       },
@@ -169,6 +183,18 @@ const Articles = () => {
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10]}
           disableRowSelectionOnClick={true}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+            noResultsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+          }}
         />
       </Grid>
       <ConfirmDialog

@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Stack, Typography } from '@mui/material'
+import { Box, Button, Chip, Grid, Stack, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { t } from 'i18next'
 import { HttpService } from '../../../api/HttpService'
@@ -55,7 +55,7 @@ const VerifyArticleRequestsView = () => {
             return (
               <Chip
                 label={t('generalManagement.upgradeLandlord.approved')}
-                color="primary"
+                color="success"
               />
             )
           case VerificationStatusEnum.REJECTED:
@@ -126,13 +126,13 @@ const VerifyArticleRequestsView = () => {
   }, [])
 
   return (
-    <>
+    <Grid item>
       <Box borderBottom={1} mb={4}>
         <Typography variant={'h3'} mb={2}>
           {t('generalManagement.manageArticles.manageArticles')}
         </Typography>
       </Box>
-      <Box sx={{ display: 'grid' }}>
+      <Box sx={{ height: 1, display: 'grid' }}>
         <DataGrid
           sx={{ width: 1 }}
           getRowId={x => x._id as string}
@@ -148,9 +148,21 @@ const VerifyArticleRequestsView = () => {
           }}
           onPaginationModelChange={setPaginationModel}
           disableRowSelectionOnClick={true}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+            noResultsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+          }}
         />
       </Box>
-    </>
+    </Grid>
   )
 }
 

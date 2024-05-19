@@ -1,4 +1,5 @@
 import { FollowEntity } from '../follow/follow-entity'
+import { Permission } from '../permission/permission'
 import { Role } from '../role/role'
 
 export interface User {
@@ -21,4 +22,5 @@ export interface User {
   provinceName?: string
   districtName?: string
   wardName?: string
+  permissions?: Permission[]
 }

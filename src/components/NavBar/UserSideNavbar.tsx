@@ -16,16 +16,21 @@ import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
 import { useTranslation } from 'react-i18next'
-import SecurityIcon from '@mui/icons-material/Security'
+import ShieldIcon from '@mui/icons-material/Shield'
 import ProtectedComponent from '../ProtectedComponent'
-
-const currentPage = localStorage.getItem('userNavigationPage') ?? '1'
+import { ALL_PERMISSION } from '../../app/permissions-root'
 
 const UserSideNavbar = () => {
+  const currentPage = localStorage.getItem('userNavigationPage') ?? '1'
+
   const { t } = useTranslation()
   const navigate = useNavigate()
   const user = useAppSelector((state: RootState) => state.auth.auth.user)
   const [selectedIndex, setSelectedIndex] = useState(parseInt(currentPage))
+
+  useEffect(() => {
+    setSelectedIndex(parseInt(currentPage))
+  }, [currentPage])
 
   const handleListItemClick = (index: number) => {
     setSelectedIndex(index)
@@ -68,7 +73,9 @@ const UserSideNavbar = () => {
           },
         }}
       >
-        <ProtectedComponent role="LANDLORD">
+        <ProtectedComponent
+          permissions={ALL_PERMISSION.ARTICLES.filter(x => x.method !== 'GET')}
+        >
           <ListItemButton
             style={ListItemButtonStyle}
             selected={selectedIndex === 1}
@@ -99,36 +106,48 @@ const UserSideNavbar = () => {
               navigate('/quan-ly/danh-sach-yeu-cau-xac-thuc')
             }}
           >
-            <SecurityIcon />
+            <ShieldIcon />
             <ListItemText>
               {t('userSideNav.listOfVerifyArticleRequest')}
             </ListItemText>
           </ListItemButton>
         </ProtectedComponent>
-        <ListItemButton
-          style={ListItemButtonStyle}
-          selected={selectedIndex === 3}
-          onClick={() => {
-            navigate('/quan-ly/cap-nhat-thong-tin-ca-nhan')
-            handleListItemClick(3)
-          }}
+        <ProtectedComponent
+          permissions={ALL_PERMISSION.USERS.filter(
+            x => x.method === 'PUT' || x.method === 'PATCH',
+          )}
         >
-          <EditIcon />
-          <ListItemText>
-            {t('userSideNav.updatePersonalInformation')}
-          </ListItemText>
-        </ListItemButton>
-        <ListItemButton
-          style={ListItemButtonStyle}
-          selected={selectedIndex === 4}
-          onClick={() => {
-            handleListItemClick(4)
-            navigate('/quan-ly/nang-cap-tai-khoan')
-          }}
+          <ListItemButton
+            style={ListItemButtonStyle}
+            selected={selectedIndex === 3}
+            onClick={() => {
+              navigate('/quan-ly/cap-nhat-thong-tin-ca-nhan')
+              handleListItemClick(3)
+            }}
+          >
+            <EditIcon />
+            <ListItemText>
+              {t('userSideNav.updatePersonalInformation')}
+            </ListItemText>
+          </ListItemButton>
+        </ProtectedComponent>
+        <ProtectedComponent
+          permissions={ALL_PERMISSION['LANDLORD-REQUEST'].filter(
+            x => x.method === 'GET' || x.method === 'POST',
+          )}
         >
-          <VerifiedUserIcon />
-          <ListItemText>{t('userSideNav.upgradeLandlord')}</ListItemText>
-        </ListItemButton>
+          <ListItemButton
+            style={ListItemButtonStyle}
+            selected={selectedIndex === 4}
+            onClick={() => {
+              handleListItemClick(4)
+              navigate('/quan-ly/nang-cap-tai-khoan')
+            }}
+          >
+            <VerifiedUserIcon />
+            <ListItemText>{t('userSideNav.upgradeLandlord')}</ListItemText>
+          </ListItemButton>
+        </ProtectedComponent>
         <ListItemButton
           style={ListItemButtonStyle}
           selected={selectedIndex === 5}

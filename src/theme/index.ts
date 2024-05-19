@@ -116,6 +116,13 @@ const theme = responsiveFontSizes(
           },
         },
       },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            minWidth: 110,
+          },
+        },
+      },
     },
   }),
 )

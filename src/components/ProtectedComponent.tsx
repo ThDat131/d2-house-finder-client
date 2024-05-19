@@ -1,21 +1,32 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
+import _ from 'lodash'
 import { useAppSelector } from '../app/hooks'
-import { RootState } from '../app/store'
+import { userPermissions } from '../app/slice/auth.slice'
 
 const ProtectedComponent = ({
-  role,
+  permissions,
   children,
+  allowAnonymous,
 }: {
-  role: string
+  permissions: any
   children: ReactNode
+  allowAnonymous?: boolean
 }) => {
-  const currentRole = useAppSelector(
-    (root: RootState) => root.auth.auth.user.role.name,
-  )
+  const currentPermissions = useAppSelector(userPermissions)
 
-  if (currentRole.toUpperCase().includes('ADMIN')) return children ?? <></>
+  const [isShow, setIsShow] = useState<any[]>([])
+  useEffect(() => {
+    setIsShow(
+      _.differenceWith(permissions, currentPermissions as any, _.isEqual),
+    )
+  }, [permissions])
 
-  if (role !== currentRole) return <></>
+  if (allowAnonymous && currentPermissions?.length === 0)
+    return children ?? <></>
+
+  if (isShow.length > 0) {
+    return <></>
+  }
 
   return children ?? <></>
 }

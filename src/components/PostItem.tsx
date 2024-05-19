@@ -4,7 +4,7 @@ import { type Article } from '../model/article/article'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
-import SecurityTwoToneIcon from '@mui/icons-material/SecurityTwoTone'
+import ShieldIcon from '@mui/icons-material/Shield'
 import { ArticleStatus } from '../common/common-enum'
 
 interface PostItemProps {
@@ -52,7 +52,7 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
           />
           {data.status === ArticleStatus.VERIFY && (
             <Tooltip title={t('articleBox.thisArticleIsVerifyByUs')}>
-              <SecurityTwoToneIcon
+              <ShieldIcon
                 sx={{
                   position: 'absolute',
                   bottom: 10,
@@ -62,7 +62,7 @@ const PostItem: React.FC<PostItemProps> = ({ data }): JSX.Element => {
                   cursor: 'pointer',
                 }}
                 fontSize="large"
-                color={'primary'}
+                color={'success'}
               />
             </Tooltip>
           )}

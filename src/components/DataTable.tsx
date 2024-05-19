@@ -1,5 +1,6 @@
 import React from 'react'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid'
+import { Stack } from '@mui/material'
 
 interface DataTableProps {
   columns: GridColDef[]

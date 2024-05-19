@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Typography,
-  Button,
-  Box,
-  Stack,
-  Switch,
-  Checkbox,
-} from '@mui/material'
+import { Grid, Typography, Button, Box, Stack, Checkbox } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
@@ -20,6 +12,8 @@ import { ActionType } from '../../../common/common-enum'
 import CreateUpdateDialog from './components/CreateUpdateDialog'
 import { deleteRole, getRoles } from '../../../app/slice/role.slice'
 import { toast } from 'react-toastify'
+import ProtectedComponent from '../../../components/ProtectedComponent'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
 
 const Roles = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -72,23 +66,35 @@ const Roles = () => {
       renderCell: params => {
         return (
           <Stack spacing={1} direction={'row'}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                handleOpenUpdate(params.row)
-              }}
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ROLES.filter(
+                x => x.method === 'PUT' || x.method === 'PATCH',
+              )}
             >
-              {t('admin.role.update')}
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handleOpenDelete(params.row)
-              }}
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleOpenUpdate(params.row)
+                }}
+              >
+                {t('admin.role.update')}
+              </Button>
+            </ProtectedComponent>
+            <ProtectedComponent
+              permissions={ALL_PERMISSION.ROLES.filter(
+                x => x.method === 'DELETE',
+              )}
             >
-              {t('admin.role.delete')}
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  handleOpenDelete(params.row)
+                }}
+              >
+                {t('admin.role.delete')}
+              </Button>
+            </ProtectedComponent>
           </Stack>
         )
       },
@@ -159,6 +165,26 @@ const Roles = () => {
             onPaginationModelChange={setPaginationModel}
             disableRowSelectionOnClick={true}
             pageSizeOptions={[10]}
+            slots={{
+              noRowsOverlay: () => (
+                <Stack
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  height={1}
+                >
+                  {t('generalManagement.noDataFound')}
+                </Stack>
+              ),
+              noResultsOverlay: () => (
+                <Stack
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  height={1}
+                >
+                  {t('generalManagement.noDataFound')}
+                </Stack>
+              ),
+            }}
           />
         </Box>
       </Grid>

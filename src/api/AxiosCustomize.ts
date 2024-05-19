@@ -58,10 +58,10 @@ instance.interceptors.response.use(
     }
 
     if (
-      error.config &&
-      error.response &&
-      +error.response.status === 400 &&
-      error.config.url === ApiPathEnum.GetUserByRefreshToken &&
+      error?.config &&
+      error?.response &&
+      (+error?.response?.status === 400 || +error?.response?.status === 500) &&
+      error?.config?.url === ApiPathEnum.GetUserByRefreshToken &&
       location.pathname.startsWith('/admin')
     ) {
       store.dispatch(refreshTokenExpiredAction(true))

@@ -9,6 +9,8 @@ import { getVerifyArticleRequests } from '../../../app/slice/verify-article-requ
 import { VerifyArticleRequests } from '../../../model/verify-article-request/verify-article-request'
 import { useNavigate } from 'react-router-dom'
 import UpdateVerifyArticleRequest from './components/UpdateVerifyArticleRequest'
+import { ALL_PERMISSION } from '../../../app/permissions-root'
+import ProtectedComponent from '../../../components/ProtectedComponent'
 
 const VerifyArticleRequest = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -72,7 +74,7 @@ const VerifyArticleRequest = () => {
             return (
               <Chip
                 label={t('generalManagement.upgradeLandlord.approved')}
-                color="primary"
+                color="success"
               />
             )
           case VerificationStatusEnum.REJECTED:
@@ -93,14 +95,20 @@ const VerifyArticleRequest = () => {
         return (
           <Stack spacing={1} direction={'row'}>
             {params.row.status === VerificationStatusEnum.PENDING && (
-              <Button
-                variant="contained"
-                onClick={() => {
-                  handleUpdateRequest(params.row)
-                }}
+              <ProtectedComponent
+                permissions={ALL_PERMISSION.VERIFICATIONS.filter(
+                  x => x.method === 'PUT' || x.method === 'PATCH',
+                )}
               >
-                {t('admin.landlordRequest.update')}
-              </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    handleUpdateRequest(params.row)
+                  }}
+                >
+                  {t('admin.landlordRequest.update')}
+                </Button>
+              </ProtectedComponent>
             )}
             <Button
               variant="contained"
@@ -161,6 +169,18 @@ const VerifyArticleRequest = () => {
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10]}
           disableRowSelectionOnClick={true}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+            noResultsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+          }}
         />
       </Grid>
       <UpdateVerifyArticleRequest

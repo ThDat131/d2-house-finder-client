@@ -109,8 +109,6 @@ const ArticleDetails = (): JSX.Element => {
       x => x._id === article?.createdBy._id,
     )
 
-    console.log(isFollow)
-
     if (isFollow) {
       unFollow()
     } else {

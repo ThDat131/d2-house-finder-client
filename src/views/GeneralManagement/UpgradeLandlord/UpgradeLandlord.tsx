@@ -106,7 +106,7 @@ const UpgradeLandlord = (): JSX.Element => {
             return (
               <Chip
                 label={t('generalManagement.upgradeLandlord.approved')}
-                color="primary"
+                color="success"
               />
             )
           case LandlordRequestStatusEnum.REJECTED:
@@ -244,15 +244,15 @@ const UpgradeLandlord = (): JSX.Element => {
   }, [paginationModel, isUpdated])
 
   return (
-    <Grid container>
+    <Grid item container>
       <Grid item borderBottom={1} xs={12}>
         <Typography variant={'h3'} mb={2}>
           {t('generalManagement.upgradeLandlord.upgradeLandlord')}
         </Typography>
       </Grid>
-      <Grid item borderBottom={1} xs={12} height={1}>
+      <Grid item xs={12} height={1}>
         <TabContext value={selectedTab}>
-          <Box sx={{ height: 1 }}>
+          <Box>
             <TabList
               onChange={(evt, value) => {
                 setSelectedTab(value)
@@ -466,7 +466,7 @@ const UpgradeLandlord = (): JSX.Element => {
             </Container>
           </TabPanel>
           <TabPanel value={TypeTabEnum.LIST}>
-            <Grid item xs={12} height={1}>
+            <Grid item xs={12} height={1} display={'grid'}>
               <DataGrid
                 getRowId={x => x._id}
                 rows={(requests?.results as UpgradeLandlordRequest[]) ?? []}
@@ -482,6 +482,26 @@ const UpgradeLandlord = (): JSX.Element => {
                 onPaginationModelChange={setPaginationModel}
                 pageSizeOptions={[10]}
                 disableRowSelectionOnClick={true}
+                slots={{
+                  noRowsOverlay: () => (
+                    <Stack
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      height={1}
+                    >
+                      {t('generalManagement.noDataFound')}
+                    </Stack>
+                  ),
+                  noResultsOverlay: () => (
+                    <Stack
+                      alignItems={'center'}
+                      justifyContent={'center'}
+                      height={1}
+                    >
+                      {t('generalManagement.noDataFound')}
+                    </Stack>
+                  ),
+                }}
               />
             </Grid>
           </TabPanel>

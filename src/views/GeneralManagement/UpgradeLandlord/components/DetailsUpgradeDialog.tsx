@@ -82,7 +82,7 @@ const DetailsUpgradeDialog: React.FC<DetailsUpgradeDialogProps> = ({
               ) : request.status === LandlordRequestStatusEnum.APPROVED ? (
                 <Chip
                   label={t('generalManagement.upgradeLandlord.approved')}
-                  color="primary"
+                  color="success"
                 />
               ) : (
                 <Chip

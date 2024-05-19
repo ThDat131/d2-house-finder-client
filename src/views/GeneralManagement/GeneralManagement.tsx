@@ -13,7 +13,7 @@ const GeneralManagement = (): JSX.Element => {
         minHeight={1}
       >
         <UserSideNavbar />
-        <Grid container p={4} width={1} height={1} direction={'column'}>
+        <Grid container p={4} width={1} direction={'column'}>
           <Outlet />
         </Grid>
       </Box>

@@ -55,7 +55,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
     password: type === ActionType.CREATE ? '' : user?.password ?? '',
     avatar: type === ActionType.CREATE ? '' : user?.avatar ?? '',
     phone: type === ActionType.CREATE ? '' : user?.phone ?? '',
-    role: type === ActionType.CREATE ? '' : user?.role ?? '',
+    role: type === ActionType.CREATE ? '' : user?.role?._id ?? '',
     active: type === ActionType.CREATE ? false : user?.active ?? false,
     streetAddress: type === ActionType.CREATE ? '' : user?.streetAddress ?? '',
     latitude: type === ActionType.CREATE ? '' : user?.latitude ?? '',

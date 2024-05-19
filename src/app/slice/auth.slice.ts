@@ -2,19 +2,21 @@ import {
   type PayloadAction,
   createSlice,
   createAsyncThunk,
+  createSelector,
 } from '@reduxjs/toolkit'
 import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { type SigninModel } from '../../model/auth/signin-model'
 import { type User } from '../../model/user/user'
 import { FollowEntity } from '../../model/follow/follow-entity'
+import { RootState } from '../store'
 
-interface AuthProps {
+export interface AuthProps {
   auth: AuthResponse
   isRefreshToken: boolean
 }
 
-interface AuthResponse {
+export interface AuthResponse {
   access_token: string
   user: User
 }
@@ -121,5 +123,17 @@ export const {
 } = authSlice.actions
 
 const authReducer = authSlice.reducer
+
+const currentAuthState = (state: RootState) => state.auth
+
+export const userPermissions = createSelector(
+  [currentAuthState],
+  (auth: AuthProps) =>
+    auth.auth.user.permissions?.map(x => ({
+      apiPath: x.apiPath,
+      method: x.method,
+      module: x.module,
+    })) ?? [],
+)
 
 export default authReducer
