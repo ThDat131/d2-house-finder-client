@@ -85,7 +85,7 @@ const DetailUpdateVerifyArticleRequest = () => {
               ) : location.state.status === VerificationStatusEnum.SUCCEED ? (
                 <Chip
                   label={t('generalManagement.upgradeLandlord.approved')}
-                  color="primary"
+                  color="success"
                 />
               ) : (
                 <Chip

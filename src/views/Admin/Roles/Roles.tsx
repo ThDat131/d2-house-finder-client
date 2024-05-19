@@ -165,6 +165,26 @@ const Roles = () => {
             onPaginationModelChange={setPaginationModel}
             disableRowSelectionOnClick={true}
             pageSizeOptions={[10]}
+            slots={{
+              noRowsOverlay: () => (
+                <Stack
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  height={1}
+                >
+                  {t('generalManagement.noDataFound')}
+                </Stack>
+              ),
+              noResultsOverlay: () => (
+                <Stack
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  height={1}
+                >
+                  {t('generalManagement.noDataFound')}
+                </Stack>
+              ),
+            }}
           />
         </Box>
       </Grid>

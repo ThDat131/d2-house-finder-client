@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Stack, Typography } from '@mui/material'
+import { Box, Button, Chip, Grid, Stack, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { useTranslation } from 'react-i18next'
 import { HttpService } from '../../../api/HttpService'
@@ -87,7 +87,7 @@ const ManageArticles = (): JSX.Element => {
             return (
               <Chip
                 label={t('generalManagement.manageArticles.verify')}
-                color="primary"
+                color="success"
               />
             )
           case ArticleStatus.UNVERIFY:
@@ -118,7 +118,7 @@ const ManageArticles = (): JSX.Element => {
                 }}
                 disabled={params.row.status === ArticleStatus.VERIFY}
               >
-                {t('generalManagement.manageArticles.verifyArticle')}
+                {t('generalManagement.manageArticles.verify')}
               </Button>
             </ProtectedComponent>
 
@@ -187,13 +187,13 @@ const ManageArticles = (): JSX.Element => {
   }, [paginationModel])
 
   return (
-    <>
+    <Grid item>
       <Box borderBottom={1} mb={4}>
         <Typography variant={'h3'} mb={2}>
           {t('generalManagement.manageArticles.manageArticles')}
         </Typography>
       </Box>
-      <Box sx={{ display: 'grid' }}>
+      <Box sx={{ height: 1, display: 'grid' }}>
         <DataGrid
           sx={{ width: 1 }}
           getRowId={x => x._id}
@@ -209,6 +209,18 @@ const ManageArticles = (): JSX.Element => {
           }}
           onPaginationModelChange={setPaginationModel}
           disableRowSelectionOnClick={true}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+            noResultsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+          }}
         />
       </Box>
       <ConfirmDialog
@@ -237,7 +249,7 @@ const ManageArticles = (): JSX.Element => {
         setOpen={setOpenVerify}
         article={selectedArticle as Article}
       />
-    </>
+    </Grid>
   )
 }
 

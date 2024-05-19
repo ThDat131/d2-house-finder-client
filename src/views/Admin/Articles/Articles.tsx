@@ -79,7 +79,7 @@ const Articles = () => {
       renderCell: params => {
         switch (params.value) {
           case ArticleStatus.VERIFY:
-            return <Chip label={t('admin.article.verify')} color="primary" />
+            return <Chip label={t('admin.article.verify')} color="success" />
           case ArticleStatus.UNVERIFY:
             return <Chip label={t('admin.article.unverify')} color="error" />
         }
@@ -183,6 +183,18 @@ const Articles = () => {
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10]}
           disableRowSelectionOnClick={true}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+            noResultsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+          }}
         />
       </Grid>
       <ConfirmDialog

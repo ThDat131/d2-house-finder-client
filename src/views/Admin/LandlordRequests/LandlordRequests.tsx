@@ -52,7 +52,7 @@ const LandlordRequests = () => {
             return (
               <Chip
                 label={t('generalManagement.upgradeLandlord.approved')}
-                color="primary"
+                color="success"
               />
             )
           case LandlordRequestStatusEnum.REJECTED:
@@ -164,6 +164,18 @@ const LandlordRequests = () => {
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10]}
           disableRowSelectionOnClick={true}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+            noResultsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+          }}
         />
       </Grid>
       <UpdateLandlordRequest

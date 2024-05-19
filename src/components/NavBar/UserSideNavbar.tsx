@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
 import { useTranslation } from 'react-i18next'
-import SecurityIcon from '@mui/icons-material/Security'
+import ShieldIcon from '@mui/icons-material/Shield'
 import ProtectedComponent from '../ProtectedComponent'
 import { ALL_PERMISSION } from '../../app/permissions-root'
 
@@ -106,7 +106,7 @@ const UserSideNavbar = () => {
               navigate('/quan-ly/danh-sach-yeu-cau-xac-thuc')
             }}
           >
-            <SecurityIcon />
+            <ShieldIcon />
             <ListItemText>
               {t('userSideNav.listOfVerifyArticleRequest')}
             </ListItemText>

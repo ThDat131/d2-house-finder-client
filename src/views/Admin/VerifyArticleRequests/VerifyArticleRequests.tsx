@@ -74,7 +74,7 @@ const VerifyArticleRequest = () => {
             return (
               <Chip
                 label={t('generalManagement.upgradeLandlord.approved')}
-                color="primary"
+                color="success"
               />
             )
           case VerificationStatusEnum.REJECTED:
@@ -169,6 +169,18 @@ const VerifyArticleRequest = () => {
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[10]}
           disableRowSelectionOnClick={true}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+            noResultsOverlay: () => (
+              <Stack alignItems={'center'} justifyContent={'center'} height={1}>
+                {t('generalManagement.noDataFound')}
+              </Stack>
+            ),
+          }}
         />
       </Grid>
       <UpdateVerifyArticleRequest

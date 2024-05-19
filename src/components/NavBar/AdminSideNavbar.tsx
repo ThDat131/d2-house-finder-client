@@ -33,7 +33,7 @@ import { RootState } from '../../app/store'
 import LogoutIcon from '@mui/icons-material/Logout'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import { signout } from '../../app/slice/auth.slice'
-import SecurityIcon from '@mui/icons-material/Security'
+import ShieldIcon from '@mui/icons-material/Shield'
 import ProtectedComponent from '../ProtectedComponent'
 import { ALL_PERMISSION } from '../../app/permissions-root'
 import engFlag from '../../assets/image/flag/eng.png'
@@ -117,7 +117,7 @@ const AdminSideNavBar = (): JSX.Element => {
     {
       id: 9,
       title: t('admin.sideNav.verifyArticleRequest'),
-      icon: <SecurityIcon />,
+      icon: <ShieldIcon />,
       url: '/admin/verify-article-requests',
     },
   ]
