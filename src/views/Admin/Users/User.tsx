@@ -22,27 +22,21 @@ import ConfirmDialog from '../../../components/Modal/ConfirmDialog'
 import { toast } from 'react-toastify'
 import ProtectedComponent from '../../../components/ProtectedComponent'
 import { ALL_PERMISSION } from '../../../app/permissions-root'
-import { getRoles, simpleModelRole } from '../../../app/slice/role.slice'
-import _ from 'lodash'
 
 const Users = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const userState = useAppSelector((state: RootState) => state.user)
-  const roleState = useAppSelector((state: RootState) => state.role)
-  const simpleModelRoles = useAppSelector(simpleModelRole)
   const { t } = useTranslation()
 
-  const [roleSelect, setRoleSelect] = useState('-1')
+  const [roleSelect, setRoleSelect] = useState(-1)
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: PAGE_SIZE,
   })
   const [openDelete, setOpenDelete] = useState<boolean>(false)
   const [selectedUser, setSelectedUser] = useState<User>()
-  const [search, setSearch] = useState('')
-
   const columns: GridColDef[] = [
     {
       field: '_id',
@@ -57,6 +51,11 @@ const Users = () => {
     {
       field: 'phone',
       headerName: t('admin.user.phone'),
+      flex: 1,
+    },
+    {
+      field: 'email',
+      headerName: t('admin.user.email'),
       flex: 1,
     },
     {
@@ -128,31 +127,14 @@ const Users = () => {
   }
 
   useEffect(() => {
-    const rolePromise = dispatch(getRoles({ current: 1, pageSize: 999 }))
+    const usersPromise = dispatch(
+      getUsers({ current: paginationModel.page + 1 }),
+    )
 
     return () => {
-      rolePromise.abort()
+      usersPromise.abort()
     }
-  }, [])
-
-  useEffect(() => {
-    const debounce = setTimeout(() => {
-      dispatch(
-        getUsers({
-          current: paginationModel.page + 1,
-          role:
-            roleSelect === '-1'
-              ? { _id: '', name: '' }
-              : (simpleModelRoles.find(x => x._id === roleSelect) as any),
-          fullName: `/${search}/i`,
-        }),
-      )
-    }, 500)
-
-    return () => {
-      clearTimeout(debounce)
-    }
-  }, [dispatch, paginationModel, roleSelect, search])
+  }, [dispatch, paginationModel])
 
   return (
     <Grid container height={1}>
@@ -187,27 +169,21 @@ const Users = () => {
             labelId="user-role"
             id="demo-simple-select"
             value={roleSelect}
-            label={t('admin.user.role')}
+            label="Vai trò"
             onChange={evt => {
-              setRoleSelect(evt.target.value)
+              setRoleSelect(evt.target.value as number)
             }}
           >
-            <MenuItem value={'-1'}>{t('admin.user.all')}</MenuItem>
-            {roleState.roles.map(x => (
-              <MenuItem key={x._id} value={x._id}>
-                {x.name}
-              </MenuItem>
-            ))}
+            <MenuItem value={2}>Admin</MenuItem>
+            <MenuItem value={1}>Chủ trọ</MenuItem>
+            <MenuItem value={0}>Người thuê trọ</MenuItem>
+            <MenuItem value={-1}>Tất cả</MenuItem>
           </Select>
         </FormControl>
         <TextField
           variant="outlined"
-          label={t('admin.user.searchByFullName')}
-          value={search}
+          label={t('admin.user.search')}
           sx={{ flex: 1 }}
-          onChange={evt => {
-            setSearch(evt.target.value)
-          }}
         />
       </Grid>
       <Grid item xs={12} height={'80%'}>

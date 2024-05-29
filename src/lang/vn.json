@@ -65,8 +65,7 @@
       "update": "Cập nhật",
       "verify": "Xác thực",
       "vndPerMonth": "đồng/tháng",
-      "ward": "Phường/Xã",
-      "status": "Trạng thái"
+      "ward": "Phường/Xã"
     },
     "user": {
       "active": "Kích hoạt",
@@ -93,15 +92,11 @@
       "phone": "Số điện thoại",
       "role": "Vai trò",
       "search": "Tìm kiếm",
-      "searchByFullName": "Tìm kiếm theo họ và tên",
-      "searchByTitle": "Tìm kiếm theo tiêu đề",
-      "searchByName": "Tìm kiếm theo tên",
       "updateAUser": "Cập nhật người dùng",
       "updateFailed": "Có lỗi xảy ra, vui lòng thử lại",
       "updateSuccess": "Cập nhật người dùng thành công",
       "update": "Cập nhật",
-      "uploadAvatar": "Tải ảnh đại diện",
-      "all": "Tất cả"
+      "uploadAvatar": "Tải ảnh đại diện"
     },
     "category": {
       "active": "Kích hoạt",
@@ -121,8 +116,7 @@
       "name": "Tên danh mục",
       "updateCategory": "Cập nhật danh mục",
       "updateSuccess": "Cập nhật danh mục thành công",
-      "update": "Cập nhật",
-      "category": "Danh mục"
+      "update": "Cập nhật"
     },
     "landlordRequest": {
       "action": "Thao tác",
@@ -134,8 +128,7 @@
       "status": "Trạng thái",
       "updateRequestId": "Cập nhật yêu cầu {{id}}",
       "updateSuccess": "Cập nhật yêu cầu thành công",
-      "update": "Cập nhật",
-      "pending": "Đang chờ"
+      "update": "Cập nhật"
     },
     "permission": {
       "action": "Thao tác",
@@ -228,7 +221,6 @@
   "articleDetails": {
     "address": "Địa chỉ",
     "allImages": "Xem tất cả ảnh",
-    "maybeYouLike": "Có thể bạn cũng thích",
     "articleInWard": "Tin trọ cùng phường",
     "acreage": "Diện tích",
     "category": "Danh mục",

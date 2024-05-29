@@ -9,6 +9,7 @@ import PostItem from '../../components/PostItem'
 import PriceFilter from '../../components/PriceFilter'
 import AcreageFilter from '../../components/AcreageFilter'
 import { useParams } from 'react-router-dom'
+import Loading from '../../components/Loading'
 import PostItemSkeleton from '../../components/PostItemSkeleton'
 
 const ArticleCategory = (): JSX.Element => {
@@ -60,9 +61,16 @@ const ArticleCategory = (): JSX.Element => {
       >
         <Grid item xs={8}>
           <Box padding={2} sx={{ background: '#f0f0f0', borderRadius: '5px' }}>
-            <Typography variant={'h4'} mb={2}>
+            <Typography>
               {t('home.totalNumberOfPost', { number: totalPost })}
             </Typography>
+            <Box display={'flex'} alignItems={'center'} gap={1}>
+              <Typography>{t('home.sort')}</Typography>
+              <Stack direction={'row'}>
+                <Button>{t('home.default')}</Button>
+                <Button>{t('home.newest')}</Button>
+              </Stack>
+            </Box>
             <Stack spacing={1} mb={3}>
               {articlesLoading ? (
                 <>

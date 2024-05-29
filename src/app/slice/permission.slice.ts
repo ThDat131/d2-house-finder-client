@@ -21,8 +21,6 @@ interface PermissionStateProps {
 interface Meta {
   current: number
   pageSize?: number
-  name?: string
-  method?: string
 }
 
 const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
@@ -40,27 +38,14 @@ const { httpService } = new HttpService()
 export const getPermissions = createAsyncThunk(
   'permission/getPermissions',
   async (data: Meta, thunkAPI) => {
-    let params: any = {
-      current: data.current,
-      pageSize: data?.pageSize ?? PAGE_SIZE,
-    }
-
-    if (data?.name) {
-      params = { ...params, name: data.name }
-    }
-
-    if (data?.method) {
-      params = {
-        ...params,
-        method: data.method === 'ALL' ? null : data.method,
-      }
-    }
-
     try {
       const response = await httpService.get<GetPermissionResponse>(
         ApiPathEnum.Permission,
         {
-          params,
+          params: {
+            current: data.current,
+            pageSize: data?.pageSize ?? PAGE_SIZE,
+          },
           signal: thunkAPI.signal,
         },
       )

@@ -1,9 +1,4 @@
-import {
-  PayloadAction,
-  createAsyncThunk,
-  createSelector,
-  createSlice,
-} from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { HttpService } from '../../api/HttpService'
 
 import { ApiPathEnum } from '../../api/ApiPathEnum'
@@ -13,8 +8,6 @@ import {
   VerifyArticleRequestsResponse,
   VerifyArticleRequestsUpdateModel,
 } from '../../model/verify-article-request/verify-article-request'
-import { RootState } from '../store'
-import { VerificationStatusEnum } from '../../common/common-enum'
 
 interface VerifyArticleRequestsProp {
   requests: VerifyArticleRequests[]
@@ -28,12 +21,6 @@ interface VerifyArticleRequestsProp {
 
 interface Meta {
   current: number
-  pageSize?: number
-  article?: {
-    _id: string
-    title: string
-  }
-  status?: VerificationStatusEnum
 }
 
 const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -54,33 +41,14 @@ export const getVerifyArticleRequests = createAsyncThunk(
   'verifyArticleRequest/getVerifyArticleRequests',
   async (data: Meta, thunkAPI) => {
     try {
-      let params: any = {
-        current: data.current,
-        populate: 'createdBy,articleId',
-        fields: 'createdBy.fullName,createdBy.email,articleId.title',
-        pageSize: data?.pageSize ? data.pageSize : PAGE_SIZE,
-      }
-
-      if (data.article?._id) {
-        params = {
-          ...params,
-          filter: {
-            articleId: data.article,
-          },
-        }
-      }
-
-      if (data?.status) {
-        params = {
-          ...params,
-          status: data.status,
-        }
-      }
-
       const response = await httpService.get<
         CommonResponse<VerifyArticleRequestsResponse>
       >(ApiPathEnum.VerifyArticle, {
-        params,
+        params: {
+          current: data.current,
+          populate: 'createdBy,articleId',
+          fields: 'createdBy.fullName,createdBy.email,articleId.title',
+        },
         signal: thunkAPI.signal,
       })
 
@@ -154,14 +122,4 @@ const verifyArticleRequestSlice = createSlice({
 
 const verifyArticleRequestReducer = verifyArticleRequestSlice.reducer
 
-const verifyArticleRequests = (state: RootState) => state.verifyArticle.requests
-
-export const titleOfVerifyArticleRequests = createSelector(
-  [verifyArticleRequests],
-  x =>
-    x.map(x => ({
-      _id: x.articleId?._id,
-      title: x.articleId?.title,
-    })),
-)
 export default verifyArticleRequestReducer

@@ -6,11 +6,6 @@ import { type User } from '../../../model/user/user'
 
 interface Meta {
   current: number
-  role?: {
-    _id: string
-    name: string
-  }
-  fullName?: string
 }
 
 interface UserStateProps {
@@ -39,28 +34,15 @@ export const getUsers = createAsyncThunk(
   'user/getUsers',
   async (data: Meta, thunkAPI) => {
     try {
-      let params: any = {
-        current: data.current,
-        pageSize: PAGE_SIZE,
-        populate: 'role',
-        fields: 'role._id,role.name',
-      }
-      if (data?.role?._id) {
-        params = {
-          ...params,
-          filter: {
-            role: data.role,
-          },
-        }
-      }
-      if (data?.fullName) {
-        params = { ...params, fullName: data.fullName }
-      }
-
       const response = await httpService.get<GetUsersResponse>(
         ApiPathEnum.Users,
         {
-          params,
+          params: {
+            current: data.current,
+            pageSize: PAGE_SIZE,
+            populate: 'role',
+            fields: 'role._id,role.name',
+          },
           signal: thunkAPI.signal,
         },
       )
@@ -123,9 +105,6 @@ const userSlice = createSlice({
       state.pageSize = action.payload.meta.pageSize
       state.totalPage = action.payload.meta.pages
       state.totalUser = action.payload.meta.total
-      state.loading = false
-    })
-    builder.addCase(getUsers.rejected, state => {
       state.loading = false
     })
     builder.addCase(createUser.pending, state => {

@@ -2,17 +2,15 @@ import { Box, List, ListItem, Typography } from '@mui/material'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import { styled } from '@mui/system'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
+import { setPriceFilter } from '../app/slice/filter.slice'
 import { useTranslation } from 'react-i18next'
-import { getArticles } from '../app/slice/article.slice.'
 import { useState } from 'react'
 import { RootState } from '../app/store'
-import { setAcreageFilter, setPriceFilter } from '../app/slice/filter.slice'
 
 const PriceFilter = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const priceFilter = useAppSelector((root: RootState) => root.filter.price)
-
   const ListItemStyle: React.CSSProperties = {
     width: '50%',
     whiteSpace: 'nowrap',
@@ -34,13 +32,6 @@ const PriceFilter = () => {
 
   const handleFilter = (value: number[]) => {
     dispatch(setPriceFilter(value))
-    dispatch(setAcreageFilter([0, 0]))
-    dispatch(
-      getArticles({
-        price: [value[0] * 1000000, value[1] * 1000000],
-        current: 1,
-      }),
-    )
   }
 
   return (
@@ -52,7 +43,7 @@ const PriceFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            handleFilter([0, 1])
+            isSelected([0, 1]) ? handleFilter([0, 0]) : handleFilter([0, 1])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -63,7 +54,7 @@ const PriceFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            handleFilter([1, 2])
+            isSelected([1, 2]) ? handleFilter([0, 0]) : handleFilter([1, 2])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -74,7 +65,7 @@ const PriceFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            handleFilter([2, 3])
+            isSelected([2, 3]) ? handleFilter([0, 0]) : handleFilter([2, 3])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -85,7 +76,7 @@ const PriceFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            handleFilter([3, 5])
+            isSelected([3, 5]) ? handleFilter([0, 0]) : handleFilter([3, 5])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -96,7 +87,7 @@ const PriceFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            handleFilter([5, 7])
+            isSelected([5, 7]) ? handleFilter([0, 0]) : handleFilter([5, 7])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -107,7 +98,7 @@ const PriceFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            handleFilter([7, 10])
+            isSelected([7, 10]) ? handleFilter([0, 0]) : handleFilter([7, 10])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -118,7 +109,7 @@ const PriceFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            handleFilter([10, 15])
+            isSelected([10, 15]) ? handleFilter([0, 0]) : handleFilter([10, 15])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -129,7 +120,7 @@ const PriceFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            handleFilter([15, 0])
+            isSelected([15, 0]) ? handleFilter([0, 0]) : handleFilter([15, 0])
           }}
         >
           <KeyboardArrowRightIcon />
