@@ -4,7 +4,8 @@ import { styled } from '@mui/system'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { RootState } from '../app/store'
-import { setAcreageFilter } from '../app/slice/filter.slice'
+import { setAcreageFilter, setPriceFilter } from '../app/slice/filter.slice'
+import { getArticle, getArticles } from '../app/slice/article.slice.'
 
 const AcreageFilter = () => {
   const { t } = useTranslation()
@@ -31,6 +32,13 @@ const AcreageFilter = () => {
 
   const handleFilter = (value: number[]) => {
     dispatch(setAcreageFilter(value))
+    dispatch(setPriceFilter([0, 0]))
+    dispatch(
+      getArticles({
+        acreage: [value[0], value[1]],
+        current: 1,
+      }),
+    )
   }
 
   return (
@@ -42,18 +50,18 @@ const AcreageFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            isSelected([0, 20]) ? handleFilter([0, 0]) : handleFilter([0, 20])
+            handleFilter([0, 19])
           }}
         >
           <KeyboardArrowRightIcon />
-          <Typography sx={isSelected([0, 20]) ? SelectedStyle : null}>
+          <Typography sx={isSelected([0, 19]) ? SelectedStyle : null}>
             {t('acreageFilter.underAcreage', { acreage: 20 })} m<sup>2</sup>
           </Typography>
         </CustomListItem>
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            isSelected([20, 30]) ? handleFilter([0, 0]) : handleFilter([20, 30])
+            handleFilter([20, 30])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -65,7 +73,7 @@ const AcreageFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            isSelected([30, 50]) ? handleFilter([0, 0]) : handleFilter([30, 50])
+            handleFilter([30, 50])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -77,7 +85,7 @@ const AcreageFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            isSelected([50, 70]) ? handleFilter([0, 0]) : handleFilter([50, 70])
+            handleFilter([50, 70])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -89,7 +97,7 @@ const AcreageFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            isSelected([70, 90]) ? handleFilter([0, 0]) : handleFilter([70, 90])
+            handleFilter([70, 90])
           }}
         >
           <KeyboardArrowRightIcon />
@@ -101,11 +109,11 @@ const AcreageFilter = () => {
         <CustomListItem
           style={ListItemStyle}
           onClick={() => {
-            isSelected([90, 0]) ? handleFilter([0, 0]) : handleFilter([90, 0])
+            handleFilter([91, 0])
           }}
         >
           <KeyboardArrowRightIcon />
-          <Typography sx={isSelected([90, 0]) ? SelectedStyle : null}>
+          <Typography sx={isSelected([91, 0]) ? SelectedStyle : null}>
             {t('acreageFilter.overAcreage', { acreage: 90 })}m<sup>2</sup>
           </Typography>
         </CustomListItem>

@@ -33,7 +33,6 @@ import { RootState } from '../../app/store'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { getArticle } from '../../app/slice/article.slice.'
 import { HttpService } from '../../api/HttpService'
-import { GetArticlesResponse } from '../../model/article/article-response'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import PostItem from '../../components/PostItem'
 import UserLayout from '../../components/Layout/UserLayout'
@@ -67,35 +66,25 @@ const ArticleDetails = (): JSX.Element => {
   const loading = useAppSelector((state: RootState) => state.article.loading)
   const comments = useAppSelector((state: RootState) => state.article.comments)
   const ref = useRef(false)
+  const relatedRef = useRef(false)
 
   const getNearestArticle = (
     currentId: string,
     code: number,
     category: string,
   ) => {
-    if (!ref.current) {
-      httpService
-        .get<GetArticlesResponse>(ApiPathEnum.Article, {
-          params: {
-            current: 1,
-            pageSize: 5,
-            populate: 'createdBy,address',
-            fields:
-              'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone',
-            'address.wardCode': code,
-            categoryId: category,
-            '_id!': currentId,
-          },
-        })
-        .then(res => {
-          if (res.data) {
-            setArticleList(res.data.data.results)
-          }
-        })
+    if (!relatedRef.current) {
+      relatedRef.current = true
+
+      httpService.get(`${ApiPathEnum.GetRecommendations}/${id}`).then(res => {
+        if (res.data) {
+          setArticleList(res.data.data)
+        }
+      })
     }
 
     return () => {
-      ref.current = true
+      relatedRef.current = false
     }
   }
 
@@ -159,28 +148,36 @@ const ArticleDetails = (): JSX.Element => {
   }
 
   useEffect(() => {
-    const promise = dispatch(getArticle(id as string))
+    if (!ref.current) {
+      ref.current = true
 
-    promise
-      .then(res => {
-        if (res.payload) {
-          const result = res.payload as any
-          const articleFromResult = result.data.article as Article
-          const longitude = articleFromResult.location.coordinates[0]
-          const latitude = articleFromResult.location.coordinates[1]
+      const promise = dispatch(getArticle(id as string))
 
-          setArticle(articleFromResult)
-          setViewportData(prev => ({ ...prev, latitude, longitude }))
-          getNearestArticle(
-            articleFromResult._id,
-            articleFromResult.address.wardCode,
-            (articleFromResult.categoryId._id as string) ?? '',
-          )
-        }
-      })
-      .finally(() => {
-        setLoadingPage(false)
-      })
+      promise
+        .then(res => {
+          if (res.payload) {
+            const result = res.payload as any
+            const articleFromResult = result.data.article as Article
+            const longitude = articleFromResult.location.coordinates[0]
+            const latitude = articleFromResult.location.coordinates[1]
+
+            setArticle(articleFromResult)
+            setViewportData(prev => ({ ...prev, latitude, longitude }))
+            getNearestArticle(
+              articleFromResult._id,
+              articleFromResult.address.wardCode,
+              (articleFromResult.categoryId._id as string) ?? '',
+            )
+          }
+        })
+        .finally(() => {
+          setLoadingPage(false)
+        })
+
+      return () => {
+        ref.current = false
+      }
+    }
   }, [id])
 
   const getExactAddress = (data: Article): string => {
@@ -287,20 +284,9 @@ const ArticleDetails = (): JSX.Element => {
                       {t('articleDetails.category')}
                     </Typography>
                   </TableCell>
-
                   <TableCell>
                     <Typography color={'primary'} fontWeight={500}>
                       {article?.categoryId?.name}
-                    </Typography>
-                  </TableCell>
-                  <TableCell variant="head">
-                    <Typography fontWeight={700}>
-                      {t('articleDetails.owner')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography color={'primary'} fontWeight={500}>
-                      {article?.createdBy?.fullName}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -313,16 +299,6 @@ const ArticleDetails = (): JSX.Element => {
                   <TableCell>
                     <Typography color={'primary'} fontWeight={500}>
                       {article?.acreage}m<sup>2</sup>
-                    </Typography>
-                  </TableCell>
-                  <TableCell variant="head">
-                    <Typography fontWeight={700}>
-                      {t('articleDetails.phone')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography color={'primary'} fontWeight={500}>
-                      {article?.createdBy?.phone ?? 0}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -391,12 +367,14 @@ const ArticleDetails = (): JSX.Element => {
             <Grid container>
               <Grid item xs={12}>
                 <Typography variant="h4" mb={1}>
-                  {t('articleDetails.articleInWard')}
+                  {t('articleDetails.maybeYouLike')}
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item container xs={12}>
                 {articleList.map(x => (
-                  <PostItem key={x._id} data={x} />
+                  <Grid item xs={12} key={x._id} mb={2}>
+                    <PostItem data={x} />
+                  </Grid>
                 ))}
               </Grid>
             </Grid>
@@ -428,6 +406,9 @@ const ArticleDetails = (): JSX.Element => {
                   size="large"
                   endIcon={<PhoneIcon />}
                   fullWidth
+                  onClick={() => {
+                    window.open(`https://zalo.me/${article?.createdBy.phone}`)
+                  }}
                 >
                   {article?.createdBy?.phone ?? 0}
                 </Button>

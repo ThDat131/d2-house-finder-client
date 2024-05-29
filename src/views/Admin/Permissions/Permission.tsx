@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Grid, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { useTranslation } from 'react-i18next'
 import AddIcon from '@mui/icons-material/Add'
@@ -32,6 +43,8 @@ const Permissions = () => {
     page: 0,
     pageSize: PAGE_SIZE,
   })
+  const [selectedMethod, setSelectedMethod] = useState('ALL')
+  const [search, setSearch] = useState('')
 
   const handleOpenCreate = () => {
     setOpenCreateUpdate(true)
@@ -126,14 +139,20 @@ const Permissions = () => {
   ]
 
   useEffect(() => {
-    const permissionRequestPromise = dispatch(
-      getPermissions({ current: paginationModel.page + 1 }),
-    )
+    const debounce = setTimeout(() => {
+      dispatch(
+        getPermissions({
+          current: paginationModel.page + 1,
+          method: selectedMethod,
+          name: `/${search}/i`,
+        }),
+      )
+    }, 500)
 
     return () => {
-      permissionRequestPromise.abort()
+      clearTimeout(debounce)
     }
-  }, [dispatch, paginationModel])
+  }, [dispatch, paginationModel, search, selectedMethod])
 
   return (
     <Grid item container xs={12} height={1}>
@@ -161,7 +180,37 @@ const Permissions = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item xs={12} height={'90%'}>
+      <Grid item xs={12} container gap={1} paddingY={1} height={'10%'}>
+        <FormControl sx={{ minWidth: 100 }}>
+          <InputLabel id="user-role">{t('admin.permission.method')}</InputLabel>
+          <Select
+            labelId="user-role"
+            id="demo-simple-select"
+            value={selectedMethod}
+            label={t('admin.permission.method')}
+            onChange={evt => {
+              setSelectedMethod(evt.target.value)
+            }}
+          >
+            <MenuItem value={'ALL'}>{t('admin.user.all')}</MenuItem>
+            <MenuItem value={'GET'}>GET</MenuItem>
+            <MenuItem value={'POST'}>POST</MenuItem>
+            <MenuItem value={'PUT'}>PUT</MenuItem>
+            <MenuItem value={'PATCH'}>PATCH</MenuItem>
+            <MenuItem value={'DELETE'}>DELETE</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          variant="outlined"
+          label={t('admin.user.searchByName')}
+          value={search}
+          sx={{ flex: 1 }}
+          onChange={evt => {
+            setSearch(evt.target.value)
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} height={'80%'}>
         <Box height={1}>
           <DataGrid
             getRowId={x => x._id}
