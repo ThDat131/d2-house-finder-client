@@ -65,7 +65,13 @@ const FindHouseWithLocation = () => {
       })
       .then(res => {
         if (res.status === 200 && res.data.status !== 'NOT_FOUND') {
-          setAddresses(res.data.predictions)
+          const locations: PlaceType = res.data.predictions.map((x: any) => ({
+            description: x.description,
+            structured_formatting: x.structured_formatting,
+            place_id: x.place_id,
+          }))
+
+          setAddresses(locations as any)
         }
       })
   }

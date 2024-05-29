@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Stack, Typography } from '@mui/material'
+import { Box, Button, Grid, Stack, TextField, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
@@ -26,6 +26,7 @@ const Categories = () => {
 
   const [openUpdate, setOpenUpdate] = useState<boolean>(false)
   const [openDelete, setOpenDelete] = useState<boolean>(false)
+  const [search, setSearch] = useState<string>('')
   const [selectedCategory, setSelectedCategory] = useState<Category>()
 
   const categoryState = useAppSelector((state: RootState) => state.category)
@@ -106,28 +107,14 @@ const Categories = () => {
   }
 
   useEffect(() => {
-    if (!openUpdate && !openDelete) {
-      return
+    const debounce = setTimeout(() => {
+      dispatch(getCategories({ current: 1, name: `/${search}/i` }))
+    }, 500)
+
+    return () => {
+      clearTimeout(debounce)
     }
-
-    if (!openUpdate) {
-      const categoryPromise = dispatch(getCategories())
-
-      return () => {
-        categoryPromise.abort()
-      }
-    }
-  }, [openUpdate])
-
-  useEffect(() => {
-    if (!openDelete) {
-      const categoryPromise = dispatch(getCategories())
-
-      return () => {
-        categoryPromise.abort()
-      }
-    }
-  }, [openDelete])
+  }, [search])
 
   return (
     <Grid item container xs={12} height={1}>
@@ -155,7 +142,18 @@ const Categories = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item xs={12} height={'90%'}>
+      <Grid item xs={12} container gap={1} paddingY={1} height={'10%'}>
+        <TextField
+          variant="outlined"
+          label={t('admin.user.searchByName')}
+          value={search}
+          sx={{ flex: 1 }}
+          onChange={evt => {
+            setSearch(evt.target.value)
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} height={'80%'}>
         <Box height={1}>
           <DataGrid
             getRowId={x => x._id}

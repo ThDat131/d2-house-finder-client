@@ -1,4 +1,9 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {
+  PayloadAction,
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from '@reduxjs/toolkit'
 import { HttpService } from '../../api/HttpService'
 import {
   UpgradeLandlordRequest,
@@ -7,6 +12,8 @@ import {
 } from '../../model/upgrade-landlord-request/upgrade-landlord-request'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { CommonResponse } from '../../model/common/common-response'
+import { RootState } from '../store'
+import { LandlordRequestStatusEnum } from '../../common/common-enum'
 
 interface LandlordRequestsProps {
   requests: UpgradeLandlordRequest[]
@@ -20,6 +27,13 @@ interface LandlordRequestsProps {
 
 interface Meta {
   current: number
+  createdBy?: {
+    fullName: string
+    _id: string
+    email: string
+  }
+  pageSize?: number
+  status?: LandlordRequestStatusEnum
 }
 
 const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
@@ -39,15 +53,33 @@ const { httpService } = new HttpService()
 export const getLandlordRequests = createAsyncThunk(
   'landlordRequests/getLandlordRequests',
   async (data: Meta, thunkAPI) => {
+    let params: any = {
+      current: data.current,
+      populate: 'createdBy',
+      fields: 'createdBy.fullName,createdBy.email',
+    }
+
+    if (data?.createdBy?._id) {
+      params = {
+        ...params,
+        filter: {
+          createdBy: data.createdBy,
+        },
+      }
+    }
+
+    if (data?.status) {
+      params = {
+        ...params,
+        status: data.status,
+      }
+    }
+
     try {
       const response = await httpService.get<
         CommonResponse<UpgradeLandlordRequestResponse>
       >(ApiPathEnum.LandlordRequest, {
-        params: {
-          current: data.current,
-          populate: 'createdBy',
-          fields: 'createdBy.fullName,createdBy.email',
-        },
+        params,
         signal: thunkAPI.signal,
       })
 
@@ -121,5 +153,17 @@ const landlordRequestSlice = createSlice({
 })
 
 const landlordRequestReducer = landlordRequestSlice.reducer
+
+const landlordRequests = (state: RootState) => state.landlordRequest.requests
+
+export const allCreatedByLandlordRequests = createSelector(
+  [landlordRequests],
+  x =>
+    x.map(x => ({
+      _id: x.createdBy?._id as string,
+      fullName: x.createdBy?.fullName as string,
+      email: x.createdBy?.email as string,
+    })),
+)
 
 export default landlordRequestReducer

@@ -300,7 +300,11 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
 
     if (provinceState.data?.length > 0) return
     const provincePromise = dispatch(getAllProvinces())
-    const categoryPromise = dispatch(getCategories())
+    const categoryPromise = dispatch(
+      getCategories({
+        current: 1,
+      }),
+    )
     return () => {
       provincePromise.abort()
       categoryPromise.abort()

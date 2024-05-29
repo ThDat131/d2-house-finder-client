@@ -1,4 +1,12 @@
-import { Grid, Typography, Button, Box, Stack, Checkbox } from '@mui/material'
+import {
+  Grid,
+  Typography,
+  Button,
+  Box,
+  Stack,
+  Checkbox,
+  TextField,
+} from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
@@ -27,6 +35,7 @@ const Roles = () => {
   const [openDelete, setOpenDelete] = useState<boolean>(false)
   const [type, setType] = useState<ActionType>(ActionType.CREATE)
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
+  const [search, setSearch] = useState('')
 
   const handleOpenCreate = () => {
     setOpenCreateUpdate(true)
@@ -113,14 +122,16 @@ const Roles = () => {
   }, [])
 
   useEffect(() => {
-    const rolesRequestPromise = dispatch(
-      getRoles({ current: paginationModel.page + 1 }),
-    )
+    const debounce = setTimeout(() => {
+      dispatch(
+        getRoles({ current: paginationModel.page + 1, name: `/${search}/i` }),
+      )
+    }, 500)
 
     return () => {
-      rolesRequestPromise.abort()
+      clearTimeout(debounce)
     }
-  }, [dispatch, paginationModel])
+  }, [dispatch, paginationModel, search])
 
   return (
     <Grid item container xs={12} height={1}>
@@ -148,7 +159,18 @@ const Roles = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item xs={12} height={'90%'}>
+      <Grid item xs={12} container gap={1} paddingY={1} height={'10%'}>
+        <TextField
+          variant="outlined"
+          label={t('admin.user.searchByName')}
+          value={search}
+          sx={{ flex: 1 }}
+          onChange={evt => {
+            setSearch(evt.target.value)
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} height={'80%'}>
         <Box height={1}>
           <DataGrid
             getRowId={x => x._id}

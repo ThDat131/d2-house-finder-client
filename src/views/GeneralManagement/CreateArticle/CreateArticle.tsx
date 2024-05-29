@@ -114,7 +114,11 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
 
   useEffect(() => {
     if (categories?.length > 0) return
-    const categoryPromise = dispatch(getCategories())
+    const categoryPromise = dispatch(
+      getCategories({
+        current: 1,
+      }),
+    )
     return () => {
       categoryPromise.abort()
     }

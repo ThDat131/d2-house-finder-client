@@ -1,9 +1,20 @@
-import { Button, Chip, Grid, Stack, Typography } from '@mui/material'
+import {
+  Autocomplete,
+  Button,
+  Chip,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { getLandlordRequests } from '../../../app/slice/landlord-requests.slice'
 import { RootState } from '../../../app/store'
 import { LandlordRequestStatusEnum } from '../../../common/common-enum'
 import UpdateLandlordRequest from './components/UpdateLandlordRequest'
@@ -11,6 +22,10 @@ import DetailsUpgradeDialog from '../../GeneralManagement/UpgradeLandlord/compon
 import { UpgradeLandlordRequest } from '../../../model/upgrade-landlord-request/upgrade-landlord-request'
 import ProtectedComponent from '../../../components/ProtectedComponent'
 import { ALL_PERMISSION } from '../../../app/permissions-root'
+import {
+  allCreatedByLandlordRequests,
+  getLandlordRequests,
+} from '../../../app/slice/landlord-requests.slice'
 const LandlordRequests = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
   const { t } = useTranslation()
@@ -18,6 +33,16 @@ const LandlordRequests = () => {
   const landlordRequestState = useAppSelector(
     (state: RootState) => state.landlordRequest,
   )
+  const allCreatedBySimpleList = useAppSelector(allCreatedByLandlordRequests)
+
+  const [selectedCreatedBy, setSelectedCreatedBy] = useState({
+    _id: '',
+    fullName: '',
+    email: '',
+  })
+  const [users, setUsers] = useState<any[]>([])
+  const [statusSelect, setStatusSelect] = useState('-1')
+
   const columns: GridColDef[] = [
     {
       field: '_id',
@@ -123,14 +148,30 @@ const LandlordRequests = () => {
   }
 
   useEffect(() => {
-    const landlordRequestPromise = dispatch(
-      getLandlordRequests({ current: paginationModel.page + 1 }),
-    )
+    setUsers(allCreatedBySimpleList)
+  }, [allCreatedBySimpleList])
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      setUsers(allCreatedBySimpleList)
+
+      dispatch(
+        getLandlordRequests({
+          current: paginationModel.page + 1,
+          pageSize: 999,
+          createdBy: selectedCreatedBy,
+          status:
+            statusSelect === '-1'
+              ? undefined
+              : (statusSelect as LandlordRequestStatusEnum),
+        }),
+      )
+    }, 500)
 
     return () => {
-      landlordRequestPromise.abort()
+      clearTimeout(debounce)
     }
-  }, [dispatch, paginationModel])
+  }, [dispatch, paginationModel, selectedCreatedBy, statusSelect])
 
   return (
     <Grid container height={1}>
@@ -148,11 +189,51 @@ const LandlordRequests = () => {
           </Typography>
         </Grid>
       </Grid>
-      <Grid item xs={12} height={'90%'}>
+      <Grid item xs={12} container gap={1} paddingY={1} height={'10%'}>
+        <FormControl>
+          <InputLabel id="status">{t('admin.article.status')}</InputLabel>
+          <Select
+            labelId="user-role"
+            id="demo-simple-select"
+            value={statusSelect}
+            label={t('admin.article.status')}
+            onChange={evt => {
+              setStatusSelect(evt.target.value)
+            }}
+            sx={{ minWidth: 200 }}
+          >
+            <MenuItem value={'-1'}>{t('admin.user.all')}</MenuItem>
+            <MenuItem value={LandlordRequestStatusEnum.APPROVED}>
+              {t('admin.landlordRequest.approved')}
+            </MenuItem>
+            <MenuItem value={LandlordRequestStatusEnum.PENDING}>
+              {t('admin.landlordRequest.pending')}
+            </MenuItem>
+            <MenuItem value={LandlordRequestStatusEnum.REJECTED}>
+              {t('admin.landlordRequest.rejected')}
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <Autocomplete
+          value={selectedCreatedBy}
+          getOptionLabel={x => x.fullName}
+          getOptionKey={x => x._id}
+          disablePortal
+          id="combo-box-user"
+          options={users}
+          renderInput={params => (
+            <TextField {...params} label={t('admin.user.searchByFullName')} />
+          )}
+          onChange={(evt, value: any) => {
+            setSelectedCreatedBy(value)
+          }}
+          sx={{ flex: 1 }}
+        />
+      </Grid>
+      <Grid item xs={12} height={'80%'}>
         <DataGrid
           getRowId={x => x._id}
           rows={landlordRequestState.requests}
-          paginationMode={'server'}
           rowCount={landlordRequestState.totalRequest}
           columns={columns}
           loading={landlordRequestState.loading}

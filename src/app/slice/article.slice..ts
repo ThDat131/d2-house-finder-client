@@ -14,6 +14,7 @@ import {
 } from '../../model/article/article-response'
 import { type Article } from '../../model/article/article'
 import { Comment } from '../../model/comment/comment'
+import { ArticleStatus } from '../../common/common-enum'
 
 interface ArticleStateProps {
   articles: Article[]
@@ -57,8 +58,15 @@ interface EditCommentProps {
 
 interface Meta {
   current: number
-  categoryId?: string
   filter?: string
+  title?: string
+  categoryId?: {
+    _id: string
+    name: string
+  }
+  price?: number[]
+  acreage?: number[]
+  status?: ArticleStatus
 }
 
 const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
@@ -78,17 +86,87 @@ const { httpService } = new HttpService()
 export const getArticles = createAsyncThunk(
   'article/getArticles',
   async (data: Meta, thunkAPI) => {
+    let params: any = {
+      current: data.current,
+      pageSize: PAGE_SIZE,
+      populate: 'createdBy,categoryId',
+      fields:
+        'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone,categoryId.name,categoryId._id',
+    }
+
+    if (data?.categoryId?._id) {
+      params = {
+        ...params,
+        filter: {
+          categoryId: data.categoryId,
+        },
+      }
+    }
+
+    if (data?.title) {
+      params = {
+        ...params,
+        title: data.title,
+      }
+    }
+
+    if (data?.status) {
+      params = {
+        ...params,
+        status: data.status,
+      }
+    }
+    if (data?.price) {
+      if (data.price[1] === 0) {
+        params = {
+          ...params,
+          filter: {
+            price: {
+              $gte: data.price[0],
+            },
+          },
+        }
+      } else {
+        params = {
+          ...params,
+          filter: {
+            price: {
+              $lte: data.price[1],
+              $gte: data.price[0],
+            },
+          },
+        }
+      }
+    }
+
+    if (data?.acreage) {
+      if (data.acreage[1] === 0) {
+        params = {
+          ...params,
+          filter: {
+            acreage: {
+              $gte: data.acreage[0],
+            },
+          },
+        }
+      } else {
+        params = {
+          ...params,
+          filter: {
+            acreage: {
+              $lte: data.acreage[1],
+              $gte: data.acreage[0],
+            },
+          },
+        }
+      }
+    }
+
     try {
       const response = await httpService.get<GetArticlesResponse>(
         `${ApiPathEnum.Article}${data.filter ?? ''}`,
         {
-          params: {
-            current: data.current,
-            pageSize: PAGE_SIZE,
-            populate: 'createdBy,categoryId',
-            fields:
-              'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone,categoryId.name,categoryId._id',
-          },
+          params,
           signal: thunkAPI.signal,
         },
       )

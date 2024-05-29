@@ -1,11 +1,29 @@
-import { Button, Chip, Grid, Stack, Typography } from '@mui/material'
+import {
+  Autocomplete,
+  Button,
+  Chip,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { RootState } from '../../../app/store'
 import { useEffect, useState } from 'react'
-import { VerificationStatusEnum } from '../../../common/common-enum'
-import { getVerifyArticleRequests } from '../../../app/slice/verify-article-requests.slice'
+import {
+  LandlordRequestStatusEnum,
+  VerificationStatusEnum,
+} from '../../../common/common-enum'
+import {
+  getVerifyArticleRequests,
+  titleOfVerifyArticleRequests,
+} from '../../../app/slice/verify-article-requests.slice'
 import { VerifyArticleRequests } from '../../../model/verify-article-request/verify-article-request'
 import { useNavigate } from 'react-router-dom'
 import UpdateVerifyArticleRequest from './components/UpdateVerifyArticleRequest'
@@ -28,6 +46,14 @@ const VerifyArticleRequest = () => {
   const [selectedRequest, setSelectedRequest] =
     useState<VerifyArticleRequests>()
   const [openUpdateRequest, setOpenUpdateRequest] = useState<boolean>(false)
+  const [selectedCreatedBy, setSelectedCreatedBy] = useState({
+    _id: '',
+    title: '',
+  })
+  const [articles, setArticles] = useState<any[]>([])
+  const [statusSelect, setStatusSelect] = useState('-1')
+
+  const allArticleSimpleList = useAppSelector(titleOfVerifyArticleRequests)
 
   const handleUpdateRequest = (x: VerifyArticleRequests) => {
     setSelectedRequest(x)
@@ -128,14 +154,26 @@ const VerifyArticleRequest = () => {
   ]
 
   useEffect(() => {
+    setArticles(allArticleSimpleList)
+  }, [allArticleSimpleList])
+
+  useEffect(() => {
     const verifyArticleRequestPromise = dispatch(
-      getVerifyArticleRequests({ current: paginationModel.page + 1 }),
+      getVerifyArticleRequests({
+        current: paginationModel.page + 1,
+        pageSize: 999,
+        article: selectedCreatedBy,
+        status:
+          statusSelect === '-1'
+            ? undefined
+            : (statusSelect as VerificationStatusEnum),
+      }),
     )
 
     return () => {
       verifyArticleRequestPromise.abort()
     }
-  }, [dispatch, paginationModel])
+  }, [dispatch, paginationModel, selectedCreatedBy, statusSelect])
 
   return (
     <Grid container height={1}>
@@ -153,11 +191,51 @@ const VerifyArticleRequest = () => {
           </Typography>
         </Grid>
       </Grid>
-      <Grid item xs={12} height={'90%'}>
+      <Grid item xs={12} container gap={1} paddingY={1} height={'10%'}>
+        <FormControl>
+          <InputLabel id="status">{t('admin.article.status')}</InputLabel>
+          <Select
+            labelId="user-role"
+            id="demo-simple-select"
+            value={statusSelect}
+            label={t('admin.article.status')}
+            onChange={evt => {
+              setStatusSelect(evt.target.value)
+            }}
+            sx={{ minWidth: 200 }}
+          >
+            <MenuItem value={'-1'}>{t('admin.user.all')}</MenuItem>
+            <MenuItem value={VerificationStatusEnum.SUCCEED}>
+              {t('admin.landlordRequest.approved')}
+            </MenuItem>
+            <MenuItem value={LandlordRequestStatusEnum.PENDING}>
+              {t('admin.landlordRequest.pending')}
+            </MenuItem>
+            <MenuItem value={LandlordRequestStatusEnum.REJECTED}>
+              {t('admin.landlordRequest.rejected')}
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <Autocomplete
+          value={selectedCreatedBy}
+          getOptionLabel={x => x.title}
+          getOptionKey={x => x._id}
+          disablePortal
+          id="combo-box-articles"
+          options={articles}
+          renderInput={params => (
+            <TextField {...params} label={t('admin.user.searchByTitle')} />
+          )}
+          onChange={(evt, value: any) => {
+            setSelectedCreatedBy(value)
+          }}
+          sx={{ flex: 1 }}
+        />
+      </Grid>
+      <Grid item xs={12} height={'80%'}>
         <DataGrid
           getRowId={x => x._id as string}
           rows={verifyArticleRequestState.requests}
-          paginationMode={'server'}
           rowCount={verifyArticleRequestState.totalRequest}
           columns={columns}
           loading={verifyArticleRequestState.loading}
