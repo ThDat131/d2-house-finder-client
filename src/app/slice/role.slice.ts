@@ -1,8 +1,14 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {
+  PayloadAction,
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from '@reduxjs/toolkit'
 import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { CommonResponse } from '../../model/common/common-response'
 import { GetRoleResponse, Role, RoleRequest } from '../../model/role/role'
+import { RootState } from '../store'
 
 interface RoleStateProps {
   roles: Role[]
@@ -17,6 +23,7 @@ interface RoleStateProps {
 interface Meta {
   current: number
   pageSize?: number
+  name?: string
 }
 
 const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
@@ -34,14 +41,20 @@ const { httpService } = new HttpService()
 export const getRoles = createAsyncThunk(
   'role/getRoles',
   async (data: Meta, thunkAPI) => {
+    let params: any = {
+      current: data.current,
+      pageSize: data.pageSize ?? PAGE_SIZE,
+    }
+
+    if (data?.name) {
+      params = { ...params, name: data.name }
+    }
+
     try {
       const response = await httpService.get<GetRoleResponse>(
         ApiPathEnum.Role,
         {
-          params: {
-            current: data.current,
-            pageSize: data.pageSize ?? PAGE_SIZE,
-          },
+          params,
           signal: thunkAPI.signal,
         },
       )
@@ -191,5 +204,14 @@ const roleSlice = createSlice({
 })
 
 const roleReducer = roleSlice.reducer
+
+const roleState = (state: RootState) => state.role.roles
+
+export const simpleModelRole = createSelector([roleState], role =>
+  role.map(x => ({
+    _id: x._id,
+    name: x.name,
+  })),
+)
 
 export default roleReducer
