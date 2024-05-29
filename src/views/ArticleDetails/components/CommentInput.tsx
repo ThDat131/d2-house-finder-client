@@ -53,6 +53,10 @@ const CommentInput: React.FC<CommentInputProps> = ({
   const [comment, setComment] = useState<string>('')
 
   const handleCreateComment = () => {
+    if (!comment) {
+      return
+    }
+
     setComment('')
     let tempComment: any
 

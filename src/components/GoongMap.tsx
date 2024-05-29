@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ReactMapGL, {
   Layer,
   Marker,
@@ -19,6 +19,7 @@ import {
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { VNDCurrencyFormat } from '../utils/utils'
+import '@goongmaps/goong-js/dist/goong-js.css'
 
 interface GoongMapProps {
   data: ViewPort
@@ -47,6 +48,7 @@ const GoongMap: React.FC<GoongMapProps> = ({
     minZoom: 16,
   })
   const [popups, setPopups] = useState<Article[]>([])
+  const [removeLayer, setRemoveLayer] = useState(false)
 
   const generatePolygon = (radiusMeters: number): number[][] => {
     const radiusDegreesLatitude = radiusMeters / 111320
@@ -84,7 +86,14 @@ const GoongMap: React.FC<GoongMapProps> = ({
 
   useEffect(() => {
     setViewPort(data)
+    setRemoveLayer(false)
   }, [data])
+
+  const onInteractionStateChange = useCallback((interactionState: any) => {
+    if (interactionState.isDragging) {
+      setRemoveLayer(true)
+    }
+  }, [])
 
   return (
     <ReactMapGL
@@ -93,8 +102,11 @@ const GoongMap: React.FC<GoongMapProps> = ({
         setViewPort(nextViewport)
       }}
       goongApiAccessToken={MapAPIKey}
-      dragPan={!lock}
-      scrollZoom={!lock}
+      dragPan={true}
+      scrollZoom={true}
+      doubleClickZoom={false}
+      asyncRender={true}
+      onInteractionStateChange={onInteractionStateChange}
     >
       {markers !== undefined &&
         markers.length > 0 &&
@@ -161,7 +173,7 @@ const GoongMap: React.FC<GoongMapProps> = ({
             </Popup>
           )
         })}
-      {layer && (
+      {layer && !removeLayer && (
         <Source type="geojson" data={geojsonPolygon} id="polygon">
           <Layer
             id="polygon"

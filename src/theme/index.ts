@@ -13,7 +13,19 @@ const theme = responsiveFontSizes(
         contrastText: '#fff',
       },
       error: {
-        main: red.A400,
+        main: '#ff4c51',
+        light: '#ff4c51',
+        contrastText: '#fff',
+      },
+      success: {
+        main: '#56ca00',
+        light: '#56ca00',
+        contrastText: '#fff',
+      },
+      warning: {
+        main: '#ffb400',
+        light: '#ffb400',
+        contrastText: '#fff',
       },
     },
     typography: {

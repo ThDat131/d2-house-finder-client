@@ -24,6 +24,7 @@ export const ApiPathEnum = {
   Role: `${prefix}${version}/roles`,
   Statistical: `${prefix}${version}/statistical`,
   VerifyArticle: `${prefix}${version}/verifications`,
+  GetRecommendations: `${prefix}${version}/articles/getRecommodations`,
   // GoongMap
   AutoComplete: 'Place/AutoComplete',
   Detail: 'Place/Detail',

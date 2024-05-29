@@ -2,6 +2,7 @@ import {
   createSlice,
   createAsyncThunk,
   type PayloadAction,
+  createSelector,
 } from '@reduxjs/toolkit'
 import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
@@ -10,6 +11,7 @@ import { type GetCategoryResponse } from '../../views/Admin/Categories/model/Get
 import { type CreateCategoryModel } from '../../views/Admin/Categories/model/create-category-model'
 import { type CommonResponse } from '../../model/common/common-response'
 import { type ErrorResponse } from '../../model/common/error-response'
+import { RootState } from '../store'
 
 interface CategoryStateProps {
   category: Category[]
@@ -20,6 +22,12 @@ interface CategoryStateProps {
   pageCurrent: number
   totalPage: number
   totalCategories: number
+}
+
+interface Meta {
+  current: number
+  pageSize?: number
+  name?: string
 }
 
 const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
@@ -37,15 +45,24 @@ const { httpService } = new HttpService()
 
 export const getCategories = createAsyncThunk(
   'category/getCategories',
-  async (_, thunkAPI) => {
+  async (data: Meta, thunkAPI) => {
+    let params: any = {
+      current: data.current,
+      pageSize: data?.pageSize ? data.pageSize : PAGE_SIZE,
+    }
+
+    if (data?.name) {
+      params = {
+        ...params,
+        name: data.name,
+      }
+    }
+
     try {
       const response = await httpService.get<GetCategoryResponse>(
         ApiPathEnum.Categories,
         {
-          params: {
-            current: 1,
-            pageSize: PAGE_SIZE,
-          },
+          params,
           signal: thunkAPI.signal,
         },
       )
@@ -115,7 +132,7 @@ export const deleteCategory = createAsyncThunk(
         throw new Error(response.data.message)
       }
 
-      return response.data as CommonResponse<Category>
+      return category._id
     } catch (ex) {
       const error = ex as Error
       return thunkAPI.rejectWithValue(error.message)
@@ -167,7 +184,11 @@ const categorySlice = createSlice({
     builder.addCase(updateCategory.pending, state => {
       state.loading = true
     })
-    builder.addCase(updateCategory.fulfilled, state => {
+    builder.addCase(updateCategory.fulfilled, (state, action) => {
+      const categories = state.category
+      const idx = categories.findIndex(x => x._id === action.payload.data._id)
+
+      state.category[idx] = action.payload.data
       state.loading = false
     })
     builder.addCase(updateCategory.rejected, (state, action) => {
@@ -177,8 +198,9 @@ const categorySlice = createSlice({
     builder.addCase(deleteCategory.pending, state => {
       state.loading = true
     })
-    builder.addCase(deleteCategory.fulfilled, state => {
+    builder.addCase(deleteCategory.fulfilled, (state, action) => {
       state.loading = false
+      state.category = state.category.filter(x => x._id !== action.payload)
     })
     builder.addCase(deleteCategory.rejected, (state, action) => {
       state.error = action.payload as string
@@ -188,6 +210,15 @@ const categorySlice = createSlice({
 })
 
 export const { clearError, selectCategory } = categorySlice.actions
+
+const categoryState = (state: RootState) => state.category.category
+
+export const simpleModelCategory = createSelector([categoryState], category =>
+  category.map(x => ({
+    _id: x._id,
+    name: x.name,
+  })),
+)
 
 const categoryReducer = categorySlice.reducer
 
