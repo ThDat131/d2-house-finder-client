@@ -13,11 +13,6 @@ export interface UpgradeLandlordRequest {
   feedBack?: string
   createdAt?: Date
   updatedAt?: Date
-  createdBy?: {
-    _id: string
-    fullName: string
-    email: string
-  }
 }
 
 export interface UpgradeLandlordRequestResponse {

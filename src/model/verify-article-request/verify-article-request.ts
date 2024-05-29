@@ -6,10 +6,7 @@ export interface VerifyArticleRequests {
   contract: string[]
   video: string[]
   status: VerificationStatusEnum
-  articleId: {
-    _id: string
-    title: string
-  }
+  articleId: string
   feedBack?: string
 }
 

@@ -1,15 +1,4 @@
-import {
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-  Typography,
-  Chip,
-} from '@mui/material'
+import { Button, Chip, Grid, Stack, Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import { Link, useNavigate } from 'react-router-dom'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
@@ -27,16 +16,11 @@ import { toast } from 'react-toastify'
 import { VNDCurrencyFormat } from '../../../utils/utils'
 import { ALL_PERMISSION } from '../../../app/permissions-root'
 import ProtectedComponent from '../../../components/ProtectedComponent'
-import {
-  getCategories,
-  simpleModelCategory,
-} from '../../../app/slice/category.slice'
 
 const Articles = () => {
   const PAGE_SIZE = parseInt(import.meta.env.VITE_PAGE_SIZE)
   const { t } = useTranslation()
   const articleState = useAppSelector((state: RootState) => state.article)
-  const simpleModelCategories = useAppSelector(simpleModelCategory)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -46,9 +30,6 @@ const Articles = () => {
   })
   const [openDelete, setOpenDelete] = useState<boolean>(false)
   const [selectedArticle, setSelectedArticle] = useState<Article>()
-  const [categorySelect, setCategorySelect] = useState('-1')
-  const [statusSelect, setStatusSelect] = useState('-1')
-  const [search, setSearch] = useState<string>('')
 
   const handleOpenDelete = (x: Article) => {
     setSelectedArticle(x)
@@ -147,37 +128,14 @@ const Articles = () => {
   ]
 
   useEffect(() => {
-    const categoryPromise = dispatch(
-      getCategories({ current: 1, pageSize: 999 }),
+    const articlesPromise = dispatch(
+      getArticles({ current: paginationModel.page + 1 }),
     )
 
     return () => {
-      categoryPromise.abort()
+      articlesPromise.abort()
     }
-  }, [])
-
-  useEffect(() => {
-    const debounce = setTimeout(() => {
-      dispatch(
-        getArticles({
-          current: paginationModel.page + 1,
-          categoryId:
-            categorySelect === '-1'
-              ? { _id: '', name: '' }
-              : (simpleModelCategories.find(
-                  x => x._id === categorySelect,
-                ) as any),
-          title: `/${search}/i`,
-          status:
-            statusSelect === '-1' ? undefined : (statusSelect as ArticleStatus),
-        }),
-      )
-    }, 500)
-
-    return () => {
-      clearTimeout(debounce)
-    }
-  }, [dispatch, paginationModel, categorySelect, search, statusSelect])
+  }, [dispatch, paginationModel])
 
   const handleUpdate = (article: Article) => {
     navigate(`update/${article._id}`, { state: article })
@@ -209,59 +167,7 @@ const Articles = () => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item xs={12} container gap={1} paddingY={1} height={'10%'}>
-        <FormControl>
-          <InputLabel id="user-role">{t('admin.category.category')}</InputLabel>
-          <Select
-            labelId="user-role"
-            id="demo-simple-select"
-            value={categorySelect}
-            label={t('admin.category.category')}
-            onChange={evt => {
-              setCategorySelect(evt.target.value)
-            }}
-            sx={{ minWidth: 200 }}
-          >
-            <MenuItem value={'-1'}>{t('admin.user.all')}</MenuItem>
-            {simpleModelCategories.map(x => (
-              <MenuItem key={x._id} value={x._id}>
-                {x.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl>
-          <InputLabel id="status">{t('admin.article.status')}</InputLabel>
-          <Select
-            labelId="user-role"
-            id="demo-simple-select"
-            value={statusSelect}
-            label={t('admin.article.status')}
-            onChange={evt => {
-              setStatusSelect(evt.target.value)
-            }}
-            sx={{ minWidth: 200 }}
-          >
-            <MenuItem value={'-1'}>{t('admin.user.all')}</MenuItem>
-            <MenuItem value={ArticleStatus.VERIFY}>
-              {t('admin.article.verify')}
-            </MenuItem>
-            <MenuItem value={ArticleStatus.UNVERIFY}>
-              {t('admin.article.unverify')}
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <TextField
-          variant="outlined"
-          label={t('admin.user.searchByTitle')}
-          value={search}
-          sx={{ flex: 1 }}
-          onChange={evt => {
-            setSearch(evt.target.value)
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} height={'80%'}>
+      <Grid item xs={12} height={'90%'}>
         <DataGrid
           getRowId={x => x._id}
           rows={articleState.articles}

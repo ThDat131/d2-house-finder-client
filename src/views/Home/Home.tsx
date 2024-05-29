@@ -17,6 +17,7 @@ import { selectCategory } from '../../app/slice/category.slice'
 import { selectProvince } from '../../app/slice/province.slice'
 import { selectDistrict } from '../../app/slice/district.slice'
 import { selectWard } from '../../app/slice/ward.slice'
+import Loading from '../../components/Loading'
 import PostItemSkeleton from '../../components/PostItemSkeleton'
 
 export const Home = (): JSX.Element => {
@@ -53,13 +54,17 @@ export const Home = (): JSX.Element => {
     dispatch(selectWard(null))
   }
 
+  // if (articleState.loading) {
+  //   return <Loading />
+  // }
+
   return (
     <UserLayout haveSearch={true}>
       <Grid container spacing={2} justifyContent={'space-between'}>
         <Grid item xs={8}>
           <Box padding={2} sx={{ background: '#f0f0f0', borderRadius: '5px' }}>
-            <Stack direction={'row'} justifyContent={'space-between'} mb={2}>
-              <Typography variant={'h4'}>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant={'h4'} mb={2}>
                 {t('home.totalNumberOfPost', {
                   number: articleState.totalPost,
                 })}
@@ -74,7 +79,6 @@ export const Home = (): JSX.Element => {
                       }),
                     )
                   }}
-                  color="error"
                 >
                   {t('home.clearFilter')}
                 </Button>

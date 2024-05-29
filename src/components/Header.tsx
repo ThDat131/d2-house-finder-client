@@ -47,7 +47,6 @@ import ProtectedComponent from './ProtectedComponent'
 import { ALL_PERMISSION } from '../app/permissions-root'
 import engFlag from '../assets/image/flag/eng.png'
 import vnFlag from '../assets/image/flag/vn.png'
-import { getArticles } from '../app/slice/article.slice.'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
@@ -211,11 +210,6 @@ export const Header = (): JSX.Element => {
               label={t('header.home')}
               value={''}
               sx={{ color: '#fff', opacity: 1 }}
-              onClick={() => {
-                dispatch(getArticles({ current: 1 }))
-                dispatch(setPriceFilter([0, 0]))
-                dispatch(setAcreageFilter([0, 0]))
-              }}
             />
             <ProtectedComponent
               permissions={ALL_PERMISSION.ARTICLES.filter(x =>
@@ -240,9 +234,7 @@ export const Header = (): JSX.Element => {
                 value={'admin'}
                 sx={{ color: '#fff', opacity: 1 }}
                 onClick={() => {
-                  localStorage.setItem('adminNavigationPage', '-1')
-                  localStorage.setItem('userNavigationPage', '-1')
-                  localStorage.setItem('adminChildUrl', '')
+                  localStorage.setItem('adminNavigationPage', '1')
                 }}
               />
             )}

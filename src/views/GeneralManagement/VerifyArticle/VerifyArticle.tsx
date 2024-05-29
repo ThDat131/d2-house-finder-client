@@ -38,6 +38,7 @@ const VerifyArticle = (): JSX.Element => {
                 style={{ objectFit: 'cover' }}
                 width={1}
                 height={300}
+                // src="https://nestjs-accommodation-finder.s3.amazonaws.com/737aff99-258a-49b0-b1d4-9de9c0907a93-bright-forget-me-nots-royalty-free-image-1677788394.jpg"
               />
             </Grid>
           </Grid>

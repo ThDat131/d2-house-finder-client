@@ -84,14 +84,9 @@ const Signin = (): JSX.Element => {
         }
         setLoading(false)
         if (res?.statusCode === 200) {
-          if (res.data.user.role.name === 'ADMIN') {
-            localStorage.setItem('adminNavigationPage', '-1')
-            localStorage.setItem('userNavigationPage', '-1')
-            localStorage.setItem('adminChildUrl', '')
-
-            navigate('/admin')
-          } else navigate('/')
-
+          res.data.user.role.name === 'ADMIN'
+            ? navigate('/admin')
+            : navigate('/')
           localStorage.setItem('access_token', res.data.access_token)
         } else {
           setError(res.message)

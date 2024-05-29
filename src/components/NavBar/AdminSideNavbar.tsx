@@ -39,10 +39,10 @@ import { ALL_PERMISSION } from '../../app/permissions-root'
 import engFlag from '../../assets/image/flag/eng.png'
 import vnFlag from '../../assets/image/flag/vn.png'
 
-const AdminSideNavBar = (): JSX.Element => {
-  const currentPage = localStorage.getItem('adminNavigationPage') ?? '1'
-  const currentChildUrl = localStorage.getItem('adminChildUrl') ?? ''
+const currentPage = localStorage.getItem('adminNavigationPage') ?? '1'
+const currentChildUrl = localStorage.getItem('adminChildUrl') ?? ''
 
+const AdminSideNavBar = (): JSX.Element => {
   const { t, i18n } = useTranslation()
   const dispatch = useAppDispatch()
 
