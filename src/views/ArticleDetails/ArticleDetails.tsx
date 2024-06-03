@@ -350,9 +350,12 @@ const ArticleDetails = (): JSX.Element => {
                   {t('articleDetails.comment')}
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
-                <CommentInput type={0} />
-              </Grid>
+              {authState?.auth?.user?._id && (
+                <Grid item xs={12}>
+                  <CommentInput type={0} />
+                </Grid>
+              )}
+
               <Grid item container xs={12}>
                 {comments.map(x => (
                   <Grid item xs={12} key={x._id}>
