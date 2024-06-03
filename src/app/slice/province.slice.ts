@@ -18,9 +18,12 @@ const initialState = {
 export const getAllProvinces = createAsyncThunk(
   'address/getAllProvinces',
   async (_, thunkAPI) => {
-    const response = await httpAddressService.get(ApiPathEnum.GetAllProvinces, {
-      signal: thunkAPI.signal,
-    })
+    const response = await httpAddressService.get(
+      `${ApiPathEnum.GetAllProvinces}/`,
+      {
+        signal: thunkAPI.signal,
+      },
+    )
 
     return response.data
   },

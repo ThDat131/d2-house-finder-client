@@ -48,6 +48,7 @@ import { ALL_PERMISSION } from '../app/permissions-root'
 import engFlag from '../assets/image/flag/eng.png'
 import vnFlag from '../assets/image/flag/vn.png'
 import { getArticles } from '../app/slice/article.slice.'
+import { toast } from 'react-toastify'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
@@ -224,11 +225,16 @@ export const Header = (): JSX.Element => {
               allowAnonymous={true}
             >
               <Tab
-                component={Link}
-                to={'/tim-tro-theo-vi-tri'}
                 label={t('header.smartSearch')}
                 value={'smartSearch'}
                 sx={{ color: '#fff', opacity: 1 }}
+                onClick={() => {
+                  if (currentUser._id) {
+                    navigate('/tim-tro-theo-vi-tri')
+                  } else {
+                    toast.warn(t('home.pleaseSignInToContinue'))
+                  }
+                }}
               />
             </ProtectedComponent>
 
