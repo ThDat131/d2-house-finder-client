@@ -19,7 +19,7 @@ export const getAllDistricts = createAsyncThunk(
   'address/getAllDistricts',
   async (provinceId: string, thunkAPI) => {
     const response = await httpAddressService.get(
-      `${ApiPathEnum.GetAllDistricts}/${provinceId}/`,
+      `${ApiPathEnum.GetAllDistricts}/${provinceId}`,
       {
         signal: thunkAPI.signal,
       },
