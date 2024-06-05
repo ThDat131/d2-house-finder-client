@@ -89,6 +89,11 @@ const ArticleDetails = (): JSX.Element => {
   }
 
   const handleFollow = () => {
+    if (!authState.auth.user._id) {
+      toast.warning(t('home.pleaseSignInToContinue'))
+      return
+    }
+
     if (article?.createdBy?._id === authState.auth.user._id) {
       toast.warning(t('profile.canNotFollowYourSelf'))
       return

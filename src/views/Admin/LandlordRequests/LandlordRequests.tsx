@@ -257,6 +257,7 @@ const LandlordRequests = () => {
               </Stack>
             ),
           }}
+          autoHeight={true}
         />
       </Grid>
       <UpdateLandlordRequest

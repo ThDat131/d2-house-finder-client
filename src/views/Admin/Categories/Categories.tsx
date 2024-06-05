@@ -190,6 +190,7 @@ const Categories = () => {
                 </Stack>
               ),
             }}
+            autoHeight={true}
           />
         </Box>
       </Grid>

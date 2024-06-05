@@ -193,7 +193,7 @@ const ManageArticles = (): JSX.Element => {
           {t('generalManagement.manageArticles.manageArticles')}
         </Typography>
       </Box>
-      <Box sx={{ height: 1, display: 'grid' }}>
+      <Box sx={{ display: 'grid' }}>
         <DataGrid
           sx={{ width: 1 }}
           getRowId={x => x._id}
@@ -221,6 +221,7 @@ const ManageArticles = (): JSX.Element => {
               </Stack>
             ),
           }}
+          autoHeight={true}
         />
       </Box>
       <ConfirmDialog

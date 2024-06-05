@@ -58,7 +58,6 @@ const UpdateVerifyArticleRequest: React.FC<UpdateVerifyArticleRequestProps> = ({
     dispatch(updateVerifyArticleRequest(data))
       .unwrap()
       .then(res => {
-        console.log(res)
         if (res?.statusCode && res.statusCode !== 200) {
           toast.error(t('admin.permission.errorHaveOccurPleaseTryAgain'))
           return

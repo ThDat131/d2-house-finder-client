@@ -247,6 +247,7 @@ const Permissions = () => {
                 </Stack>
               ),
             }}
+            autoHeight={true}
           />
         </Box>
       </Grid>

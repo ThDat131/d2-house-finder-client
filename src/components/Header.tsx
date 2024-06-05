@@ -66,7 +66,7 @@ export const Header = (): JSX.Element => {
 
   const handleSignout = () => {
     dispatch(signout())
-    navigate('/dang-nhap')
+    navigate('/')
   }
 
   const parseDateString = (dateString: string) => {
@@ -108,7 +108,7 @@ export const Header = (): JSX.Element => {
       ),
     )
 
-    if (value === undefined) {
+    if (!value) {
       navigate('/')
       return
     }
@@ -264,7 +264,8 @@ export const Header = (): JSX.Element => {
             <Select
               labelId="category-select"
               style={{ textDecoration: 'none' }}
-              value={categoryState.selected?._id}
+              value={categoryState?.selected?._id ?? ''}
+              defaultValue={''}
               sx={{
                 color: '#fff',
                 '.MuiSvgIcon-root ': {
@@ -279,7 +280,7 @@ export const Header = (): JSX.Element => {
               }}
             >
               <MenuItem
-                value={undefined}
+                value=""
                 sx={{
                   textTransform: 'uppercase',
                 }}

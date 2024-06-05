@@ -129,10 +129,10 @@ const VerifyArticleRequestsView = () => {
     <Grid item>
       <Box borderBottom={1} mb={4}>
         <Typography variant={'h3'} mb={2}>
-          {t('generalManagement.manageArticles.manageArticles')}
+          {t('admin.verifyArticleRequest.listOfVerifyArticleRequest')}
         </Typography>
       </Box>
-      <Box sx={{ height: 1, display: 'grid' }}>
+      <Box sx={{ display: 'grid' }}>
         <DataGrid
           sx={{ width: 1 }}
           getRowId={x => x._id as string}
@@ -160,6 +160,7 @@ const VerifyArticleRequestsView = () => {
               </Stack>
             ),
           }}
+          autoHeight={true}
         />
       </Box>
     </Grid>

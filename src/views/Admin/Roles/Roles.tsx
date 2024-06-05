@@ -207,6 +207,7 @@ const Roles = () => {
                 </Stack>
               ),
             }}
+            autoHeight={true}
           />
         </Box>
       </Grid>

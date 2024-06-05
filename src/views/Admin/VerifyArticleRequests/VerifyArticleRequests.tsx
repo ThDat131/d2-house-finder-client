@@ -259,6 +259,7 @@ const VerifyArticleRequest = () => {
               </Stack>
             ),
           }}
+          autoHeight={true}
         />
       </Grid>
       <UpdateVerifyArticleRequest
