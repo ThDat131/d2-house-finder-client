@@ -502,6 +502,7 @@ const UpgradeLandlord = (): JSX.Element => {
                     </Stack>
                   ),
                 }}
+                autoHeight={true}
               />
             </Grid>
           </TabPanel>

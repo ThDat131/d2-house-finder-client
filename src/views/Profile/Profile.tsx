@@ -43,6 +43,11 @@ export const Profile = () => {
   }
 
   const handleFollow = () => {
+    if (!authState.auth.user._id) {
+      toast.warning(t('home.pleaseSignInToContinue'))
+      return
+    }
+
     if (user?._id === authState.auth.user._id) {
       toast.warning(t('profile.canNotFollowYourSelf'))
       return

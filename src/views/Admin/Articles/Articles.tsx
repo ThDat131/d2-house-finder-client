@@ -289,6 +289,7 @@ const Articles = () => {
               </Stack>
             ),
           }}
+          autoHeight={true}
         />
       </Grid>
       <ConfirmDialog

@@ -51,12 +51,12 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
       </DialogTitle>
       <DialogContent>
         <FormControl fullWidth>
-          <RadioGroup value={categoryState.selected?.name}>
+          <RadioGroup value={categoryState?.selected?.name}>
             <Box sx={{ borderBottom: 1, borderColor: 'grey.500', py: 1 }}>
               <FormControlLabel
                 onClick={() => {
                   setOpen(false)
-                  dispatch(selectCategory(null))
+                  dispatch(selectCategory(''))
                 }}
                 control={<Radio />}
                 label={t('chooseCategoryModal.selectedAll')}

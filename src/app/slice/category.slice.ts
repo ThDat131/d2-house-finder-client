@@ -16,7 +16,7 @@ import { RootState } from '../store'
 interface CategoryStateProps {
   category: Category[]
   error: string
-  selected: Category | null
+  selected: any
   loading: boolean
   pageSize: number
   pageCurrent: number
@@ -34,7 +34,7 @@ const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
 const initialState: CategoryStateProps = {
   category: [] as Category[],
   error: '',
-  selected: null as Category | null,
+  selected: '' as any,
   loading: true,
   pageSize: PAGE_SIZE,
   pageCurrent: 0,
@@ -147,7 +147,7 @@ const categorySlice = createSlice({
     clearError: state => {
       state.error = ''
     },
-    selectCategory: (state, action: PayloadAction<Category | null>) => {
+    selectCategory: (state, action: PayloadAction<any>) => {
       state.selected = action.payload
     },
   },

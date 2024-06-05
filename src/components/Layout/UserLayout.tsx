@@ -26,16 +26,17 @@ export const UserLayout: React.FC<Props> = ({
     (state: RootState) => state.auth.isRefreshToken,
   )
   const currentUserRef = useRef(false)
+  const categoryRef = useRef(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
     localStorage.setItem('lang', 'vn')
     const fetchData = async () => {
-      let categoryPromise
       let currentUserPromise
+      let categoryPromise
 
-      if (!categoryState.category || categoryState.category.length <= 0) {
+      if (!categoryRef.current) {
         categoryPromise = dispatch(getCategories({ current: 1, pageSize: 999 }))
       }
 
@@ -51,6 +52,7 @@ export const UserLayout: React.FC<Props> = ({
     return () => {
       dispatch(getCurrentUser())
       currentUserRef.current = true
+      categoryRef.current = true
     }
   }, [])
 

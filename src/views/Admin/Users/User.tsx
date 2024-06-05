@@ -238,6 +238,7 @@ const Users = () => {
               </Stack>
             ),
           }}
+          autoHeight={true}
         />
       </Grid>
       <ConfirmDialog

@@ -165,7 +165,6 @@ const VerifyArticleDialog = ({
     httpService
       .post(ApiPathEnum.VerifyArticle, data)
       .then(res => {
-        console.log(res)
         if (res.status === 201) {
           toast.success(
             t('generalManagement.verifyArticle.sendRequestSuccessfully'),

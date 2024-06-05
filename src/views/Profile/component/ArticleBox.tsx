@@ -12,17 +12,17 @@ const ArticleBox: React.FC<ArticleBoxProps> = ({ article }): JSX.Element => {
   const { t } = useTranslation()
   return (
     <Paper sx={{ overflow: 'hidden' }} elevation={3}>
-      <Stack>
+      <Stack minHeight={400}>
         <Box height={200}>
           <Box component={'img'} src={article.images[0]} width={1} height={1} />
         </Box>
         <Box p={2}>
-          <Box height={60}>
+          <Box height={60} overflow={'hidden'}>
             <Typography fontWeight={600} fontSize={18}>
               {article.title}
             </Typography>
           </Box>
-          <Box>
+          <Box my={2}>
             <Stack direction={'row'} spacing={2}>
               <Typography fontWeight={600} m={0}>
                 {t('articleBox.vndPerMonth', {
@@ -34,7 +34,7 @@ const ArticleBox: React.FC<ArticleBoxProps> = ({ article }): JSX.Element => {
               </Typography>
             </Stack>
           </Box>
-          <Box>
+          <Box height={48}>
             <Typography>{getProvinceAndDistrict(article)}</Typography>
           </Box>
           <Box>
