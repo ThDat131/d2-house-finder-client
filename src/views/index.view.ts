@@ -15,3 +15,4 @@ export { default as UpgradeLandlord } from './GeneralManagement/UpgradeLandlord/
 export { default as VerifyArticleRequests } from './GeneralManagement/VerifyArticleRequests/VerifyArticleRequests'
 export { default as DetailVerifyArticleRequest } from './GeneralManagement/VerifyArticleRequests/components/DetailVerifyArticleRequest'
 export { default as NotFound } from './NotFound/NotFound'
+export { default as ForgotPassword } from './ForgotPassword/ForgotPassword'

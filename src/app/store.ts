@@ -23,13 +23,21 @@ import permissionReducer from './slice/permission.slice'
 import roleReducer from './slice/role.slice'
 import verifyArticleRequestReducer from './slice/verify-article-requests.slice'
 
-const persistConfig = {
-  key: 'root',
+const authPersistConfig = {
+  key: 'auth',
   storage,
 }
 
-const authPersistedReducer = persistReducer(persistConfig, authReducer)
-const categoryPersistedReducer = persistReducer(persistConfig, categoryReducer)
+const categoryPersistConfig = {
+  key: 'category',
+  storage,
+}
+
+const authPersistedReducer = persistReducer(authPersistConfig, authReducer)
+const categoryPersistedReducer = persistReducer(
+  categoryPersistConfig,
+  categoryReducer,
+)
 
 export const store = configureStore({
   reducer: {
