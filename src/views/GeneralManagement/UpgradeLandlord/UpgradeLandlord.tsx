@@ -5,6 +5,9 @@ import {
   Button,
   Chip,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
   FormControlLabel,
   Grid,
   Popper,
@@ -38,6 +41,9 @@ import { DEFAULT_FORMAT_DATE } from '../../../common/common-constant'
 import { CommonResponse } from '../../../model/common/common-response'
 import { toast } from 'react-toastify'
 import DetailsUpgradeDialog from './components/DetailsUpgradeDialog'
+import FileUploadIcon from '@mui/icons-material/FileUpload'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Camera } from 'react-camera-pro'
 
 enum TypeTabEnum {
   CREATE = 'CREATE',
@@ -69,6 +75,13 @@ const UpgradeLandlord = (): JSX.Element => {
   const [openDetails, setOpenDetails] = useState<boolean>(false)
   const [selectedRequest, setSelectedRequest] =
     useState<UpgradeLandlordRequest>()
+  const [frontImageLoading, setFrontImageLoading] = useState<boolean>(false)
+  const [backImageLoading, setBackImageLoading] = useState<boolean>(false)
+  const [profileImageLoading, setProfileImageLoading] = useState<boolean>(false)
+  const [imageUpload, setImageUpload] = useState<any>([])
+  const [openVideo, setOpenVideo] = useState<boolean>(false)
+  const camera = useRef(null)
+  const [image, setImage] = useState(null)
 
   const columns: GridColDef[] = [
     {
@@ -150,6 +163,7 @@ const UpgradeLandlord = (): JSX.Element => {
     dateOfIssue: new Date(),
     status: LandlordRequestStatusEnum.PENDING,
     placeOfIssue: '',
+    images: ['', '', ''],
   }
 
   const validationSchema = Yup.object().shape({
@@ -184,6 +198,8 @@ const UpgradeLandlord = (): JSX.Element => {
 
   const handleCreateLandlordRequest = (model: UpgradeLandlordRequest) => {
     setLoadingSubmit(true)
+
+    model.images = imageUpload.map((x: any) => x.url)
 
     httpService
       .post(ApiPathEnum.LandlordRequest, model)
@@ -234,6 +250,70 @@ const UpgradeLandlord = (): JSX.Element => {
       })
   }
 
+  const handleChangeFrontImage = (evt: any) => {
+    if (evt.target.files) {
+      for (const file of evt.target.files) {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        setFrontImageLoading(true)
+        httpService
+          .post<CommonResponse<any>>(ApiPathEnum.UploadSingleFile, formData)
+          .then(res => {
+            if (res.status === 201) {
+              const temp = [...imageUpload]
+              temp[0] = {
+                url: res.data.data.path,
+                name: file.name,
+              }
+              setImageUpload(temp)
+            }
+          })
+          .finally(() => {
+            setFrontImageLoading(false)
+          })
+      }
+    }
+  }
+
+  const handleChangeBackImage = (evt: any) => {
+    if (evt.target.files) {
+      for (const file of evt.target.files) {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        setBackImageLoading(true)
+        httpService
+          .post<CommonResponse<any>>(ApiPathEnum.UploadSingleFile, formData)
+          .then(res => {
+            if (res.status === 201) {
+              const temp = [...imageUpload]
+              temp[1] = {
+                url: res.data.data.path,
+                name: file.name,
+              }
+              setImageUpload(temp)
+            }
+          })
+          .finally(() => {
+            setBackImageLoading(false)
+          })
+      }
+    }
+  }
+
+  const handleChangeProfileImage = () => {
+    setOpenVideo(true)
+  }
+
+  const handleDeleteImagesFile = (index: number) => {
+    const temp = [...imageUpload]
+
+    temp.splice(index, 1)
+
+    setImageUpload(temp)
+  }
+
   useEffect(() => {
     if (!requestsRef.current) {
       fetchLandlordRequest()
@@ -277,6 +357,184 @@ const UpgradeLandlord = (): JSX.Element => {
               </Alert>
               <form onSubmit={formik.handleSubmit}>
                 <Stack spacing={5}>
+                  <Grid container spacing={2}>
+                    <Grid
+                      item
+                      xs={4}
+                      container
+                      justifyContent={'center'}
+                      direction={'column'}
+                      alignItems={'center'}
+                      gap={2}
+                    >
+                      <Typography>
+                        {t(
+                          'generalManagement.upgradeLandlord.frontImagePersonalId',
+                        )}
+                      </Typography>
+                      {imageUpload[0]?.url && !frontImageLoading ? (
+                        <Grid
+                          item
+                          xs={3}
+                          key={imageUpload[0].name}
+                          flexDirection={'column'}
+                        >
+                          <Box height={200} overflow={'hidden'} boxShadow={5}>
+                            <Box
+                              component={'img'}
+                              srcSet={imageUpload[0].url}
+                              src={imageUpload[0].url}
+                              width={'100%'}
+                              height={'100%'}
+                            />
+                          </Box>
+                          <Button
+                            startIcon={<DeleteIcon />}
+                            fullWidth
+                            variant="contained"
+                            onClick={() => {
+                              handleDeleteImagesFile(0)
+                            }}
+                          >
+                            {t('generalManagement.createNewArticle.delete')}
+                          </Button>
+                        </Grid>
+                      ) : (
+                        <LoadingButton
+                          variant="contained"
+                          startIcon={<FileUploadIcon />}
+                          component={'label'}
+                          loading={frontImageLoading}
+                          disabled={!canCreate}
+                        >
+                          {t('generalManagement.verifyArticle.upload')}
+                          <input
+                            type="file"
+                            multiple
+                            hidden
+                            onChange={evt => {
+                              handleChangeFrontImage(evt)
+                            }}
+                          />
+                        </LoadingButton>
+                      )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={4}
+                      container
+                      justifyContent={'center'}
+                      direction={'column'}
+                      alignItems={'center'}
+                      gap={2}
+                    >
+                      <Typography>
+                        {t(
+                          'generalManagement.upgradeLandlord.backImagePersonalId',
+                        )}
+                      </Typography>
+                      {imageUpload[1]?.url && !backImageLoading ? (
+                        <Grid
+                          item
+                          xs={3}
+                          key={imageUpload[1].name}
+                          flexDirection={'column'}
+                        >
+                          <Box height={200} overflow={'hidden'} boxShadow={5}>
+                            <Box
+                              component={'img'}
+                              srcSet={imageUpload[1].url}
+                              src={imageUpload[1].url}
+                              width={'100%'}
+                              height={'100%'}
+                            />
+                          </Box>
+                          <Button
+                            startIcon={<DeleteIcon />}
+                            fullWidth
+                            variant="contained"
+                            onClick={() => {
+                              handleDeleteImagesFile(1)
+                            }}
+                          >
+                            {t('generalManagement.createNewArticle.delete')}
+                          </Button>
+                        </Grid>
+                      ) : (
+                        <LoadingButton
+                          variant="contained"
+                          startIcon={<FileUploadIcon />}
+                          component={'label'}
+                          loading={backImageLoading}
+                          disabled={!canCreate}
+                        >
+                          {t('generalManagement.verifyArticle.upload')}
+                          <input
+                            type="file"
+                            multiple
+                            hidden
+                            onChange={evt => {
+                              handleChangeBackImage(evt)
+                            }}
+                          />
+                        </LoadingButton>
+                      )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={4}
+                      container
+                      justifyContent={'center'}
+                      direction={'column'}
+                      alignItems={'center'}
+                      gap={2}
+                    >
+                      <Typography>
+                        {t('generalManagement.upgradeLandlord.profileImage')}
+                      </Typography>
+                      {imageUpload[2]?.url && !profileImageLoading ? (
+                        <Grid
+                          item
+                          xs={3}
+                          key={imageUpload[2].name}
+                          flexDirection={'column'}
+                        >
+                          <Box height={200} overflow={'hidden'} boxShadow={5}>
+                            <Box
+                              component={'img'}
+                              srcSet={imageUpload[2].url}
+                              src={imageUpload[2].url}
+                              width={'100%'}
+                              height={'100%'}
+                            />
+                          </Box>
+                          <Button
+                            startIcon={<DeleteIcon />}
+                            fullWidth
+                            variant="contained"
+                            onClick={() => {
+                              handleDeleteImagesFile(2)
+                            }}
+                          >
+                            {t('generalManagement.createNewArticle.delete')}
+                          </Button>
+                        </Grid>
+                      ) : (
+                        <LoadingButton
+                          variant="contained"
+                          startIcon={<FileUploadIcon />}
+                          component={'label'}
+                          loading={profileImageLoading}
+                          disabled={!canCreate}
+                          onClick={() => {
+                            handleChangeProfileImage()
+                          }}
+                        >
+                          {t('generalManagement.upgradeLandlord.takePhoto')}
+                        </LoadingButton>
+                      )}
+                    </Grid>
+                  </Grid>
                   <Grid container item alignItems={'center'}>
                     <Grid item textAlign={'center'} xs={2}>
                       <Typography>
@@ -513,6 +771,63 @@ const UpgradeLandlord = (): JSX.Element => {
         setOpen={setOpenDetails}
         request={selectedRequest as UpgradeLandlordRequest}
       />
+      <Dialog
+        open={openVideo}
+        onClose={() => {
+          setOpenVideo(false)
+        }}
+        maxWidth={'lg'}
+        fullWidth
+      >
+        <DialogContent>
+          <Box overflow={'hidden'} position={'relative'} height={800}>
+            <Camera
+              ref={camera}
+              errorMessages={{
+                noCameraAccessible: t(
+                  'generalManagement.upgradeLandlord.pleaseAllowCameraAccess',
+                ),
+                permissionDenied: t(
+                  'generalManagement.upgradeLandlord.pleaseAllowCameraAccess',
+                ),
+              }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              const photo = camera.current as any
+              const base64Photo = photo.takePhoto()
+
+              if (base64Photo) {
+                setProfileImageLoading(true)
+                httpService
+                  .post<CommonResponse<any>>(ApiPathEnum.UploadBase64File, {
+                    base64: base64Photo,
+                  })
+                  .then(res => {
+                    if (res.status === 201) {
+                      const temp = [...imageUpload]
+                      temp[2] = {
+                        url: res.data.data.path,
+                        name: 'profile',
+                      }
+                      setImageUpload(temp)
+                    }
+                  })
+                  .finally(() => {
+                    setProfileImageLoading(false)
+                  })
+              }
+
+              setOpenVideo(false)
+            }}
+          >
+            {t('generalManagement.upgradeLandlord.takePhoto')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   )
 }

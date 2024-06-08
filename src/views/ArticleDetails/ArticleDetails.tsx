@@ -39,6 +39,7 @@ import UserLayout from '../../components/Layout/UserLayout'
 import { toast } from 'react-toastify'
 import { LoadingButton } from '@mui/lab'
 import { addFollow, removeFollow } from '../../app/slice/auth.slice'
+import Carousel from '../../components/Carousel'
 
 const ArticleDetails = (): JSX.Element => {
   const { id } = useParams()
@@ -211,47 +212,47 @@ const ArticleDetails = (): JSX.Element => {
     <UserLayout haveSearch={false}>
       <Container sx={{ mt: 2 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Paper elevation={4}>
-              <Box
-                height={400}
-                sx={{
-                  backgroundImage: `url(${
-                    article?.images[0] ??
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6C7KefXhbUwl5NEW8iFCGfowi0GlBVYFDhjR06w7wcQ&s'
-                  })`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
-                position={'relative'}
-              >
-                <Fancybox
-                  options={{
-                    Carousel: {
-                      infinite: false,
-                    },
-                  }}
+          <Grid item xs={12} position={'relative'}>
+            <Carousel>
+              {article?.images.map(x => (
+                <Box
+                  width={1}
+                  height={400}
+                  className="f-carousel__slide"
+                  key={x}
                 >
-                  <Button
-                    startIcon={<FormatListBulletedIcon />}
-                    href={article?.images[0]}
-                    style={{ position: 'absolute', bottom: 10, right: 10 }}
-                    variant="contained"
-                    className="f-carousel__slide"
-                    data-fancybox="gallery"
-                  >
-                    {t('articleDetails.allImages')}
-                  </Button>
-                  {article?.images.map((x, index) => {
-                    return (
-                      index !== 0 && (
-                        <Button key={index} data-fancybox="gallery" href={x} />
-                      )
-                    )
-                  })}
-                </Fancybox>
-              </Box>
-            </Paper>
+                  <Box
+                    height={1}
+                    width={1}
+                    component={'img'}
+                    src={
+                      x ??
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6C7KefXhbUwl5NEW8iFCGfowi0GlBVYFDhjR06w7wcQ&s'
+                    }
+                    sx={{ objectFit: 'cover', objectPosition: 'center' }}
+                  />
+                </Box>
+              ))}
+            </Carousel>
+            <Fancybox>
+              <Button
+                startIcon={<FormatListBulletedIcon />}
+                href={article?.images[0]}
+                style={{ position: 'absolute', bottom: 10, right: 10 }}
+                variant="contained"
+                className="f-carousel__slide"
+                data-fancybox="gallery"
+              >
+                {t('articleDetails.allImages')}
+              </Button>
+              {article?.images.map((x, index) => {
+                return (
+                  index !== 0 && (
+                    <Button key={index} data-fancybox="gallery" href={x} />
+                  )
+                )
+              })}
+            </Fancybox>
           </Grid>
           <Grid item xs={9}>
             <Typography variant="h3" mb={2}>

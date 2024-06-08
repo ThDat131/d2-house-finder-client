@@ -338,7 +338,12 @@
       "updatePassword": "Cập nhật mật khẩu",
       "newPassword": "Mật khẩu mới",
       "oldPassword": "Mật khẩu cũ",
-      "update": "Cập nhật"
+      "passwordMustMatch": "Mật khẩu phải trùng khớp",
+      "reNewPassword": "Xác nhận mật khẩu mới",
+      "update": "Cập nhật",
+      "youCantLeaveThisEmpty": "Bạn không thể để trống trường này",
+      "updatePasswordSuccessfully": "Cập nhật mật khẩu thành công",
+      "wrongPasswordTryAgain": "Sai mật khẩu, vui lòng thử lại"
     },
     "upgradeLandlord": {
       "action": "Thao tác",
@@ -373,7 +378,16 @@
       "sendRequestSuccessfully": "Gửi yêu cầu thành công. Vui lòng đợi quản trị viên duyệt",
       "status": "Trạng thái",
       "updatedAt": "Ngày cập nhật",
-      "upgradeLandlord": "Nâng cấp tài khoản chủ trọ"
+      "upgradeLandlord": "Nâng cấp tài khoản chủ trọ",
+      "frontImagePersonalId": "Ảnh mặt trước CCCD",
+      "backImagePersonalId": "Ảnh mặt sau CCCD",
+      "profileImage": "Ảnh cá nhân",
+      "analyzeFace": "Phân tích khuôn mặt",
+      "matchRatioIs": "Tỉ lệ trùng khớp là {{number}}%",
+      "canNotIdentifyFaceInPersonalId": "Không thể nhận diện khuôn mặt trong CCCD/CMND",
+      "canNotIdentifyFaceInProfileImage": "Không thể nhận diện khuôn mặt trong ảnh cá nhân",
+      "takePhoto": "Chụp ảnh",
+      "pleaseAllowCameraAccess": "Vui lòng chọn cho phép truy cập camera"
     },
     "verifyArticle": {
       "contract": "Giấy tờ nhà",
@@ -461,7 +475,9 @@
     "passwordIsTooShort": "Mật khẩu quá ngắn",
     "rememberAccount": "Ghi nhớ tài khoản",
     "signin": "Đăng nhập",
-    "welcome": "Chào mừng bạn đến với D2 - nền tảng thuê nhà trọ đáng tin cậy và tiện lợi."
+    "welcome": "Chào mừng bạn đến với D2 - nền tảng thuê nhà trọ đáng tin cậy và tiện lợi.",
+    "sendRequestForgotPassword": "Gửi yêu cầu quên mật khẩu",
+    "notProblemContinueSignIn": "Không gặp vấn đề? Đăng nhập"
   },
   "signup": {
     "alreadyHaveAccountSignin": "Đã có tài khoản? Đăng nhập",

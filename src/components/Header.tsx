@@ -238,7 +238,7 @@ export const Header = (): JSX.Element => {
               />
             </ProtectedComponent>
 
-            {currentUser.role.name.includes('ADMIN') && (
+            {currentUser.role?.name?.includes('ADMIN') && (
               <Tab
                 component={Link}
                 to={'/admin'}

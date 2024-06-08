@@ -15,7 +15,12 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useFormik } from 'formik'
-import { getCurrentUser, signinAPI } from '../../app/slice/auth.slice'
+import {
+  getCurrentUser,
+  signInWithFacebook,
+  signInWithGoogle,
+  signinAPI,
+} from '../../app/slice/auth.slice'
 import { type SigninModel } from '../../model/auth/signin-model'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
@@ -26,6 +31,12 @@ import { toast } from 'react-toastify'
 import BlackLogo from '../../assets/image/logo/BlackLogo.png'
 import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth'
+import { auth } from '../../configs/firebase'
 
 const Signin = (): JSX.Element => {
   const { httpService } = new HttpService()
@@ -100,31 +111,67 @@ const Signin = (): JSX.Element => {
   }
 
   const handleSignInWithGoogle = async () => {
-    // const url = import.meta.env.VITE_API_URL
-    // const authWindow = window.open(
-    //   `${url}api/v1/auth/google/login`,
-    //   '',
-    //   'popup=true',
-    // )
-    // const interval = setInterval(() => {
-    //   console.log(authWindow)
-    //   if (authWindow?.closed) {
-    //     clearInterval(interval)
-    //     console.log('DONE')
-    //     // Call a backend API to fetch the user's data
-    //   }
-    // }, 1000)
-    // httpService.get(ApiPathEnum.SigninWithGoogle)
-    // .then(res => {
-    //   if (res.headers && res.headers.location) {
-    //     // navigate(res.headers.location)
-    //     // return res.headers.location
-    //   }
-    // })
+    const provider = new GoogleAuthProvider()
+    signInWithPopup(auth, provider).then(res => {
+      const credential = GoogleAuthProvider.credentialFromResult(res)
+
+      if (credential) {
+        setLoading(true)
+
+        dispatch(signInWithGoogle(credential))
+          .unwrap()
+          .then(res => {
+            if (res.statusCode === 200) {
+              if (res.data.user.role.name === 'ADMIN') {
+                localStorage.setItem('adminNavigationPage', '-1')
+                localStorage.setItem('userNavigationPage', '-1')
+                localStorage.setItem('adminChildUrl', '')
+
+                navigate('/admin')
+              } else navigate('/')
+
+              localStorage.setItem('access_token', res.data.access_token)
+            } else {
+              toast.error(res.message)
+            }
+          })
+          .finally(() => {
+            setLoading(false)
+          })
+      }
+    })
   }
 
   const handleSignInWithFacebook = () => {
-    // httpService.get(ApiPathEnum.SigninWithFacebook)
+    const provider = new FacebookAuthProvider()
+    signInWithPopup(auth, provider).then(res => {
+      const credential = FacebookAuthProvider.credentialFromResult(res)
+
+      if (credential) {
+        setLoading(true)
+
+        dispatch(signInWithFacebook(credential))
+          .unwrap()
+          .then(res => {
+            if (res.statusCode === 200) {
+              if (res.data.user.role.name === 'ADMIN') {
+                localStorage.setItem('adminNavigationPage', '-1')
+                localStorage.setItem('userNavigationPage', '-1')
+                localStorage.setItem('adminChildUrl', '')
+
+                navigate('/admin')
+              } else navigate('/')
+
+              localStorage.setItem('access_token', res.data.access_token)
+            } else {
+              toast.error(res.message)
+            }
+          })
+          .finally(() => {
+            setLoading(false)
+          })
+      }
+    })
   }
 
   const formik = useFormik({
@@ -210,7 +257,9 @@ const Signin = (): JSX.Element => {
               />
               <FormControl sx={{ justifyContent: 'center' }}>
                 <Typography>
-                  <Link to={'/'}>{t('signin.forgotPassword')}</Link>
+                  <Link to={'/quen-mat-khau'}>
+                    {t('signin.forgotPassword')}
+                  </Link>
                 </Typography>
               </FormControl>
             </Stack>

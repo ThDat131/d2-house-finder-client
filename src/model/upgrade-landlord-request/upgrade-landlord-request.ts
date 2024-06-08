@@ -18,6 +18,7 @@ export interface UpgradeLandlordRequest {
     fullName: string
     email: string
   }
+  images: [string, string, string]
 }
 
 export interface UpgradeLandlordRequestResponse {

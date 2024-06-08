@@ -22,8 +22,8 @@ import {
   UpdatePassword,
   UpgradeLandlord,
   Verify,
-  VerifyArticle,
   VerifyArticleRequests,
+  ForgotPassword,
 } from './views/index.view'
 import { ThemeProvider } from '@emotion/react'
 import theme from './theme'
@@ -67,6 +67,10 @@ const router = createBrowserRouter([
   {
     path: '/dang-nhap',
     element: <Signin />,
+  },
+  {
+    path: 'quen-mat-khau',
+    element: <ForgotPassword />,
   },
   {
     path: '/quan-ly',

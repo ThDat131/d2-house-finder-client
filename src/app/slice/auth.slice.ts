@@ -62,6 +62,40 @@ export const signinAPI = createAsyncThunk(
   },
 )
 
+export const signInWithFacebook = createAsyncThunk(
+  'user/signInFacebook',
+  async (credential: any, thunkAPI) => {
+    const { httpService } = new HttpService()
+
+    try {
+      const response = await httpService.post(ApiPathEnum.SigninWithFacebook, {
+        access_token: credential.accessToken,
+      })
+
+      return response.data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
+export const signInWithGoogle = createAsyncThunk(
+  'user/signInGoogle',
+  async (credential: any, thunkAPI) => {
+    const { httpService } = new HttpService()
+
+    try {
+      const response = await httpService.post(ApiPathEnum.SigninWithGoogle, {
+        access_token: credential.accessToken,
+      })
+
+      return response.data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -107,6 +141,14 @@ const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(signinAPI.fulfilled, (state, action) => {
+      if (!action.payload) return initialState
+      state.auth = action.payload.data
+    })
+    builder.addCase(signInWithFacebook.fulfilled, (state, action) => {
+      if (!action.payload) return initialState
+      state.auth = action.payload.data
+    })
+    builder.addCase(signInWithGoogle.fulfilled, (state, action) => {
       if (!action.payload) return initialState
       state.auth = action.payload.data
     })

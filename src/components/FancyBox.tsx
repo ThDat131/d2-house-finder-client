@@ -29,7 +29,7 @@ function Fancybox(props: PropsWithChildren<Props>) {
   })
 
   return (
-    <Box style={{ zIndex: 3000 }} ref={containerRef}>
+    <Box sx={{ zIndex: 9999 }} ref={containerRef}>
       {props.children}
     </Box>
   )
