@@ -9,6 +9,7 @@ import { getCategories } from '../../app/slice/category.slice'
 import { getCurrentUser, signout } from '../../app/slice/auth.slice'
 import Loading from '../Loading'
 import { useNavigate } from 'react-router-dom'
+import { getSubCategories } from '../../app/slice/sub-category.slice'
 
 interface Props {
   children: React.ReactNode

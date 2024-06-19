@@ -94,15 +94,6 @@ export const getArticles = createAsyncThunk(
         'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone,categoryId.name,categoryId._id',
     }
 
-    if (data?.categoryId?._id) {
-      params = {
-        ...params,
-        filter: {
-          categoryId: data.categoryId,
-        },
-      }
-    }
-
     if (data?.title) {
       params = {
         ...params,

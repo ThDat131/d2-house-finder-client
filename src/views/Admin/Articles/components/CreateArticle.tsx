@@ -1,11 +1,14 @@
 import {
   Box,
   Button,
+  Checkbox,
   CircularProgress,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   Grid,
   InputAdornment,
+  ListItem,
   MenuItem,
   OutlinedInput,
   Paper,
@@ -13,6 +16,7 @@ import {
   Stack,
   TextField,
   Typography,
+  styled,
 } from '@mui/material'
 import { ActionType } from '../../../../common/common-enum'
 import { useTranslation } from 'react-i18next'
@@ -56,6 +60,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { LoadingButton } from '@mui/lab'
 import { getCategories } from '../../../../app/slice/category.slice'
 import { Article } from '../../../../model/article/article'
+import _ from 'lodash'
 
 interface ImageType {
   blob: string
@@ -80,6 +85,8 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
   const location = useLocation()
 
   const [districts, setDistricts] = useState<District[]>([])
+  const [selected, setSelected] = useState<any>([])
+  const [types, setTypes] = useState<any>()
   const [wards, setWards] = useState<Ward[]>([])
   const [exactAddress, setExactAddress] = useState<string>('')
   const [description, setDescription] = useState<any>(EditorState.createEmpty())
@@ -113,6 +120,7 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
     wardName: type === ActionType.CREATE ? '' : article?.address.wardName ?? '',
     images: type === ActionType.CREATE ? [] : article?.images ?? [],
     quantity: type === ActionType.CREATE ? 0 : article?.quantity ?? 0,
+    attributes: type === ActionType.CREATE ? [] : article?.attributes ?? [],
   }
 
   const validationSchema = Yup.object().shape({
@@ -256,10 +264,54 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
     setImageUrls(updatedImageUrls)
   }
 
+  const CustomListItem = styled(ListItem)({
+    paddingLeft: 0,
+  })
+
+  const ListItemStyle: React.CSSProperties = {
+    width: '50%',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    userSelect: 'none',
+  }
+
+  const ConditionList = (types: any, key: string) => {
+    if (!types) return
+
+    const array = types[key]
+
+    return (
+      <Grid container spacing={1}>
+        {array.map((x: any) => (
+          <Grid item key={x._id} xs={4}>
+            <CustomListItem style={ListItemStyle}>
+              <FormControlLabel
+                control={<Checkbox />}
+                label={x.name}
+                defaultChecked={false}
+                checked={selected.includes(x._id)}
+                onClick={() => {
+                  if (!selected.includes(x._id)) {
+                    setSelected((prev: any) => [...prev, x._id])
+                  } else {
+                    setSelected((prev: any) =>
+                      prev.filter((y: any) => y !== x._id),
+                    )
+                  }
+                }}
+              />
+            </CustomListItem>
+          </Grid>
+        ))}
+      </Grid>
+    )
+  }
+
   useEffect(() => {
     if (type === ActionType.UPDATE) {
       const initial = location.state as Article
       setArticle(initial)
+      setSelected(initial?.attributes ?? [])
 
       const convertedDescription = convertFromHTML(initial.description)
       const contentState = ContentState.createFromBlockArray(
@@ -310,6 +362,16 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
       categoryPromise.abort()
     }
   }, [])
+
+  useEffect(() => {
+    const types = _.groupBy(
+      categoryState.category.find(x => x._id === formik.values.categoryId)
+        ?.subCategories,
+      'type',
+    )
+
+    setTypes(types)
+  }, [formik.values.categoryId])
 
   return (
     <Grid container spacing={2}>
@@ -534,6 +596,21 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
                         </FormHelperText>
                       </FormControl>
                     </Stack>
+                  </Grid>
+                  <Grid item xs={12} mb={2}>
+                    {types &&
+                      Object.keys(types).map(x => (
+                        <Grid item key={x} xs={12}>
+                          <Typography
+                            component={'h5'}
+                            fontWeight={'bold'}
+                            my={2}
+                          >
+                            {x}
+                          </Typography>
+                          {ConditionList(types, x)}
+                        </Grid>
+                      ))}
                   </Grid>
                   <Grid item xs={12} mb={2}>
                     <Stack>

@@ -10,6 +10,7 @@ import PriceFilter from '../../components/PriceFilter'
 import AcreageFilter from '../../components/AcreageFilter'
 import { useParams } from 'react-router-dom'
 import PostItemSkeleton from '../../components/PostItemSkeleton'
+import ConditionFilter from '../../components/ConditionFilter'
 
 const ArticleCategory = (): JSX.Element => {
   const { name } = useParams()
@@ -27,6 +28,8 @@ const ArticleCategory = (): JSX.Element => {
   const totalPost = useAppSelector(
     (state: RootState) => state.article.totalPost,
   )
+
+  const categoriesState = useAppSelector((state: RootState) => state.category)
 
   useEffect(() => {
     const articlesPromise = dispatch(
@@ -86,6 +89,9 @@ const ArticleCategory = (): JSX.Element => {
         </Grid>
         <Grid item xs={4}>
           <Stack spacing={2}>
+            {categoriesState?.selected?.subCategories?.length > 0 && (
+              <ConditionFilter />
+            )}
             <PriceFilter />
             <AcreageFilter />
           </Stack>

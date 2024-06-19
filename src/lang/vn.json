@@ -439,6 +439,9 @@
     "yourContentIsNotFound": "Rất tiếc, nội dung bạn tìm không tồn tại.",
     "goBackToHome": "Về trang chủ"
   },
+  "conditionFilter": {
+    "conditionFilter": "Điều kiện lọc"
+  },
   "priceFilter": {
     "byPrice": "Xem theo giá",
     "fromPriceToPrice": "Từ {{fromPrice}} đến {{toPrice}} triệu",

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Category } from '../../../../model/category/category'
 import {
   Button,
@@ -10,7 +10,10 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
+  ListItem,
   TextField,
+  Typography,
+  styled,
 } from '@mui/material'
 import * as Yup from 'yup'
 import { useTranslation } from 'react-i18next'
@@ -24,6 +27,8 @@ import {
 import { ALREADY_EXISTS } from '../../../../model/common/error-type'
 import { toast } from 'react-toastify'
 import { LoadingButton } from '@mui/lab'
+import { ALL_SUB_CATEGORY } from '../../../../app/sample-sub-category'
+import _ from 'lodash'
 
 interface UpdateCategoryProps {
   category: Category | undefined
@@ -38,6 +43,7 @@ const UpdateCategory: React.FC<UpdateCategoryProps> = ({
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const categoryState = useAppSelector((state: RootState) => state.category)
+  const [types, setTypes] = useState<any>()
 
   const handleClose = () => {
     setOpen(false)
@@ -46,6 +52,7 @@ const UpdateCategory: React.FC<UpdateCategoryProps> = ({
     _id: category?._id,
     name: category?.name,
     active: category?.active as boolean,
+    subCategories: category?.subCategories.map((x: any) => x._id) as string[],
   }
 
   const validationSchema = Yup.object().shape({
@@ -74,8 +81,69 @@ const UpdateCategory: React.FC<UpdateCategoryProps> = ({
   const onFocus = (): void => {
     dispatch(clearError())
   }
+
+  const CustomListItem = styled(ListItem)({
+    paddingLeft: 0,
+  })
+
+  const ListItemStyle: React.CSSProperties = {
+    width: '50%',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    userSelect: 'none',
+  }
+
+  const ConditionList = (types: any, key: string) => {
+    if (!types) return
+
+    const array = types[key]
+
+    return (
+      <Grid container spacing={1}>
+        {array.map((x: any) => (
+          <Grid item key={x._id} xs={4}>
+            <CustomListItem style={ListItemStyle}>
+              <FormControlLabel
+                control={<Checkbox />}
+                label={x.name}
+                defaultChecked={false}
+                checked={formik.values.subCategories.includes(x._id)}
+                onClick={() => {
+                  const temp = [...formik.values.subCategories]
+
+                  if (!formik.values?.subCategories.includes(x._id)) {
+                    formik.setFieldValue('subCategories', [...temp, x._id])
+                  } else {
+                    formik.setFieldValue(
+                      'subCategories',
+                      temp.filter(y => y !== x._id),
+                    )
+                  }
+                }}
+              />
+            </CustomListItem>
+          </Grid>
+        ))}
+      </Grid>
+    )
+  }
+
+  useEffect(() => {
+    if (open) {
+      const types = _.groupBy(ALL_SUB_CATEGORY, 'type')
+      setTypes(types)
+    }
+  }, [open])
+
   return (
-    <Dialog open={open}>
+    <Dialog
+      open={open}
+      onClose={() => {
+        setOpen(false)
+      }}
+      maxWidth={'lg'}
+      fullWidth
+    >
       <DialogTitle>{t('admin.category.updateCategory')}</DialogTitle>
       <form onSubmit={formik.handleSubmit}>
         <DialogContent>
@@ -113,6 +181,23 @@ const UpdateCategory: React.FC<UpdateCategoryProps> = ({
                 label={t('admin.category.active')}
               />
             </Grid>
+          </Grid>
+          <Grid
+            container
+            item
+            xs={12}
+            display={'flex'}
+            justifyContent={'flex-end'}
+          >
+            {types &&
+              Object.keys(types).map(x => (
+                <Grid item key={x} xs={12}>
+                  <Typography component={'h5'} fontWeight={'bold'} my={2}>
+                    {x}
+                  </Typography>
+                  {ConditionList(types, x)}
+                </Grid>
+              ))}
           </Grid>
         </DialogContent>
         <DialogActions>

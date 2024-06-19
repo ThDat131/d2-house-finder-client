@@ -16,4 +16,5 @@ export interface ArticleCreatedModel {
   wardName: string
   images: string[]
   quantity: number
+  attributes: string[]
 }

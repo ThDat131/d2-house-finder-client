@@ -12,3 +12,16 @@ interface Data {
 }
 
 export interface GetCategoryResponse extends CommonResponse<Data> {}
+
+interface SubCategoryData {
+  meta: {
+    current: number
+    pageSize: number
+    pages: number
+    total: number
+  }
+  results: SubCategory[]
+}
+
+export interface GetSubCategoryResponse
+  extends CommonResponse<SubCategoryData> {}
