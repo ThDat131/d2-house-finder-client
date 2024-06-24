@@ -173,7 +173,7 @@ const VerifyArticleRequest = () => {
     return () => {
       verifyArticleRequestPromise.abort()
     }
-  }, [dispatch, paginationModel, selectedCreatedBy, statusSelect])
+  }, [dispatch, selectedCreatedBy, statusSelect])
 
   return (
     <Grid container height={1}>

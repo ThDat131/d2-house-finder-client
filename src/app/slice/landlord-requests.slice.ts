@@ -57,6 +57,7 @@ export const getLandlordRequests = createAsyncThunk(
       current: data.current,
       populate: 'createdBy',
       fields: 'createdBy.fullName,createdBy.email',
+      pageSize: data?.pageSize ? data.pageSize : PAGE_SIZE,
     }
 
     if (data?.createdBy?._id) {
@@ -158,12 +159,23 @@ const landlordRequests = (state: RootState) => state.landlordRequest.requests
 
 export const allCreatedByLandlordRequests = createSelector(
   [landlordRequests],
-  x =>
-    x.map(x => ({
+  x => {
+    const temp = x.map(x => ({
       _id: x.createdBy?._id as string,
       fullName: x.createdBy?.fullName as string,
       email: x.createdBy?.email as string,
-    })),
+    }))
+
+    const seen = new Set()
+    const uniqueArray = temp.filter(item => {
+      const duplicate = seen.has(item._id)
+      seen.add(item._id)
+
+      return !duplicate
+    })
+
+    return uniqueArray
+  },
 )
 
 export default landlordRequestReducer

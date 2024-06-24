@@ -158,10 +158,21 @@ const verifyArticleRequests = (state: RootState) => state.verifyArticle.requests
 
 export const titleOfVerifyArticleRequests = createSelector(
   [verifyArticleRequests],
-  x =>
-    x.map(x => ({
+  x => {
+    const temp = x.map(x => ({
       _id: x.articleId?._id,
       title: x.articleId?.title,
-    })),
+    }))
+
+    const seen = new Set()
+    const uniqueArray = temp.filter(item => {
+      const duplicate = seen.has(item._id)
+      seen.add(item._id)
+
+      return !duplicate
+    })
+
+    return uniqueArray
+  },
 )
 export default verifyArticleRequestReducer

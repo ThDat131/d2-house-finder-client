@@ -49,6 +49,7 @@ export const getCategories = createAsyncThunk(
     let params: any = {
       current: data.current,
       pageSize: data?.pageSize ? data.pageSize : PAGE_SIZE,
+      populate: 'subCategories',
     }
 
     if (data?.name) {

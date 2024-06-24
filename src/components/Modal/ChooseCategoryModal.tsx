@@ -14,6 +14,10 @@ import React, { useEffect } from 'react'
 import { useAppDispatch } from '../../app/hooks'
 import { selectCategory } from '../../app/slice/category.slice'
 import { useTranslation } from 'react-i18next'
+import {
+  getSubCategories,
+  removeSubCategory,
+} from '../../app/slice/sub-category.slice'
 
 interface ChooseCategoryModalProps {
   open: boolean
@@ -57,6 +61,7 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
                 onClick={() => {
                   setOpen(false)
                   dispatch(selectCategory(''))
+                  dispatch(removeSubCategory())
                 }}
                 control={<Radio />}
                 label={t('chooseCategoryModal.selectedAll')}
@@ -72,6 +77,11 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
                   onClick={() => {
                     setOpen(false)
                     dispatch(selectCategory(c))
+                    dispatch(
+                      getSubCategories({
+                        categoryId: c._id,
+                      }),
+                    )
                   }}
                   value={c.name}
                   control={<Radio />}

@@ -22,6 +22,7 @@ import storage from 'redux-persist/lib/storage'
 import permissionReducer from './slice/permission.slice'
 import roleReducer from './slice/role.slice'
 import verifyArticleRequestReducer from './slice/verify-article-requests.slice'
+import subCategoryReducer from './slice/sub-category.slice'
 
 const authPersistConfig = {
   key: 'auth',
@@ -33,10 +34,19 @@ const categoryPersistConfig = {
   storage,
 }
 
+const subCategoryPersistConfig = {
+  key: 'subCategory',
+  storage,
+}
+
 const authPersistedReducer = persistReducer(authPersistConfig, authReducer)
 const categoryPersistedReducer = persistReducer(
   categoryPersistConfig,
   categoryReducer,
+)
+const subCategoryPersistedReducer = persistReducer(
+  subCategoryPersistConfig,
+  subCategoryReducer,
 )
 
 export const store = configureStore({
@@ -53,6 +63,7 @@ export const store = configureStore({
     permission: permissionReducer,
     role: roleReducer,
     verifyArticle: verifyArticleRequestReducer,
+    subCategory: subCategoryPersistedReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

@@ -49,6 +49,10 @@ import engFlag from '../assets/image/flag/eng.png'
 import vnFlag from '../assets/image/flag/vn.png'
 import { getArticles } from '../app/slice/article.slice.'
 import { toast } from 'react-toastify'
+import {
+  getSubCategories,
+  removeSubCategory,
+} from '../app/slice/sub-category.slice'
 
 export const Header = (): JSX.Element => {
   const navigate = useNavigate()
@@ -122,6 +126,7 @@ export const Header = (): JSX.Element => {
   const handleClearFilter = ({ category }: { category: boolean }) => {
     if (category) {
       dispatch(selectCategory(null))
+      dispatch(removeSubCategory())
     }
     dispatch(setFilterQuery(''))
     dispatch(setPriceFilter([0, 0]))

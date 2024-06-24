@@ -1,8 +1,11 @@
 import {
   Box,
   Button,
+  Checkbox,
   Container,
+  FormControlLabel,
   Grid,
+  ListItem,
   Paper,
   Stack,
   Table,
@@ -10,6 +13,7 @@ import {
   TableContainer,
   TableRow,
   Typography,
+  styled,
 } from '@mui/material'
 import DOMPurify from 'dompurify'
 import React, { useEffect, useRef, useState } from 'react'
@@ -40,6 +44,8 @@ import { toast } from 'react-toastify'
 import { LoadingButton } from '@mui/lab'
 import { addFollow, removeFollow } from '../../app/slice/auth.slice'
 import Carousel from '../../components/Carousel'
+import _ from 'lodash'
+import { ALL_SUB_CATEGORY } from '../../app/sample-sub-category'
 
 const ArticleDetails = (): JSX.Element => {
   const { id } = useParams()
@@ -59,6 +65,8 @@ const ArticleDetails = (): JSX.Element => {
     transitionDuration: 1000,
     transitionInterpolator: new FlyToInterpolator(),
   })
+  const [types, setTypes] = useState<any>()
+  const [selected, setSelected] = useState<any>()
   const [article, setArticle] = useState<Article>()
   const [articleList, setArticleList] = useState<Article[]>([])
   const [loadingPage, setLoadingPage] = useState<boolean>(true)
@@ -206,6 +214,51 @@ const ArticleDetails = (): JSX.Element => {
     return ''
   }
 
+  useEffect(() => {
+    const types = _.groupBy(ALL_SUB_CATEGORY, 'type')
+
+    setTypes(types)
+  }, [])
+
+  const CustomListItem = styled(ListItem)({
+    paddingLeft: 0,
+  })
+
+  const ListItemStyle: React.CSSProperties = {
+    width: '50%',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    userSelect: 'none',
+  }
+
+  const ConditionList = (types: any, key: string) => {
+    if (!types) return
+
+    const temp = article?.attributes ?? []
+
+    const array = types[key].filter((x: any) => temp.includes(x?._id))
+
+    return (
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <Typography component={'h4'} fontWeight={'bold'} my={2}>
+            {array.length > 0 && key}
+          </Typography>
+        </Grid>
+        {array.map((x: any) => (
+          <Grid item key={x._id} xs={4}>
+            <CustomListItem style={ListItemStyle}>
+              <FormControlLabel
+                control={<Checkbox checked readOnly />}
+                label={x.name}
+              />
+            </CustomListItem>
+          </Grid>
+        ))}
+      </Grid>
+    )
+  }
+
   return loading || loadingPage ? (
     <Loading />
   ) : (
@@ -322,6 +375,19 @@ const ArticleDetails = (): JSX.Element => {
                 </TableRow>
               </Table>
             </TableContainer>
+
+            <Paper elevation={5} sx={{ mb: 2 }}>
+              <Box p={2}>
+                <Grid item xs={12} mb={2}>
+                  {types &&
+                    Object.keys(types).map(x => (
+                      <Grid item key={x} xs={12}>
+                        {ConditionList(types, x)}
+                      </Grid>
+                    ))}
+                </Grid>
+              </Box>
+            </Paper>
             <Paper elevation={5} sx={{ mb: 2 }}>
               <Box p={2}>
                 <Typography variant="h4">

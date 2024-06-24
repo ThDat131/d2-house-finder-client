@@ -157,7 +157,7 @@ const LandlordRequests = () => {
 
       dispatch(
         getLandlordRequests({
-          current: paginationModel.page + 1,
+          current: 1,
           pageSize: 999,
           createdBy: selectedCreatedBy,
           status:
@@ -171,7 +171,7 @@ const LandlordRequests = () => {
     return () => {
       clearTimeout(debounce)
     }
-  }, [dispatch, paginationModel, selectedCreatedBy, statusSelect])
+  }, [dispatch, selectedCreatedBy, statusSelect])
 
   return (
     <Grid container height={1}>

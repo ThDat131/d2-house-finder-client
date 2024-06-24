@@ -36,6 +36,7 @@ const HeaderSearch = () => {
     (root: RootState) => root.category.selected,
   )
   const categories = useAppSelector((root: RootState) => root.category)
+  const subCategories = useAppSelector((root: RootState) => root.subCategory)
   const filter = useAppSelector((root: RootState) => root.filter)
   const [categoryModal, setCategoryModal] = useState<boolean>(false)
   const [provinceModal, setProvinceModal] = useState<boolean>(false)
@@ -111,11 +112,15 @@ const HeaderSearch = () => {
         `address.wardCode=${wardSelected.ward_id}&`,
       )
     }
-    if (categories.selected) {
+
+    if (subCategories.selected.length > 0) {
       filterString = filterString.concat(
-        `categoryId=${categories.selected._id}`,
+        `filter={"attributes":{"$all":["${subCategories.selected.join(
+          '","',
+        )}"]}}`,
       )
     }
+
     dispatch(setFilterQuery(filterString))
     dispatch(getArticles({ current: 1, filter: filterString }))
   }

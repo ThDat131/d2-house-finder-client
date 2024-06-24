@@ -18,6 +18,8 @@ import { selectProvince } from '../../app/slice/province.slice'
 import { selectDistrict } from '../../app/slice/district.slice'
 import { selectWard } from '../../app/slice/ward.slice'
 import PostItemSkeleton from '../../components/PostItemSkeleton'
+import { removeSubCategory } from '../../app/slice/sub-category.slice'
+import ConditionFilter from '../../components/ConditionFilter'
 
 export const Home = (): JSX.Element => {
   const dispatch = useAppDispatch()
@@ -25,6 +27,7 @@ export const Home = (): JSX.Element => {
 
   const filter = useAppSelector((state: RootState) => state.filter)
   const articleState = useAppSelector((state: RootState) => state.article)
+  const categoriesState = useAppSelector((state: RootState) => state.category)
 
   useEffect(() => {
     handleClearFilter()
@@ -48,6 +51,7 @@ export const Home = (): JSX.Element => {
     dispatch(setPriceFilter([0, 0]))
     dispatch(setAcreageFilter([0, 0]))
     dispatch(selectCategory(null))
+    dispatch(removeSubCategory())
     dispatch(selectProvince(null))
     dispatch(selectDistrict(null))
     dispatch(selectWard(null))
@@ -112,6 +116,9 @@ export const Home = (): JSX.Element => {
         </Grid>
         <Grid item xs={4}>
           <Stack spacing={2}>
+            {categoriesState?.selected?.subCategories?.length > 0 && (
+              <ConditionFilter />
+            )}
             <PriceFilter />
             <AcreageFilter />
           </Stack>

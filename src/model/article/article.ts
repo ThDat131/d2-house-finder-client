@@ -29,4 +29,5 @@ export interface Article {
   comments: Comment[]
   location: Location
   quantity: number
+  attributes: string[]
 }
