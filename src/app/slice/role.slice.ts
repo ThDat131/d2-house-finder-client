@@ -24,6 +24,7 @@ interface Meta {
   current: number
   pageSize?: number
   name?: string
+  isActive?: boolean
 }
 
 const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
@@ -48,6 +49,10 @@ export const getRoles = createAsyncThunk(
 
     if (data?.name) {
       params = { ...params, name: data.name }
+    }
+
+    if (data?.isActive) {
+      params = { ...params, isActive: data.isActive }
     }
 
     try {

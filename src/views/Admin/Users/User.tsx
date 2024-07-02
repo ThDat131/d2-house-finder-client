@@ -128,7 +128,9 @@ const Users = () => {
   }
 
   useEffect(() => {
-    const rolePromise = dispatch(getRoles({ current: 1, pageSize: 999 }))
+    const rolePromise = dispatch(
+      getRoles({ current: 1, pageSize: 999, isActive: true }),
+    )
 
     return () => {
       rolePromise.abort()

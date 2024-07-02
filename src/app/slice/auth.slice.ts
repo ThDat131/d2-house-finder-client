@@ -38,6 +38,7 @@ const initialState: AuthProps = {
       phone: '',
       followers: [] as FollowEntity[],
       followings: [] as FollowEntity[],
+      permissions: [] as any[],
     },
   },
 }
@@ -122,6 +123,7 @@ const authSlice = createSlice({
         fullName: action.payload.fullName,
         phone: action.payload.phone,
         role: action.payload.role,
+        permissions: action.payload.permissions,
       }
       state.auth.user = updatedUser
     },

@@ -355,6 +355,7 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
     const categoryPromise = dispatch(
       getCategories({
         current: 1,
+        active: true,
       }),
     )
     return () => {

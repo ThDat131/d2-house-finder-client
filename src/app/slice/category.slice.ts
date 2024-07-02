@@ -28,6 +28,7 @@ interface Meta {
   current: number
   pageSize?: number
   name?: string
+  active?: boolean
 }
 
 const PAGE_SIZE = import.meta.env.VITE_PAGE_SIZE
@@ -56,6 +57,13 @@ export const getCategories = createAsyncThunk(
       params = {
         ...params,
         name: data.name,
+      }
+    }
+
+    if (data?.active) {
+      params = {
+        ...params,
+        active: data.active,
       }
     }
 

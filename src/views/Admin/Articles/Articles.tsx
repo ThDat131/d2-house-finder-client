@@ -148,7 +148,7 @@ const Articles = () => {
 
   useEffect(() => {
     const categoryPromise = dispatch(
-      getCategories({ current: 1, pageSize: 999 }),
+      getCategories({ current: 1, pageSize: 999, active: true }),
     )
 
     return () => {

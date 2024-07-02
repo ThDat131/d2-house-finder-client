@@ -16,6 +16,7 @@ import { selectCategory } from '../../app/slice/category.slice'
 import { useTranslation } from 'react-i18next'
 import {
   getSubCategories,
+  removeSelectedSubCategory,
   removeSubCategory,
 } from '../../app/slice/sub-category.slice'
 
@@ -62,6 +63,7 @@ const ChooseCategoryModal: React.FC<ChooseCategoryModalProps> = ({
                   setOpen(false)
                   dispatch(selectCategory(''))
                   dispatch(removeSubCategory())
+                  dispatch(removeSelectedSubCategory())
                 }}
                 control={<Radio />}
                 label={t('chooseCategoryModal.selectedAll')}

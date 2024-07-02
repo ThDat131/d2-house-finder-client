@@ -117,7 +117,7 @@ const ConditionFilter = () => {
   useEffect(() => {
     const types = _.groupBy(categoriesState.selected.subCategories, 'type')
     setTypes(types)
-  }, [subCategoriesState.subCategory])
+  }, [subCategoriesState.subCategory, categoriesState.selected])
 
   return (
     <Box padding={2} sx={{ background: '#f0f0f0', borderRadius: '5px' }}>
