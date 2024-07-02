@@ -92,6 +92,7 @@ export const getArticles = createAsyncThunk(
       populate: 'createdBy,categoryId',
       fields:
         'createdBy.fullName,createdBy.email,createdBy.avatar,createdBy.phone,categoryId.name,categoryId._id',
+      sort: '-createdAt',
     }
 
     if (data?.title) {

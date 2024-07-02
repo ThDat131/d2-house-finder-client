@@ -65,6 +65,9 @@ const subCategorySlice = createSlice({
     removeSubCategory: state => {
       state.subCategory = []
     },
+    removeSelectedSubCategory: state => {
+      state.selected = []
+    },
     selectSubCategory: (state, action) => {
       if (state.selected.includes(action.payload))
         state.selected = state.selected.filter(x => x !== action.payload)
@@ -83,6 +86,10 @@ const subCategorySlice = createSlice({
 
 const subCategoryReducer = subCategorySlice.reducer
 
-export const { removeSubCategory, selectSubCategory } = subCategorySlice.actions
+export const {
+  removeSubCategory,
+  selectSubCategory,
+  removeSelectedSubCategory,
+} = subCategorySlice.actions
 
 export default subCategoryReducer

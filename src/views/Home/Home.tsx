@@ -18,7 +18,10 @@ import { selectProvince } from '../../app/slice/province.slice'
 import { selectDistrict } from '../../app/slice/district.slice'
 import { selectWard } from '../../app/slice/ward.slice'
 import PostItemSkeleton from '../../components/PostItemSkeleton'
-import { removeSubCategory } from '../../app/slice/sub-category.slice'
+import {
+  removeSelectedSubCategory,
+  removeSubCategory,
+} from '../../app/slice/sub-category.slice'
 import ConditionFilter from '../../components/ConditionFilter'
 
 export const Home = (): JSX.Element => {
@@ -52,6 +55,7 @@ export const Home = (): JSX.Element => {
     dispatch(setAcreageFilter([0, 0]))
     dispatch(selectCategory(null))
     dispatch(removeSubCategory())
+    dispatch(removeSelectedSubCategory())
     dispatch(selectProvince(null))
     dispatch(selectDistrict(null))
     dispatch(selectWard(null))
@@ -68,7 +72,7 @@ export const Home = (): JSX.Element => {
                   number: articleState.totalPost,
                 })}
               </Typography>
-              {filter.filterQuery !== '' ? (
+              {filter.filterQuery.length > 1 ? (
                 <Button
                   onClick={() => {
                     handleClearFilter()

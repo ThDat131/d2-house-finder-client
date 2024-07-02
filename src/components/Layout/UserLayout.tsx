@@ -38,7 +38,9 @@ export const UserLayout: React.FC<Props> = ({
       let categoryPromise
 
       if (!categoryRef.current) {
-        categoryPromise = dispatch(getCategories({ current: 1, pageSize: 999 }))
+        categoryPromise = dispatch(
+          getCategories({ current: 1, pageSize: 999, active: true }),
+        )
       }
 
       if (!currentUserRef.current) {

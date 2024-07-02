@@ -15,9 +15,11 @@ import { RootState } from '../../../app/store'
 import { HttpService } from '../../../api/HttpService'
 import { ApiPathEnum } from '../../../api/ApiPathEnum'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const UpdatePassword = (): JSX.Element => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const auth = useAppSelector((state: RootState) => state.auth.auth.user)
   const { httpService } = new HttpService()
 
@@ -33,12 +35,17 @@ const UpdatePassword = (): JSX.Element => {
       .then(res => {
         if (res.status === 200) {
           toast.success(
-            'generalManagement.updatePassword.updatePasswordSuccessfully',
+            t('generalManagement.updatePassword.updatePasswordSuccessfully'),
+          )
+          navigate('/quan-ly/cap-nhat-thong-tin-ca-nhan')
+        } else {
+          toast.error(
+            t('generalManagement.updatePassword.wrongPasswordTryAgain'),
           )
         }
       })
       .catch(() => {
-        toast.success('generalManagement.updatePassword.wrongPasswordTryAgain')
+        toast.error(t('generalManagement.updatePassword.wrongPasswordTryAgain'))
       })
   }
 

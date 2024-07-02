@@ -51,6 +51,7 @@ import { getArticles } from '../app/slice/article.slice.'
 import { toast } from 'react-toastify'
 import {
   getSubCategories,
+  removeSelectedSubCategory,
   removeSubCategory,
 } from '../app/slice/sub-category.slice'
 
@@ -120,6 +121,7 @@ export const Header = (): JSX.Element => {
     const filterString = `?categoryId=${value}`
     handleClearFilter({ category: false })
     dispatch(setFilterQuery(filterString))
+    dispatch(removeSelectedSubCategory())
     navigate(`/danh-muc/${value}`)
   }
 
@@ -127,6 +129,7 @@ export const Header = (): JSX.Element => {
     if (category) {
       dispatch(selectCategory(null))
       dispatch(removeSubCategory())
+      dispatch(removeSelectedSubCategory())
     }
     dispatch(setFilterQuery(''))
     dispatch(setPriceFilter([0, 0]))

@@ -167,7 +167,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
       setUser(location.state)
     }
 
-    dispatch(getRoles({ current: 1, pageSize: 999 }))
+    dispatch(getRoles({ current: 1, pageSize: 999, isActive: true }))
   }, [])
 
   return (
