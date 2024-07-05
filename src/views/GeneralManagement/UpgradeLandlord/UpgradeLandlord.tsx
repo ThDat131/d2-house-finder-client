@@ -237,7 +237,9 @@ const UpgradeLandlord = (): JSX.Element => {
           setRequests(data)
 
           const havePending = data.results.some(
-            x => x.status === LandlordRequestStatusEnum.PENDING,
+            x =>
+              x.status === LandlordRequestStatusEnum.PENDING ||
+              x.status === LandlordRequestStatusEnum.APPROVED,
           )
 
           if (havePending) {

@@ -431,7 +431,7 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
                             provinceState.data.map(p => (
                               <MenuItem
                                 key={p.province_id}
-                                value={p.province_id}
+                                value={+p.province_id}
                                 onClick={() => {
                                   handleChangeProvince(p)
                                 }}
@@ -475,7 +475,7 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
                             districts.map(d => (
                               <MenuItem
                                 key={d.district_id}
-                                value={d.district_id}
+                                value={+d.district_id}
                                 onClick={() => {
                                   handleChangeDistrict(d)
                                 }}
@@ -510,7 +510,7 @@ const CreateArticle: React.FC<CreateArticleProps> = ({ type }) => {
                           wards.map(w => (
                             <MenuItem
                               key={w.ward_id}
-                              value={w.ward_id}
+                              value={+w.ward_id}
                               onClick={() => {
                                 handleChangeWard(w)
                               }}

@@ -121,8 +121,14 @@ const Users = () => {
       .unwrap()
       .then(res => {
         if (res.status === 200) {
-          toast.success(t('admin.category.deleteSuccess'))
+          toast.success(t('admin.user.deleteSuccess'))
+          setPaginationModel({
+            page: 0,
+            pageSize: PAGE_SIZE,
+          })
           setOpenDelete(false)
+        } else {
+          toast.error(t('admin.user.deleteFailed'))
         }
       })
   }

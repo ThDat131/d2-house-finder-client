@@ -77,6 +77,7 @@
       "create": "Tạo mới",
       "deleteAUser": "Xóa người dùng",
       "deleteSuccess": "Xóa người dùng thành công",
+      "deleteFailed": "Xóa người dùng thất bại",
       "email": "Email",
       "fullName": "Tên đầy đủ",
       "id": "ID",
@@ -101,7 +102,8 @@
       "updateSuccess": "Cập nhật người dùng thành công",
       "update": "Cập nhật",
       "uploadAvatar": "Tải ảnh đại diện",
-      "all": "Tất cả"
+      "all": "Tất cả",
+      "emailIsAlreadyExists": "Email đã tồn tại"
     },
     "category": {
       "active": "Kích hoạt",
@@ -508,7 +510,7 @@
     "submit": "Xác nhận",
     "verifyAccount": "Xác thực tài khoản",
     "verifyFailed": "Vui lòng kiểm tra lại mã xác nhận",
-    "verifySuccessfully": "Xác thực thành công. Hãy tiếp tục đăng nhập",
+    "verifySuccessfully": "Xác thực thành công",
     "weHaveSentEmail": "Chúng tôi đã gửi mã xác nhận đến {{email}}"
   }
 }

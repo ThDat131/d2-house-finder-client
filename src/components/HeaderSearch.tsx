@@ -99,17 +99,17 @@ const HeaderSearch = () => {
     }
     if (provinceSelected) {
       filterString = filterString.concat(
-        `address.provinceCode=${provinceSelected.province_id}&`,
+        `address.provinceCode=${+provinceSelected.province_id}&`,
       )
     }
     if (districtSelected) {
       filterString = filterString.concat(
-        `address.districtCode=${districtSelected.district_id}&`,
+        `address.districtCode=${+districtSelected.district_id}&`,
       )
     }
     if (wardSelected) {
       filterString = filterString.concat(
-        `address.wardCode=${wardSelected.ward_id}&`,
+        `address.wardCode=${+wardSelected.ward_id}&`,
       )
     }
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import BlackLogo from '../../assets/image/logo/BlackLogo.png'
 import VerificationCodeInput from '../../components/VerificationCodeInput'
 
@@ -20,7 +20,8 @@ const Verify = (): JSX.Element => {
   const [error, setError] = useState<boolean>(false)
   const defaultTime = import.meta.env.VITE_PENDING_TIME / 1000
   const [timer, setTimer] = useState<number>(defaultTime)
-  const email = JSON.parse(localStorage.getItem('verify') ?? '').email ?? ''
+  const email = JSON.parse(localStorage.getItem('verify') ?? '{}')?.email ?? ''
+  const { state } = useLocation()
 
   const handleSendMailVerify = () => {
     setDisabled(true)
@@ -42,6 +43,10 @@ const Verify = (): JSX.Element => {
         setTimer(defaultTime)
       })
   }
+
+  useEffect(() => {
+    if (!email) navigate('not-found')
+  }, [email])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -78,11 +83,17 @@ const Verify = (): JSX.Element => {
         if (res.status === 201) {
           toast.success(t('verify.verifySuccessfully'))
           localStorage.removeItem('verify')
-          navigate('/dang-nhap')
+          if (state === 'forgotPassword') {
+            navigate('/cap-nhat-mat-khau', { state: email })
+          } else {
+            navigate('/dang-nhap')
+          }
+        } else {
+          toast.error(t('verify.verifyFailed'))
         }
       })
       .catch(res => {
-        if (res.response.status === 402) {
+        if (res.response.status === 422) {
           toast.error(t('verify.verifyFailed'))
         }
       })

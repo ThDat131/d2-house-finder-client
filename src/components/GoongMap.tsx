@@ -47,6 +47,13 @@ const GoongMap: React.FC<GoongMapProps> = ({
     maxZoom: 16,
     minZoom: 16,
   })
+  const [mapViewPort, setMapViewPort] = useState<ViewPort>({
+    latitude: 0,
+    longitude: 0,
+    zoom: 0,
+    maxZoom: 16,
+    minZoom: 16,
+  })
   const [popups, setPopups] = useState<Article[]>([])
   const [removeLayer, setRemoveLayer] = useState(false)
 
@@ -86,20 +93,20 @@ const GoongMap: React.FC<GoongMapProps> = ({
 
   useEffect(() => {
     setViewPort(data)
-    setRemoveLayer(false)
+    setMapViewPort(data)
   }, [data])
 
   const onInteractionStateChange = useCallback((interactionState: any) => {
     if (interactionState.isDragging) {
-      setRemoveLayer(true)
+      // setRemoveLayer(true)
     }
   }, [])
 
   return (
     <ReactMapGL
-      {...viewPort}
+      {...mapViewPort}
       onViewportChange={(nextViewport: ViewPort) => {
-        setViewPort(nextViewport)
+        setMapViewPort(nextViewport)
       }}
       goongApiAccessToken={MapAPIKey}
       dragPan={true}
@@ -118,7 +125,7 @@ const GoongMap: React.FC<GoongMapProps> = ({
               longitude={marker?.location?.coordinates[0] ?? 0}
             >
               <LocationOnIcon
-                sx={{ color: '#ff0000', fontSize: 50 }}
+                sx={{ color: '#ff0000', fontSize: 30 }}
                 onClick={() => {
                   setPopups(prev => [...prev, marker])
                 }}

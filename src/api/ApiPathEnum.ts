@@ -28,6 +28,7 @@ export const ApiPathEnum = {
   VerifyArticle: `${prefix}${version}/verifications`,
   GetRecommendations: `${prefix}${version}/articles/getRecommodations`,
   SubCategory: `${prefix}${version}/subcategories`,
+  ForgotPassword: `${prefix}${version}/auth/forgotPassword`,
   // GoongMap
   AutoComplete: 'Place/AutoComplete',
   Detail: 'Place/Detail',

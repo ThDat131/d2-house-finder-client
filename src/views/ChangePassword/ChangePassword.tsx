@@ -2,61 +2,41 @@ import React, { useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import {
   Box,
-  Checkbox,
-  Divider,
-  FormControl,
-  FormControlLabel,
   FormHelperText,
   Grid,
   Paper,
-  Stack,
   TextField,
   Typography,
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useFormik } from 'formik'
-import { getCurrentUser, signinAPI } from '../../app/slice/auth.slice'
-import { type SigninModel } from '../../model/auth/signin-model'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { useLocation, useNavigate } from 'react-router-dom'
 import HouseImage from '../../assets/image/house-img.jpg'
-import { type RootState } from '../../app/store'
 import { toast } from 'react-toastify'
 import BlackLogo from '../../assets/image/logo/BlackLogo.png'
 import { HttpService } from '../../api/HttpService'
 import { ApiPathEnum } from '../../api/ApiPathEnum'
 
-const ForgotPassword = (): JSX.Element => {
+const ChangePassword = (): JSX.Element => {
   const { httpService } = new HttpService()
   const navigate = useNavigate()
-  const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<boolean>(false)
   const { t } = useTranslation()
-  const currentUser = useAppSelector(
-    (state: RootState) => state?.auth?.auth?.user,
-  )
-  const [emailToSend, setEmailToSend] = useState<string>('')
+  const { state } = useLocation()
 
-  const handleSendEmail = () => {
-    httpService.post(ApiPathEnum.SendCode, {
-      email: emailToSend,
-    })
-    navigate('/xac-nhan', { state: 'forgotPassword' })
-    localStorage.setItem('verify', JSON.stringify({ email: emailToSend }))
-  }
+  useEffect(() => {
+    if (!state) navigate('/not-found')
+  }, [state])
 
   const initialValues = {
-    oldPassword: '',
+    email: state,
     newPassword: '',
     reNewPassword: '',
   }
 
   const validationSchema = Yup.object().shape({
-    oldPassword: Yup.string().required(
-      t('generalManagement.updatePassword.youCantLeaveThisEmpty'),
-    ),
     newPassword: Yup.string().required(
       t('generalManagement.updatePassword.youCantLeaveThisEmpty'),
     ),
@@ -68,13 +48,32 @@ const ForgotPassword = (): JSX.Element => {
       ),
   })
 
-  const onSubmit = () => {}
+  const onSubmit = () => {
+    setLoading(true)
+    httpService
+      .patch(ApiPathEnum.ForgotPassword, {
+        email: formik.values.email,
+        newPassword: formik.values.newPassword,
+      })
+      .then(res => {
+        if (res.status === 200) {
+          navigate('/dang-nhap')
+          toast.success(
+            t('generalManagement.updatePassword.updatePasswordSuccessfully'),
+          )
+        }
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
 
   const onFocus = () => {
     setError(false)
   }
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues,
     validationSchema,
     onSubmit,
@@ -119,16 +118,35 @@ const ForgotPassword = (): JSX.Element => {
             {t('signin.welcome')}
           </Typography>
           <Typography component="h1" variant="h5" mb={2}>
-            {t('signin.forgotPassword')}
+            {t('generalManagement.updatePassword.updatePassword')}
           </Typography>
-          <Box width={1}>
+          <form onSubmit={formik.handleSubmit} style={{ width: '100%' }}>
             <TextField
               fullWidth
-              label={'Email'}
-              value={emailToSend}
-              onChange={evt => {
-                setEmailToSend(evt.target.value)
-              }}
+              onFocus={onFocus}
+              label={t('generalManagement.updatePassword.newPassword')}
+              name={'newPassword'}
+              value={formik.values.newPassword}
+              onChange={formik.handleChange}
+              sx={{ mb: 2 }}
+              error={
+                formik.touched.newPassword && Boolean(formik.errors.newPassword)
+              }
+              type="password"
+            />
+            <TextField
+              onFocus={onFocus}
+              fullWidth
+              label={t('generalManagement.updatePassword.reNewPassword')}
+              name={'reNewPassword'}
+              value={formik.values.reNewPassword}
+              onChange={formik.handleChange}
+              sx={{ mb: 2 }}
+              error={
+                formik.touched.reNewPassword &&
+                Boolean(formik.errors.reNewPassword)
+              }
+              type="password"
             />
             {error ? (
               <FormHelperText error> {t('signin.error')} </FormHelperText>
@@ -139,24 +157,14 @@ const ForgotPassword = (): JSX.Element => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleSendEmail}
             >
-              {t('signin.sendRequestForgotPassword')}
+              {t('generalManagement.updatePassword.updatePassword')}
             </LoadingButton>
-            <Grid container justifyContent={'center'}>
-              <Grid item>
-                <Typography>
-                  <Link to={'/dang-nhap'}>
-                    {t('signin.notProblemContinueSignIn')}
-                  </Link>
-                </Typography>
-              </Grid>
-            </Grid>
-          </Box>
+          </form>
         </Box>
       </Grid>
     </Grid>
   )
 }
 
-export default ForgotPassword
+export default ChangePassword
