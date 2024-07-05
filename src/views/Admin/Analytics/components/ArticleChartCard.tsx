@@ -70,7 +70,7 @@ const ArticleChartCard = ({
     if (typeDate === 'DAY') {
       setLabels(data?.map((x: any) => moment(x.date).format('DD/MM/YYYY')))
     } else if (typeDate === 'MONTH') {
-      setLabels(data?.map((x: any) => x.month))
+      setLabels(data?.map((x: any) => x.months))
     } else if (typeDate === 'YEAR') {
       setLabels(data?.map((x: any) => x.year))
     }

@@ -77,6 +77,7 @@
       "create": "Create New",
       "deleteAUser": "Delete User",
       "deleteSuccess": "User deleted successfully",
+      "deleteFailed": "User deleted failed",
       "email": "Email",
       "fullName": "Full Name",
       "id": "ID",
@@ -101,7 +102,8 @@
       "updateSuccess": "User updated successfully",
       "update": "Update",
       "uploadAvatar": "Upload Avatar",
-      "all": "All"
+      "all": "All",
+      "emailIsAlreadyExists": "Email is already exists"
     },
     "category": {
       "active": "Active",
@@ -508,7 +510,7 @@
     "submit": "Submit",
     "verifyAccount": "Verify account",
     "verifyFailed": "Please check the verification code again",
-    "verifySuccessfully": "Verification successful. Please continue to sign in",
+    "verifySuccessfully": "Verification successful",
     "weHaveSentEmail": "We have sent a verification code to {{email}}"
   }
 }

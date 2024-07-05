@@ -238,6 +238,13 @@ export const Profile = () => {
                   variant="contained"
                   onClick={handleFollow}
                   loading={followLoading}
+                  color={
+                    user?.followers?.find(
+                      x => authState.auth.user._id === x._id,
+                    )
+                      ? 'error'
+                      : 'primary'
+                  }
                 >
                   {user?.followers?.find(x => authState.auth.user._id === x._id)
                     ? t('profile.unFollow')

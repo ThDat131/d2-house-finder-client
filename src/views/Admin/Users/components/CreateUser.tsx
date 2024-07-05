@@ -107,11 +107,11 @@ const CreateUser: React.FC<CreateUserProps> = ({ type }): JSX.Element => {
           toast.success(t('admin.user.createSuccess'))
           navigate('/admin/user')
         } else {
-          toast.error(t('admin.user.createFailed'))
+          toast.error(t('admin.user.emailIsAlreadyExists'))
         }
       })
       .catch(() => {
-        toast.error(t('admin.user.createFailed'))
+        toast.error(t('admin.user.emailIsAlreadyExists'))
       })
   }
 

@@ -57,7 +57,7 @@ export const Signup = (): JSX.Element => {
           httpService.post(ApiPathEnum.SendCode, {
             email: formik.values.email,
           })
-          navigate('/xac-nhan')
+          navigate('/xac-nhan', { state: 'signup' })
           localStorage.setItem(
             'verify',
             JSON.stringify({ email: formik.values.email }),

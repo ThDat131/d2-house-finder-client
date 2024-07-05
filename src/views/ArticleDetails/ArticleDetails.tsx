@@ -375,19 +375,20 @@ const ArticleDetails = (): JSX.Element => {
                 </TableRow>
               </Table>
             </TableContainer>
-
-            <Paper elevation={5} sx={{ mb: 2 }}>
-              <Box p={2}>
-                <Grid item xs={12} mb={2}>
-                  {types &&
-                    Object.keys(types).map(x => (
-                      <Grid item key={x} xs={12}>
-                        {ConditionList(types, x)}
-                      </Grid>
-                    ))}
-                </Grid>
-              </Box>
-            </Paper>
+            {article?.attributes && article?.attributes?.length > 0 && (
+              <Paper elevation={5} sx={{ mb: 2 }}>
+                <Box p={2}>
+                  <Grid item xs={12} mb={2}>
+                    {types &&
+                      Object.keys(types).map(x => (
+                        <Grid item key={x} xs={12}>
+                          {ConditionList(types, x)}
+                        </Grid>
+                      ))}
+                  </Grid>
+                </Box>
+              </Paper>
+            )}
             <Paper elevation={5} sx={{ mb: 2 }}>
               <Box p={2}>
                 <Typography variant="h4">
@@ -417,17 +418,18 @@ const ArticleDetails = (): JSX.Element => {
               </Grid>
             </Paper>
             <Grid container mb={2}>
-              <Grid item xs={12}>
-                <Typography variant="h4" mb={1}>
-                  {t('articleDetails.comment')}
-                </Typography>
-              </Grid>
               {authState?.auth?.user?._id && (
-                <Grid item xs={12}>
-                  <CommentInput type={0} />
-                </Grid>
+                <>
+                  <Grid item xs={12}>
+                    <Typography variant="h4" mb={1}>
+                      {t('articleDetails.comment')}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <CommentInput type={0} />
+                  </Grid>
+                </>
               )}
-
               <Grid item container xs={12}>
                 {comments.map(x => (
                   <Grid item xs={12} key={x._id}>
@@ -440,18 +442,22 @@ const ArticleDetails = (): JSX.Element => {
               </Grid>
             </Grid>
             <Grid container>
-              <Grid item xs={12}>
-                <Typography variant="h4" mb={1}>
-                  {t('articleDetails.maybeYouLike')}
-                </Typography>
-              </Grid>
-              <Grid item container xs={12}>
-                {articleList.map(x => (
-                  <Grid item xs={12} key={x._id} mb={2}>
-                    <PostItem data={x} />
+              {articleList.length > 0 && (
+                <>
+                  <Grid item xs={12}>
+                    <Typography variant="h4" mb={1}>
+                      {t('articleDetails.maybeYouLike')}
+                    </Typography>
                   </Grid>
-                ))}
-              </Grid>
+                  <Grid item container xs={12}>
+                    {articleList.map(x => (
+                      <Grid item xs={12} key={x._id} mb={2}>
+                        <PostItem data={x} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </>
+              )}
             </Grid>
           </Grid>
           <Grid item xs={3}>
@@ -496,6 +502,13 @@ const ArticleDetails = (): JSX.Element => {
                     handleFollow()
                   }}
                   loading={followLoading}
+                  color={
+                    authState.auth.user.followings?.find(
+                      x => x._id === article?.createdBy?._id,
+                    )
+                      ? 'error'
+                      : 'primary'
+                  }
                 >
                   {authState.auth.user.followings?.find(
                     x => x._id === article?.createdBy?._id,

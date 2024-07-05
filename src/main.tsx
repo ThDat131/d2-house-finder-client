@@ -54,6 +54,7 @@ import ProtectedRoute from './components/Route/ProtectedRoute'
 import RoleProtectedRoute from './components/Route/RoleProtectedRoute'
 import { ALL_PERMISSION } from './app/permissions-root'
 import WelcomePage from './views/Admin/Welcome/Welcome'
+import ChangePassword from './views/ChangePassword/ChangePassword'
 
 const router = createBrowserRouter([
   {
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
   {
     path: 'quen-mat-khau',
     element: <ForgotPassword />,
+  },
+  {
+    path: 'cap-nhat-mat-khau',
+    element: <ChangePassword />,
   },
   {
     path: '/quan-ly',
@@ -178,7 +183,6 @@ const router = createBrowserRouter([
                 x => x.method === 'GET',
               )}
             >
-              <VerifyArticleRequests />
               <DetailVerifyArticleRequest />
             </RoleProtectedRoute>
           </ProtectedRoute>
